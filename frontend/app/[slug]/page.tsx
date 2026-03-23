@@ -27,8 +27,13 @@ export default async function PostPage({
     options,
   );
   if (!post) notFound();
-  const postImageUrl = post.image
-    ? urlFor(post.image)?.width(550).height(310).url()
+
+  const postDoc = post as SanityDocument & {
+    mainImage?: SanityImageSource | null;
+  };
+
+  const postImageUrl = postDoc.mainImage
+    ? urlFor(postDoc.mainImage)?.width(550).height(310).url()
     : null;
 
   return (

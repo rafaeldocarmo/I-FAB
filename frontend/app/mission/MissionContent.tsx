@@ -99,7 +99,7 @@ export function MissionContent() {
             {OBJECTIVES_GENERAL.map((item, i) => (
               <li
                 key={i}
-                className="flex gap-4 rounded-xl border border-[#CCCACC] bg-white px-6 py-5 text-base leading-relaxed text-[#374151] md:text-lg"
+                className="flex gap-4 rounded-xl bg-white px-6 py-5 text-base leading-relaxed text-[#374151] md:text-lg"
               >
                 <span
                   className="mt-2.5 h-2 w-2 shrink-0 rounded-full"

@@ -1,10 +1,9 @@
-import { Calendar } from "lucide-react";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url";
 
 import { client } from "@/sanity/client";
 import type { Congress } from "@/lib/types";
-import { PageHero } from "@/components/sections/PageHero";
+import { ConferenceHero } from "@/components/sections/ConferenceHero";
 import { ConferencesContent } from "./ConferencesContent";
 
 const CONGRESS_QUERY = `*[_type == "congress"] | order(startDate desc) {
@@ -38,9 +37,6 @@ export type PastConferenceData = {
   location: string;
   name: string;
   description: string;
-  delegates: string;
-  countries: string;
-  papers: string;
 };
 
 const MOCK_UPCOMING: UpcomingConferenceData = {
@@ -61,18 +57,6 @@ const MOCK_UPCOMING: UpcomingConferenceData = {
   image: "https://images.unsplash.com/photo-1576141546153-3e04370b5ff7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900",
 };
 
-const MOCK_PAST: PastConferenceData[] = [
-  { edition: "9th", year: "2024", location: "Chicago, USA", name: "i-FAB World Congress 2024", description: "The 9th congress convened at the Hyatt Regency Chicago, attracting over 800 delegates from 35 countries, with a focus on digital health and wearable biomechanics.", delegates: "820+", countries: "35", papers: "210" },
-  { edition: "8th", year: "2022", location: "Heidelberg, Germany", name: "i-FAB World Congress 2022", description: "The first hybrid congress of the post-pandemic era, held at Heidelberg University, combining in-person and virtual attendance to maximise global participation.", delegates: "750+", countries: "32", papers: "195" },
-  { edition: "7th", year: "2019", location: "Christchurch, New Zealand", name: "i-FAB World Congress 2019", description: "A landmark congress celebrating a decade of i-FAB scientific excellence, hosted at the Air Force Museum with sessions spanning gait analysis, orthotics, and surgical biomechanics.", delegates: "680+", countries: "28", papers: "185" },
-  { edition: "6th", year: "2017", location: "Staffordshire, UK", name: "i-FAB World Congress 2017", description: "Held at Staffordshire University, this congress highlighted translational research and featured dedicated tracks for students and early-career researchers.", delegates: "590+", countries: "27", papers: "170" },
-  { edition: "5th", year: "2015", location: "Washington DC, USA", name: "i-FAB World Congress 2015", description: "Co-hosted with the American Society of Biomechanics, the Washington congress expanded the community's reach into North American research networks.", delegates: "540+", countries: "25", papers: "155" },
-  { edition: "4th", year: "2012", location: "Busan, South Korea", name: "i-FAB World Congress 2012", description: "The first i-FAB congress in Asia, hosted at BEXCO, establishing lasting relationships with Asian research institutions and clinical groups.", delegates: "490+", countries: "22", papers: "140" },
-  { edition: "3rd", year: "2010", location: "Melbourne, Australia", name: "i-FAB World Congress 2010", description: "La Trobe University hosted this congress, which saw the formal ratification of i-FAB's constitution and the election of its first international governing committee.", delegates: "420+", countries: "20", papers: "125" },
-  { edition: "2nd", year: "2008", location: "Dundee, Scotland", name: "i-FAB World Congress 2008", description: "The second congress, held at the University of Dundee, began establishing the biennial rhythm that now defines the i-FAB calendar.", delegates: "340+", countries: "17", papers: "108" },
-  { edition: "1st", year: "2006", location: "Bologna, Italy", name: "i-FAB Inaugural Congress 2006", description: "The inaugural i-FAB congress, held at the University of Bologna — the birthplace of the community — marking the formal foundation of the international network.", delegates: "280+", countries: "14", papers: "82" },
-];
-
 function toOrdinal(n: number): string {
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
@@ -83,14 +67,16 @@ function formatDate(start?: string | null, end?: string | null): string {
   if (!start) return "";
   const s = new Date(start);
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const month = monthNames[s.getMonth()];
+  const startMonth = monthNames[s.getMonth()];
   const startDay = s.getDate();
-  const year = s.getFullYear();
   if (end) {
     const e = new Date(end);
-    return `${month} ${startDay}–${e.getDate()}, ${year}`;
+    const endMonth = monthNames[e.getMonth()];
+    const endDay = e.getDate();
+    if (startMonth === endMonth) return `${startDay}-${endDay} ${startMonth}`;
+    return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
   }
-  return `${month} ${startDay}, ${year}`;
+  return `${startDay} ${startMonth}`;
 }
 
 export const metadata = {
@@ -103,7 +89,7 @@ export default async function ConferencesPage() {
 
   const now = new Date();
   let upcoming: UpcomingConferenceData = MOCK_UPCOMING;
-  let past: PastConferenceData[] = MOCK_PAST;
+  let past: PastConferenceData[] = [];
 
   if (congressesRaw.length > 0) {
     const upcomingRaw = congressesRaw.find((c) => c.startDate && new Date(c.startDate) > now);
@@ -128,16 +114,14 @@ export default async function ConferencesPage() {
     if (pastRaw.length > 0) {
       past = pastRaw.map((c) => {
         const year = c.startDate ? new Date(c.startDate).getFullYear().toString() : "—";
-        const location = [c.city, c.country].filter(Boolean).join(", ") || "—";
+        const location = [c.venue, c.city, c.country].filter(Boolean).join(", ") || "—";
+        const description = typeof c.description === "string" ? c.description : "";
         return {
           edition: c.editionNumber ? toOrdinal(c.editionNumber) : "—",
           year,
           location,
           name: c.title,
-          description: "",
-          delegates: "—",
-          countries: "—",
-          papers: "—",
+          description,
         };
       });
     }
@@ -145,12 +129,7 @@ export default async function ConferencesPage() {
 
   return (
     <div>
-      <PageHero
-        icon={Calendar}
-        badge="World Congresses"
-        title="i-FAB Conferences"
-        description="Since 2006, i-FAB has convened biennial world congresses that serve as the premier forum for foot and ankle biomechanics research globally."
-      />
+      <ConferenceHero />
 
       <ConferencesContent
         upcoming={upcoming}

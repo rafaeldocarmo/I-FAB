@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Globe, Users, Calendar, ChevronRight } from "lucide-react";
 
 /** Mesmo gradiente de fundo que `CTABanner` */
-const SECTION_BG = "linear-gradient(135deg, #081849 0%, #213885 100%)" as const;
-const ICON_BG = "linear-gradient(135deg, #213885 0%, #081849 100%)";
+const SECTION_BG = "linear-gradient(135deg,rgb(15, 40, 116) 0%, #213885  100%)" as const;
+const ICON_BG = "linear-gradient(135deg,rgb(15, 40, 116) 0%, #213885  100%)";
 
 const highlightCards = [
   {

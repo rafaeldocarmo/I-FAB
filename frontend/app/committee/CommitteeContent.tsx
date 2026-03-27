@@ -9,8 +9,7 @@ type Props = {
 };
 
 /**
- * Secção principal: variação A (Classic Grid) — uma grelha centrada com fotos circulares,
- * sem cartões grandes em duas secções distintas para o comité executivo.
+ * Secção principal: variação A (Classic Grid) + variação E (cartões com overlay ao hover/focus).
  */
 export function CommitteeContent({ committee }: Props) {
   return (
@@ -55,9 +54,62 @@ export function CommitteeContent({ committee }: Props) {
         </div>
       </section>
 
+      {/* Variation E — Hover cards (exploration CommitteeHoverCards) */}
+      <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 text-center sm:mb-10">
+            <p className="mb-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-[#213885]">
+              Scientific Committee
+            </p>
+            <h2
+              className="font-bold text-[#081849]"
+              style={{
+                
+                fontSize: "clamp(1.2rem, 2vw, 1.6rem)",
+              }}
+            >
+              Hover to learn more
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+            {committee.map((member, index) => (
+              <div
+                key={`${member.name}-${member.role}-${index}`}
+                role="article"
+                tabIndex={0}
+                className="group relative min-h-[220px] cursor-pointer overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-[0_2px_10px_rgba(8,24,73,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-[#213885] hover:shadow-[0_12px_32px_rgba(33,56,133,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] focus-within:-translate-y-1 focus-within:border-[#213885] focus-within:shadow-[0_12px_32px_rgba(33,56,133,0.18)]"
+              >
+                <div className="h-[140px] overflow-hidden">
+                  <ImageWithFallback
+                    src={member.image}
+                    alt={member.name}
+                    className="h-full w-full object-cover object-top transition-[filter] duration-250 group-hover:brightness-[0.8] group-focus-within:brightness-[0.8]"
+                  />
+                </div>
+                <div className="p-3.5 font-sans">
+                  <div className="text-[13px] font-bold text-[#081849]">{member.name}</div>
+                  <div className="mt-0.5 text-[11px] font-semibold text-[#213885]">{member.role}</div>
+                </div>
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-center bg-[rgba(8,24,73,0.93)] p-5 font-sans opacity-0 transition-opacity duration-250 group-hover:opacity-100 group-focus-within:opacity-100">
+                  <div className="mb-1 text-sm font-bold text-white">{member.name}</div>
+                  <div className="mb-2.5 text-xs font-semibold text-[#ECDFD2]">{member.role}</div>
+                  <p className="mb-3.5 text-xs leading-relaxed text-white/70">
+                    {member.bio ?? member.affiliation}
+                  </p>
+                  <div className="text-[11px] text-white/50">
+                    {member.affiliation}
+                    {member.country ? ` · ${member.country}` : ""}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Join CTA */}
-      <section style={{ backgroundColor: "#ECDFD2" }} className="py-16">
+      <section  className="py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="mb-4" style={{ fontSize: "1.7rem", fontWeight: 700, color: "#081849" }}>
             Interested in Joining the Committee?

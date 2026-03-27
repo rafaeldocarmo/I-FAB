@@ -25,6 +25,8 @@ export type CommitteeMemberDisplay = {
   image: string;
   email: string;
   country: string;
+  /** Optional short bio for hover overlay (variant E); falls back to affiliation when absent */
+  bio?: string;
 };
 
 const MOCK_COMMITTEE: CommitteeMemberDisplay[] = [
@@ -127,9 +129,7 @@ export default async function CommitteePage() {
     <div>
       <CommitteeHero />
 
-      <CommitteeContent
-        committee={MOCK_COMMITTEE}
-      />
+      <CommitteeContent committee={MOCK_COMMITTEE} />
     </div>
   );
 }

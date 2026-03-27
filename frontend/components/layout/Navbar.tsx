@@ -24,32 +24,43 @@ const NAV_LINKS = [
   { label: "Mission", href: "/mission" },
   { label: "Committee", href: "/committee" },
   { label: "Conferences", href: "/conferences" },
+  { label: "Join", href: "/join" },
 ] as const;
 
+const JOIN_HREF = "/join";
+
 /** Topo da página: fundo claro por baixo do header — texto escuro nos links */
-function desktopLinkClass(atTop: boolean, active: boolean): string {
+function desktopLinkClass(atTop: boolean, active: boolean, isJoin: boolean): string {
   const base =
     "rounded-md px-2.5 py-1.5 text-[18px] font-medium transition-colors duration-200";
-  if (atTop) {
-    return active
-      ? `${base} bg-[#ECDFD2] font-semibold text-[#213885]`
-      : `${base} text-[#374151] hover:bg-[#f9f7f5]`;
+  if (active) {
+    if (atTop) return `${base} bg-[#ECDFD2] font-semibold text-[#213885]`;
+    return `${base} bg-white/12 font-semibold text-white`;
   }
-  return active
-    ? `${base} bg-white/12 font-semibold text-white`
-    : `${base} text-white/85 hover:bg-white/10`;
+  if (isJoin) {
+    if (atTop) return `${base} bg-[#213885] font-medium text-white hover:bg-[#081849]`;
+    return `${base} bg-white font-medium text-[#213885] shadow-sm hover:bg-[#f9f7f5]`;
+  }
+  if (atTop) {
+    return `${base} text-[#374151] hover:bg-[#f9f7f5]`;
+  }
+  return `${base} text-white/85 hover:bg-white/10`;
 }
 
-function mobileLinkClass(atTop: boolean, active: boolean): string {
+function mobileLinkClass(atTop: boolean, active: boolean, isJoin: boolean): string {
   const base = "rounded-lg px-4 py-3 text-sm font-medium";
-  if (atTop) {
-    return active
-      ? `${base} bg-[#ECDFD2] text-[#213885]`
-      : `${base} text-[#374151]`;
+  if (active) {
+    if (atTop) return `${base} bg-[#ECDFD2] text-[#213885]`;
+    return `${base} bg-white/12 text-white`;
   }
-  return active
-    ? `${base} bg-white/12 text-white`
-    : `${base} text-white/85`;
+  if (isJoin) {
+    if (atTop) return `${base} bg-[#213885] text-white hover:bg-[#081849]`;
+    return `${base} bg-white text-[#213885] shadow-sm hover:bg-[#f9f7f5]`;
+  }
+  if (atTop) {
+    return `${base} text-[#374151]`;
+  }
+  return `${base} text-white/85`;
 }
 
 function NavLogo({ scrolled }: { scrolled: boolean }) {
@@ -112,7 +123,11 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className={desktopLinkClass(atTop, isActive(item.href))}
+              className={desktopLinkClass(
+                atTop,
+                isActive(item.href),
+                item.href === JOIN_HREF,
+              )}
             >
               {item.label}
             </Link>
@@ -144,7 +159,11 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={mobileLinkClass(atTop, isActive(item.href))}
+                className={mobileLinkClass(
+                  atTop,
+                  isActive(item.href),
+                  item.href === JOIN_HREF,
+                )}
               >
                 {item.label}
               </Link>

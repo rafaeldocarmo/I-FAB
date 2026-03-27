@@ -1,34 +1,62 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MapPin, Calendar, Lightbulb, CalendarDays } from "lucide-react";
-import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 
-/** Azul de destaque da referência visual (badges, ícones, CTA primário) */
-const ACCENT = "#2563EB";
+/**
+ * Secção home — layout alinhado a UpcomingCountdown (exploration ConferencesSection),
+ * fundo claro e paleta i-FAB (sem gradiente azul).
+ */
+
+const NAVY = "#081849";
+const BRAND = "#213885";
+const CREAM = "#ECDFD2";
 
 type UpcomingConferenceHomeProps = {
-  edition?: string;
   name?: string;
   location?: string;
   date?: string;
-  abstractInfo?: string;
-  description?: string;
-  imageUrl?: string;
+  venue?: string;
+  countdownTarget?: string;
+  eyebrow?: string;
 };
 
 const defaults = {
-  edition: "10th",
   name: "i-FAB World Congress 2026",
   location: "Singapore, Singapore",
   date: "September 14–17, 2026",
-  abstractInfo: "Abstract submission opens January 2026",
-  description:
-    "Join thousands of researchers, clinicians, and bioengineers from around the world for the premier congress in foot and ankle biomechanics. Featuring keynote lectures, workshops, and cutting-edge research presentations.",
-  imageUrl:
-    "https://images.unsplash.com/photo-1768644675720-2f274f84c87a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900",
+  venue: "Suntec Convention Centre",
+  countdownTarget: "2026-09-14T09:00:00",
+  eyebrow: "Countdown to i-FAB 2026",
 };
+
+function useCountdown(target: string) {
+  const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  useEffect(() => {
+    const calc = () => {
+      const diff = new Date(target).getTime() - Date.now();
+      if (diff <= 0) {
+        setTime({ d: 0, h: 0, m: 0, s: 0 });
+        return;
+      }
+      setTime({
+        d: Math.floor(diff / 86400000),
+        h: Math.floor((diff % 86400000) / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    calc();
+    const id = setInterval(calc, 1000);
+    return () => clearInterval(id);
+  }, [target]);
+  return time;
+}
+
+function cityFromLocation(location: string): string {
+  const part = location.split(",")[0]?.trim();
+  return part || location;
+}
 
 export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
   const data = {
@@ -38,78 +66,84 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
     ),
   } as typeof defaults;
 
-  const title = `${data.edition} ${data.name}`;
+  const { d, h, m, s } = useCountdown(data.countdownTarget);
+  const city = cityFromLocation(data.location);
+  const headline = `${data.name} · ${city}`;
+  const metaLine = `${data.date} · ${data.venue}`;
 
-  const metaRow = (icon: ReactNode, text: string) => (
-    <div className="flex items-start gap-3 text-[15px] font-medium leading-snug text-[#4B5563]">
-      <span className="mt-0.5 shrink-0" style={{ color: ACCENT }}>
-        {icon}
-      </span>
-      <span>{text}</span>
-    </div>
-  );
+  const units: [number, string][] = [
+    [d, "Days"],
+    [h, "Hrs"],
+    [m, "Min"],
+    [s, "Sec"],
+  ];
 
   return (
-    <section className="bg-white py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Imagem + badge (referência: badge no canto superior esquerdo da foto) */}
-          <div className="relative w-full px-2 pb-3 pt-1 sm:px-3 sm:pb-4 sm:pt-2">
+    <section
+      id="conferences"
+      className="px-4 py-14 text-center font-sans sm:px-8 md:px-10 md:py-16"
+      style={{ backgroundColor: "#f9f7f5" }}
+    >
+      <div className="mx-auto max-w-4xl">
+        <p
+          className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em]"
+          style={{ color: BRAND }}
+        >
+          {data.eyebrow}
+        </p>
+
+        <h2
+          className="mb-2 text-[clamp(1.3rem,2vw,1.8rem)] font-bold leading-tight"
+          style={{ color: NAVY }}
+        >
+          {headline}
+        </h2>
+
+        <p className="mb-9 text-[13px] text-[#6B7280] sm:mb-10 sm:text-sm md:mb-11">
+          {metaLine}
+        </p>
+
+        <div className="mb-10 flex flex-wrap justify-center gap-3 sm:gap-3.5 md:mb-11">
+          {units.map(([val, lbl]) => (
             <div
-              className="relative overflow-hidden rounded-3xl shadow-lg"
+              key={lbl}
+              className="min-w-[30px] md:min-w-[90px] rounded-2xl border px-4 py-5 backdrop-blur-[8px]"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.72)",
+                borderColor: "rgba(33,56,133,0.14)",
+              }}
             >
               <div
-                className="absolute left-4 top-4 z-10 rounded-md px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-white"
-                style={{ backgroundColor: ACCENT }}
+                className="font-sans text-[34px] md:text-[42px] font-extrabold leading-none tabular-nums"
+                style={{ color: BRAND }}
               >
-                UPCOMING EVENT
+                {String(val).padStart(2, "0")}
               </div>
-              <div className="aspect-[4/3] w-full min-h-[280px] sm:min-h-[320px] lg:min-h-0 lg:h-[480px]">
-                <ImageWithFallback
-                  src='/footConference.png'
-                  alt="Upcoming i-FAB congress"
-                  className="h-full w-full object-cover"
-                />
+              <div className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#6B7280]/80">
+                {lbl}
               </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          {/* Conteúdo */}
-          <div className="flex flex-col justify-center">
-            <h2 className="mb-3 text-[clamp(1.5rem,3vw,2rem)] font-bold leading-tight text-[#0f172a] md:mb-4">
-              {title}
-            </h2>
-
-            <div className="mb-6 flex flex-col gap-3 md:gap-3.5">
-              {metaRow(<MapPin size={18} strokeWidth={2} />, data.location)}
-              {metaRow(<Calendar size={18} strokeWidth={2} />, data.date)}
-              {metaRow(
-                <Lightbulb size={18} strokeWidth={2} />,
-                data.abstractInfo,
-              )}
-            </div>
-
-            <p className="mb-8 text-base leading-relaxed text-[#4B5563]">
-              {data.description}
-            </p>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
-                href="/conferences"
-                className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-px hover:brightness-105 hover:shadow-md"
-                style={{ backgroundColor: ACCENT }}
-              >
-                <CalendarDays size={18} strokeWidth={2} />
-                Learn More
-              </Link>
-              <a
-                href="#"
-                className="inline-flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white px-6 py-3 text-sm font-semibold text-[#0f172a] transition-colors duration-200 hover:bg-[#F9FAFB]"
-              >
-                Register Interest
-              </a>
-            </div>
-          </div>
+        <div className="flex flex-wrap justify-center gap-3">
+          <a
+            href="#"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] px-8 py-3 text-sm font-bold transition-opacity hover:opacity-90"
+            style={{ backgroundColor: `#213885`, color: '#ffffff' }}
+          >
+            Register Interest
+          </a>
+          <Link
+            href="/conferences"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] border px-8 py-3 text-sm font-semibold transition-colors hover:bg-white/70"
+            style={{
+              borderColor: "rgba(33,56,133,0.28)",
+              color: BRAND,
+            }}
+          >
+            Learn More
+          </Link>
         </div>
       </div>
     </section>

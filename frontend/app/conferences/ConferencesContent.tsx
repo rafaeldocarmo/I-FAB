@@ -29,113 +29,75 @@ export function ConferencesContent({ upcoming, past }: Props) {
           </div>
 
           <div
-            className="rounded-3xl overflow-hidden"
-            style={{ border: "1px solid #CCCACC", boxShadow: "0 8px 40px rgba(8,24,73,0.10)" }}
+            className="overflow-hidden rounded-3xl shadow-[0_12px_48px_rgba(8,24,73,0.45)]"
+            style={{
+              background: "linear-gradient(145deg, #081849 0%, #213885 48%, #152a66 100%)",
+            }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="relative h-64 lg:h-auto min-h-64">
+              <div className="relative h-64 min-h-64 lg:h-auto">
                 <ImageWithFallback
-                  src={upcoming.image}
+                  src='/footConference.png'
                   alt={`${upcoming.name}`}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
-                <div
+                {/* <div
                   className="absolute inset-0"
-                  style={{ background: "linear-gradient(135deg, rgba(8,24,73,0.6), rgba(33,56,133,0.3))" }}
-                />
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(8,24,73,0.75), rgba(33,56,133,0.45))",
+                  }}
+                /> */}
                 <div className="absolute bottom-6 left-6">
                   <div
-                    className="text-5xl font-bold opacity-30 text-white"
+                    className="text-5xl font-bold opacity-90 text-[#213885]"
                   >
                     {upcoming.edition}
                   </div>
-                  <div className="text-white text-xs font-semibold uppercase tracking-widest opacity-60">Edition</div>
+                  <div className="text-[#213885] text-xs font-semibold uppercase tracking-widest opacity-60">Edition</div>
                 </div>
               </div>
 
-              <div className="p-8 lg:p-10">
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className="px-2.5 py-1 rounded-full text-xs font-semibold"
-                    style={{ backgroundColor: "#ECDFD2", color: "#213885" }}
-                  >
+              <div className="border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-10">
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-[#ECDFD2] px-2.5 py-1 text-xs font-semibold text-[#081849]">
                     {upcoming.edition} Congress
-                  </span>
-                  <span
-                    className="px-2.5 py-1 rounded-full text-xs font-semibold"
-                    style={{ backgroundColor: "rgba(33,56,133,0.1)", color: "#213885" }}
-                  >
-                    Registration Opening Soon
                   </span>
                 </div>
 
-                <h3
-                  className="mb-2"
-                  style={{  fontSize: "1.5rem", fontWeight: 700, color: "#081849" }}
-                >
-                  {upcoming.name}
-                </h3>
-                <p className="text-xs font-medium mb-5 italic" style={{ color: "#6B7280" }}>
+                <h3 className="mb-2 text-[1.5rem] font-bold text-white">{upcoming.name}</h3>
+                <p className="mb-5 text-xs font-medium italic text-[#ECDFD2]/90">
                   Theme: &ldquo;{upcoming.theme}&rdquo;
                 </p>
 
-                <div className="flex flex-col gap-2.5 mb-6">
-                  <div className="flex items-center gap-2 text-sm" style={{ color: "#374151" }}>
-                    <MapPin size={14} style={{ color: "#213885" }} />
+                <div className="mb-6 flex flex-col gap-2.5">
+                  <div className="flex items-center gap-2 text-sm text-white/90">
+                    <MapPin size={14} className="shrink-0 text-[#ECDFD2]" />
                     <span>{upcoming.location}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm" style={{ color: "#374151" }}>
-                    <Calendar size={14} style={{ color: "#213885" }} />
+                  <div className="flex items-center gap-2 text-sm text-white/90">
+                    <Calendar size={14} className="shrink-0 text-[#ECDFD2]" />
                     <span>{upcoming.date}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm" style={{ color: "#374151" }}>
-                    <Clock size={14} style={{ color: "#213885" }} />
+                  <div className="flex items-center gap-2 text-sm text-white/90">
+                    <Clock size={14} className="shrink-0 text-[#ECDFD2]" />
                     <span>{upcoming.venue}</span>
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-6" style={{ color: "#6B7280" }}>
-                  {upcoming.description}
-                </p>
+                <p className="mb-6 text-sm leading-relaxed text-white/75">{upcoming.description}</p>
 
-                <div className="grid grid-cols-1 gap-2 mb-7">
-                  {upcoming.highlights.map((h) => (
-                    <div key={h} className="flex items-center gap-2 text-xs" style={{ color: "#374151" }}>
-                      <ChevronRight size={12} style={{ color: "#213885" }} />
-                      {h}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <a
                     href="#"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200"
-                    style={{ background: "linear-gradient(135deg, #213885 0%, #081849 100%)", boxShadow: "0 4px 16px rgba(33,56,133,0.3)" }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                      (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(33,56,133,0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                      (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(33,56,133,0.3)";
-                    }}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ECDFD2] px-6 py-3 text-sm font-semibold text-[#081849] shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
                   >
                     <ExternalLink size={14} />
                     Learn More
                   </a>
                   <a
                     href="#"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
-                    style={{ backgroundColor: "transparent", color: "#213885", border: "1.5px solid #213885" }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = "#213885";
-                      (e.currentTarget as HTMLElement).style.color = "#ffffff";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-                      (e.currentTarget as HTMLElement).style.color = "#213885";
-                    }}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
                   >
                     Register Interest
                   </a>
@@ -152,7 +114,7 @@ export function ConferencesContent({ upcoming, past }: Props) {
       </div>
 
       {/* Past Conferences */}
-      <section className="py-20" style={{ backgroundColor: "#f9f7f5" }}>
+      <section className="py-20" style={{ backgroundColor: "#fff" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-10">
             <div className="w-1 h-8 rounded-full" style={{ backgroundColor: "#CCCACC" }} />
@@ -162,7 +124,7 @@ export function ConferencesContent({ upcoming, past }: Props) {
           </div>
 
           <div className="space-y-4">
-            {past.map((conf, index) => (
+            {past.map((conf) => (
               <div
                 key={conf.year}
                 className="group rounded-2xl p-6 transition-all duration-200"
@@ -180,17 +142,11 @@ export function ConferencesContent({ upcoming, past }: Props) {
                   <div className="flex-shrink-0">
                     <div
                       className="w-16 h-16 rounded-xl flex flex-col items-center justify-center"
-                      style={{ backgroundColor: index === 0 ? "#213885" : "#ECDFD2" }}
+                      style={{ backgroundColor: "#ECDFD2" }}
                     >
                       <span
-                        className="text-xs font-semibold"
-                        style={{ color: index === 0 ? "#ECDFD2" : "#6B7280", lineHeight: 1 }}
-                      >
-                        {conf.edition}
-                      </span>
-                      <span
                         className="font-bold text-base"
-                        style={{ color: index === 0 ? "#ffffff" : "#081849",  lineHeight: 1 }}
+                        style={{ color: "#213885",  lineHeight: 1 }}
                       >
                         {conf.year}
                       </span>
@@ -198,12 +154,12 @@ export function ConferencesContent({ upcoming, past }: Props) {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <h3 className="font-bold text-base" style={{ color: "#081849" }}>
                         {conf.name}
                       </h3>
                     </div>
-                    <div className="flex items-center gap-1.5 mb-3 text-xs" style={{ color: "#6B7280" }}>
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
                       <MapPin size={11} />
                       <span>{conf.location}</span>
                     </div>
@@ -214,29 +170,6 @@ export function ConferencesContent({ upcoming, past }: Props) {
                     )}
                   </div>
 
-                  <div className="flex md:flex-col gap-4 md:gap-2 flex-shrink-0">
-                    <div className="text-center">
-                      <div className="flex items-center gap-1 text-xs" style={{ color: "#6B7280" }}>
-                        <Users size={10} />
-                        <span className="font-semibold" style={{ color: "#081849" }}>{conf.delegates}</span>
-                      </div>
-                      <div className="text-xs" style={{ color: "#CCCACC" }}>Delegates</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="flex items-center gap-1 text-xs" style={{ color: "#6B7280" }}>
-                        <Globe size={10} />
-                        <span className="font-semibold" style={{ color: "#081849" }}>{conf.countries}</span>
-                      </div>
-                      <div className="text-xs" style={{ color: "#CCCACC" }}>Countries</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="flex items-center gap-1 text-xs" style={{ color: "#6B7280" }}>
-                        <Award size={10} />
-                        <span className="font-semibold" style={{ color: "#081849" }}>{conf.papers}</span>
-                      </div>
-                      <div className="text-xs" style={{ color: "#CCCACC" }}>Papers</div>
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}

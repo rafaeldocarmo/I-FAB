@@ -106,6 +106,7 @@ export function Footer() {
                 { label: "Mission & Objectives", path: "/mission" },
                 { label: "Committee", path: "/committee" },
                 { label: "Conferences", path: "/conferences" },
+                { label: "Join i-FAB", path: "/join" },
               ].map((item) => (
                 <li key={item.path}>
                   <Link
@@ -129,21 +130,21 @@ export function Footer() {
             </h3>
             <ul className="space-y-2.5">
               {[
-                "Become a Member",
-                "Submit Abstract",
-                "Research Publications",
-                "Newsletter",
-                "Contact Us",
+                { label: "Become a Member", href: "/join" },
+                { label: "Submit Abstract", href: "#" },
+                { label: "Research Publications", href: "#" },
+                { label: "Newsletter", href: "#" },
+                { label: "Contact Us", href: "mailto:info@i-fab.org" },
               ].map((item) => (
-                <li key={item}>
+                <li key={item.label}>
                   <a
-                    href="#"
+                    href={item.href}
                     className="text-sm transition-colors duration-200"
                     style={{ color: "#9ca3af" }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
                   >
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}

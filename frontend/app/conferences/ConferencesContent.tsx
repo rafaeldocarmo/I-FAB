@@ -1,6 +1,7 @@
 "use client";
 
-import { Calendar, MapPin, ExternalLink, Clock, ChevronRight, Users, Award, Globe, Mail } from "lucide-react";
+import Link from "next/link";
+import { Calendar, MapPin, ExternalLink, FileSearch } from "lucide-react";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 import type { UpcomingConferenceData, PastConferenceData } from "./page";
 
@@ -31,7 +32,7 @@ export function ConferencesContent({ upcoming, past }: Props) {
           <div
             className="overflow-hidden rounded-3xl shadow-[0_12px_48px_rgba(8,24,73,0.45)]"
             style={{
-              background: "linear-gradient(145deg, #081849 0%, #213885 48%, #152a66 100%)",
+              background: "linear-gradient(145deg, #081849 0%, #213885 48%,rgb(27, 57, 141) 100%)",
             }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -52,16 +53,16 @@ export function ConferencesContent({ upcoming, past }: Props) {
                   <div
                     className="text-5xl font-bold opacity-90 text-[#213885]"
                   >
-                    {upcoming.edition}
+                    {upcoming.edition}th
                   </div>
-                  <div className="text-[#213885] text-xs font-semibold uppercase tracking-widest opacity-60">Edition</div>
+                  <div className="text-[#213885] text-xs font-semibold uppercase tracking-widest opacity-60">&nbsp;&nbsp;Edition</div>
                 </div>
               </div>
 
               <div className="border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-10">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-[#ECDFD2] px-2.5 py-1 text-xs font-semibold text-[#081849]">
-                    {upcoming.edition} Congress
+                    {upcoming.edition}th Congress
                   </span>
                 </div>
 
@@ -79,10 +80,6 @@ export function ConferencesContent({ upcoming, past }: Props) {
                     <Calendar size={14} className="shrink-0 text-[#ECDFD2]" />
                     <span>{upcoming.date}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-white/90">
-                    <Clock size={14} className="shrink-0 text-[#ECDFD2]" />
-                    <span>{upcoming.venue}</span>
-                  </div>
                 </div>
 
                 <p className="mb-6 text-sm leading-relaxed text-white/75">{upcoming.description}</p>
@@ -95,12 +92,12 @@ export function ConferencesContent({ upcoming, past }: Props) {
                     <ExternalLink size={14} />
                     Learn More
                   </a>
-                  <a
-                    href="#"
+                  <Link
+                    href="/join"
                     className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
                   >
                     Register Interest
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -126,7 +123,7 @@ export function ConferencesContent({ upcoming, past }: Props) {
           <div className="space-y-4">
             {past.map((conf) => (
               <div
-                key={conf.year}
+                key={`${conf.year}-${conf.name}`}
                 className="group rounded-2xl p-6 transition-all duration-200"
                 style={{ backgroundColor: "#ffffff", border: "1px solid #CCCACC" }}
                 onMouseEnter={(e) => {
@@ -138,38 +135,51 @@ export function ConferencesContent({ upcoming, past }: Props) {
                   (e.currentTarget as HTMLElement).style.boxShadow = "none";
                 }}
               >
-                <div className="flex flex-col md:flex-row md:items-start gap-5">
+                <div className="flex flex-col gap-5 md:flex-row md:items-start">
                   <div className="flex-shrink-0">
                     <div
-                      className="w-16 h-16 rounded-xl flex flex-col items-center justify-center"
+                      className="flex h-16 w-16 flex-col items-center justify-center rounded-xl"
                       style={{ backgroundColor: "#ECDFD2" }}
                     >
                       <span
-                        className="font-bold text-base"
-                        style={{ color: "#213885",  lineHeight: 1 }}
+                        className="text-base font-bold"
+                        style={{ color: "#213885", lineHeight: 1 }}
                       >
                         {conf.year}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                      <h3 className="font-bold text-base" style={{ color: "#081849" }}>
-                        {conf.name}
-                      </h3>
+                  <div className="flex min-w-0 flex-1 flex-row items-center justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        <h3 className="text-base font-bold" style={{ color: "#081849" }}>
+                          {conf.name}
+                        </h3>
+                      </div>
+                      <div className="mt-0.5 flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
+                        <MapPin size={11} className="shrink-0" />
+                        <span>{conf.location}</span>
+                      </div>
+                      {conf.description ? (
+                        <p className="mt-2 text-sm leading-relaxed" style={{ color: "#6B7280" }}>
+                          {conf.description}
+                        </p>
+                      ) : null}
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
-                      <MapPin size={11} />
-                      <span>{conf.location}</span>
-                    </div>
-                    {conf.description && (
-                      <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>
-                        {conf.description}
-                      </p>
-                    )}
-                  </div>
 
+                    {conf.journalUrl ? (
+                      <a
+                        href={conf.journalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 rounded-lg p-1 text-[#213885] transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885]"
+                        aria-label={`Journal link for ${conf.name}`}
+                      >
+                        <FileSearch className="h-8 w-8" strokeWidth={1.75} aria-hidden />
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             ))}

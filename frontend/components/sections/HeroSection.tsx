@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
 export function HeroSection() {
@@ -81,26 +82,25 @@ export function HeroSection() {
             flexWrap: "wrap",
           }}
         >
-          <a
-            href="#conferences"
+          <Link
+            href="/conferences"
+            className="text-[#6B7280] border-b-2 border-transparent hover:text-[#213885] hover:border-[#213885]"
             style={{
-              color: "#213885",
               fontSize: 16,
-              fontWeight: 600,
+              fontWeight: 500,
               display: "flex",
               alignItems: "center",
               gap: 6,
               textDecoration: "none",
-              borderBottom: "2px solid #213885",
               paddingBottom: 3,
             }}
           >
             Explore Conferences <ArrowRight size={16} />
-          </a>
-          <a
-            href="#mission"
+          </Link>
+          <Link
+            href="/mission"
+            className="text-[#6B7280] border-b-2 border-transparent hover:text-[#213885] hover:border-[#213885]"
             style={{
-              color: "#6B7280",
               fontSize: 16,
               fontWeight: 500,
               display: "flex",
@@ -110,7 +110,7 @@ export function HeroSection() {
             }}
           >
             Our Mission <ChevronRight size={16} />
-          </a>
+          </Link>
         </div>
         <div
           style={{

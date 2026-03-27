@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Globe, Users, Calendar, ChevronRight } from "lucide-react";
 
 /** Mesmo gradiente de fundo que `CTABanner` */
-const SECTION_BG = "linear-gradient(135deg,rgb(15, 40, 116) 0%, #213885  100%)" as const;
-const ICON_BG = "linear-gradient(135deg,rgb(15, 40, 116) 0%, #213885  100%)";
+const SECTION_BG = "linear-gradient(135deg,rgb(24, 49, 124) 0%,rgb(36, 60, 141) 100%)" as const;
+const ICON_BG = "linear-gradient(135deg,rgb(24, 49, 124) 0%,rgb(36, 60, 141) 100%)";
 
 const highlightCards = [
   {
@@ -110,7 +110,7 @@ export function HighlightCards() {
               </p>
               <Link
                 href={card.link}
-                className="inline-flex items-center gap-1.5 text-base font-semibold transition-all duration-200"
+                className="inline-flex items-center gap-1.5 text-base font-semibold transition-all duration-200 border-b-2 border-transparent hover:border-[#213885]"
                 style={{ color: "#213885" }}
                 onMouseEnter={(e) => (e.currentTarget.style.gap = "8px")}
                 onMouseLeave={(e) => (e.currentTarget.style.gap = "6px")}

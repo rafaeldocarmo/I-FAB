@@ -6,7 +6,7 @@ export function CTABanner() {
   return (
     <section
       className="py-16 relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg,rgb(15, 40, 116) 0%, #213885  100%)" }}
+      style={{ background: "linear-gradient(135deg,rgb(24, 49, 124) 0%,rgb(36, 60, 141) 100%)" }}
     >
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <BookOpen size={36} className="mx-auto mb-4 opacity-60 text-white" />

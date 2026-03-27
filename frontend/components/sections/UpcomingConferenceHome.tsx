@@ -127,16 +127,16 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
         </div>
 
         <div className="flex flex-wrap justify-center gap-3">
-          <a
-            href="#"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] px-8 py-3 text-sm font-bold transition-opacity hover:opacity-90"
+          <Link
+            href="/join"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] px-8 py-3 text-sm font-bold transition-opacity hover:opacity-90 hover:translate-y-[-2px] shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
             style={{ backgroundColor: `#213885`, color: '#ffffff' }}
           >
             Register Interest
-          </a>
+          </Link>
           <Link
             href="/conferences"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] border px-8 py-3 text-sm font-semibold transition-colors hover:bg-white/70"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] border px-8 py-3 text-sm font-semibold transition-colors hover:bg-white/70 hover:translate-y-[-2px] shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
             style={{
               borderColor: "rgba(33,56,133,0.28)",
               color: BRAND,

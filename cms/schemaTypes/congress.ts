@@ -67,7 +67,8 @@ export default defineType({
     }),
     defineField({
       name: 'images',
-      title: 'Images',
+      title: 'Image',
+      description: 'A single congress image (hero / card).',
       type: 'array',
       of: [
         {
@@ -91,6 +92,7 @@ export default defineType({
       options: {
         layout: 'grid',
       },
+      validation: (Rule) => Rule.max(1),
     }),
     defineField({
       name: 'journalUrl',

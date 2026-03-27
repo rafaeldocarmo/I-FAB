@@ -20,14 +20,12 @@ const urlFor = (source: SanityImageSource) =>
     : null;
 
 export type UpcomingConferenceData = {
-  edition: string;
+  edition: number;
   name: string;
   location: string;
   date: string;
   theme: string;
   description: string;
-  highlights: string[];
-  venue: string;
   image: string;
 };
 
@@ -37,23 +35,18 @@ export type PastConferenceData = {
   location: string;
   name: string;
   description: string;
+  /** Link to journal / proceedings (Sanity `journalUrl`) */
+  journalUrl?: string | null;
 };
 
 const MOCK_UPCOMING: UpcomingConferenceData = {
-  edition: "10th",
+  edition: 10,
   name: "i-FAB World Congress 2026",
   location: "Singapore, Singapore",
   date: "September 14–17, 2026",
   theme: "Bridging Science and Clinical Practice",
   description:
     "The 10th i-FAB World Congress returns to Southeast Asia for the first time, bringing together the world's foremost experts in foot and ankle biomechanics. Join us for three days of plenary lectures, symposia, free communications, and workshops at the iconic Suntec Convention Centre.",
-  highlights: [
-    "30+ Invited Keynote Speakers",
-    "5 Pre-conference Workshops",
-    "Abstract Submission Opens Jan 2026",
-    "Young Investigator Award",
-  ],
-  venue: "Suntec Convention Centre, Singapore",
   image: "https://images.unsplash.com/photo-1576141546153-3e04370b5ff7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900",
 };
 
@@ -99,14 +92,12 @@ export default async function ConferencesPage() {
       const firstImage = upcomingRaw.images?.[0];
       const imgUrl = firstImage ? urlFor(firstImage)?.width(900).url() ?? MOCK_UPCOMING.image : MOCK_UPCOMING.image;
       upcoming = {
-        edition: upcomingRaw.editionNumber ? toOrdinal(upcomingRaw.editionNumber) : MOCK_UPCOMING.edition,
+        edition: upcomingRaw.editionNumber ? upcomingRaw.editionNumber : MOCK_UPCOMING.edition,
         name: upcomingRaw.title,
         location: [upcomingRaw.city, upcomingRaw.country].filter(Boolean).join(", ") || MOCK_UPCOMING.location,
         date: formatDate(upcomingRaw.startDate, upcomingRaw.endDate) || MOCK_UPCOMING.date,
         theme: MOCK_UPCOMING.theme,
         description: MOCK_UPCOMING.description,
-        highlights: MOCK_UPCOMING.highlights,
-        venue: upcomingRaw.venue || MOCK_UPCOMING.venue,
         image: imgUrl,
       };
     }
@@ -122,6 +113,7 @@ export default async function ConferencesPage() {
           location,
           name: c.title,
           description,
+          journalUrl: c.journalUrl ?? null,
         };
       });
     }

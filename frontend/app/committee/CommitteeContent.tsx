@@ -15,7 +15,7 @@ export function CommitteeContent({ committee }: Props) {
   return (
     <>
       {/* Variation A — Classic Grid (Scientific Committee) */}
-      <section className="bg-white py-11 sm:py-12 md:py-14">
+      <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 text-center sm:mb-10">
             <h2
@@ -30,11 +30,10 @@ export function CommitteeContent({ committee }: Props) {
             {committee.map((member) => (
               <div
                 key={member.name}
-                className="w-[148px] shrink-0 text-center sm:w-[180px]"
+                className="w-[298px] shrink-0 text-center sm:w-[180px]"
               >
                 <div
-                  className="mx-auto mb-3 h-20 w-20 overflow-hidden rounded-full border-2"
-                  style={{ borderColor: "#ECDFD2" }}
+                  className="mx-auto mb-3 h-30 w-30 overflow-hidden rounded-full border-1" style={{ borderColor: "rgba(22, 65, 193, 0.74)" }}
                 >
                   <ImageWithFallback
                     src={member.image}
@@ -72,13 +71,13 @@ export function CommitteeContent({ committee }: Props) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {committee.map((member, index) => (
               <div
                 key={`${member.name}-${member.role}-${index}`}
                 role="article"
                 tabIndex={0}
-                className="group relative min-h-[220px] cursor-pointer overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-[0_2px_10px_rgba(8,24,73,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-[#213885] hover:shadow-[0_12px_32px_rgba(33,56,133,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] focus-within:-translate-y-1 focus-within:border-[#213885] focus-within:shadow-[0_12px_32px_rgba(33,56,133,0.18)]"
+                className="group relative min-h-[220px] w-[200px] cursor-pointer overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-[0_2px_10px_rgba(8,24,73,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-[#213885] hover:shadow-[0_12px_32px_rgba(33,56,133,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] focus-within:-translate-y-1 focus-within:border-[#213885] focus-within:shadow-[0_12px_32px_rgba(33,56,133,0.18)]"
               >
                 <div className="h-[140px] overflow-hidden">
                   <ImageWithFallback

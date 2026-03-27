@@ -105,6 +105,13 @@ export default defineType({
           scheme: ['http', 'https'],
         }),
     }),
+    defineField({
+      name: 'homeEyebrow',
+      title: 'Homepage countdown label',
+      description:
+        'Short line above the countdown on the homepage (e.g. "Countdown to i-FAB 2026"). Leave empty to use the site default.',
+      type: 'string',
+    }),
   ],
   preview: {
     select: {

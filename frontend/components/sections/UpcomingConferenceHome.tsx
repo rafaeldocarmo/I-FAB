@@ -2,24 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { UpcomingConferenceHomeProps } from "@/lib/types";
 
 /**
  * Secção home — layout alinhado a UpcomingCountdown (exploration ConferencesSection),
  * fundo claro e paleta i-FAB (sem gradiente azul).
+ * Dados vêm do CMS via props (servidor) ou defaults abaixo.
  */
 
 const NAVY = "#081849";
 const BRAND = "#213885";
-const CREAM = "#ECDFD2";
-
-type UpcomingConferenceHomeProps = {
-  name?: string;
-  location?: string;
-  date?: string;
-  venue?: string;
-  countdownTarget?: string;
-  eyebrow?: string;
-};
 
 const defaults = {
   name: "i-FAB World Congress 2026",

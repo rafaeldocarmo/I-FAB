@@ -26,4 +26,16 @@ export type Congress = {
     | Array<SanityImageSource & { alt?: string | null; caption?: string | null }>
     | null;
   journalUrl?: string | null;
+  /** Optional label above the countdown on the homepage */
+  homeEyebrow?: string | null;
+};
+
+/** Props for `UpcomingConferenceHome` (CMS or defaults). */
+export type UpcomingConferenceHomeProps = {
+  name?: string;
+  location?: string;
+  date?: string;
+  venue?: string;
+  countdownTarget?: string;
+  eyebrow?: string;
 };

@@ -97,6 +97,15 @@ export function Navbar() {
     startTransition(() => setMobileOpen(false));
   }, [pathname]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   const isActive = (href: string) => pathname === href;
 
   const headerStyle = useMemo(
@@ -111,6 +120,7 @@ export function Navbar() {
   );
 
   return (
+    <>
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-[background,box-shadow,border-color] duration-300"
       style={headerStyle}
@@ -172,5 +182,15 @@ export function Navbar() {
         </div>
       )}
     </header>
+
+    {mobileOpen ? (
+      <button
+        type="button"
+        className="fixed inset-0 z-40 md:hidden cursor-pointer bg-[rgba(8,24,73,0.12)] backdrop-blur-[6px] transition-[backdrop-filter,background-color] duration-200"
+        aria-label="Close menu"
+        onClick={() => setMobileOpen(false)}
+      />
+    ) : null}
+    </>
   );
 }

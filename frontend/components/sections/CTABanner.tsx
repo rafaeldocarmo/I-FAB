@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { BookOpen } from "lucide-react";
 
 export function CTABanner() {
@@ -27,34 +28,13 @@ export function CTABanner() {
           Connect with leading researchers and clinicians worldwide. Stay updated on the latest advances in foot and ankle biomechanics.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <a
-            href="mailto:info@i-fab.org"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200"
+          <Link
+            href="/join"
+            className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 hover:translate-y-[-2px]"
             style={{ backgroundColor: "#fff", color: "#081849" }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            }}
           >
-            Get in Touch
-          </a>
-          <a
-            href="mailto:info@i-fab.org"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold text-white transition-all duration-200"
-            style={{ border: "1.5px solid rgba(255,255,255,0.3)" }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.1)";
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            }}
-          >
-            Browse Resources
-          </a>
+            Get in Touch 
+          </Link>
         </div>
       </div>
     </section>

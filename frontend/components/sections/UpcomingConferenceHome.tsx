@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { FileText, Link2 } from "lucide-react";
 import type { UpcomingConferenceHomeProps } from "@/lib/types";
+import type { JournalKind } from "@/lib/journalResource";
 
 /**
  * Secção home — layout alinhado a UpcomingCountdown (exploration ConferencesSection),
@@ -20,6 +22,8 @@ const defaults = {
   venue: "Suntec Convention Centre",
   countdownTarget: "2026-09-14T09:00:00",
   eyebrow: "Countdown to i-FAB 2026",
+  learnMoreUrl: "/conferences",
+  learnMoreKind: "link" satisfies JournalKind,
 };
 
 function useCountdown(target: string) {
@@ -56,7 +60,7 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
     ...Object.fromEntries(
       Object.entries(props).filter(([, v]) => v != null),
     ),
-  } as typeof defaults;
+  } as typeof defaults & { learnMoreKind?: JournalKind };
 
   const { d, h, m, s } = useCountdown(data.countdownTarget);
   const city = cityFromLocation(data.location);
@@ -69,6 +73,12 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
     [m, "Min"],
     [s, "Sec"],
   ];
+
+  const learnMoreHref = data.learnMoreUrl || "/conferences";
+  const learnMoreIsExternal = /^https?:\/\//i.test(learnMoreHref);
+  const learnMoreKind = data.learnMoreKind ?? "link";
+  const learnMoreClassName =
+    "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[10px] border px-8 py-3 text-sm font-semibold transition-colors hover:bg-white/70 hover:translate-y-[-2px] shadow-[0_4px_16px_rgba(0,0,0,0.1)]";
 
   return (
     <section
@@ -126,16 +136,37 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
           >
             Register Interest
           </Link>
-          <Link
-            href="/conferences"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] border px-8 py-3 text-sm font-semibold transition-colors hover:bg-white/70 hover:translate-y-[-2px] shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
-            style={{
-              borderColor: "rgba(33,56,133,0.28)",
-              color: BRAND,
-            }}
-          >
-            Learn More
-          </Link>
+          {learnMoreIsExternal ? (
+            <a
+              href={learnMoreHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={learnMoreClassName}
+              style={{
+                borderColor: "rgba(33,56,133,0.28)",
+                color: BRAND,
+              }}
+            >
+              {learnMoreKind === "pdf" ? (
+                <FileText className="h-4 w-4 shrink-0" aria-hidden />
+              ) : (
+                <Link2 className="h-4 w-4 shrink-0" aria-hidden />
+              )}
+              Learn More
+            </a>
+          ) : (
+            <Link
+              href={learnMoreHref}
+              className={learnMoreClassName}
+              style={{
+                borderColor: "rgba(33,56,133,0.28)",
+                color: BRAND,
+              }}
+            >
+              <Link2 className="h-4 w-4 shrink-0" aria-hidden />
+              Learn More
+            </Link>
+          )}
         </div>
       </div>
     </section>

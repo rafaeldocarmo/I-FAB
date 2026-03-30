@@ -56,11 +56,10 @@ export function HeroSection() {
             fontWeight: 700,
             letterSpacing: 5,
             color: "#213885",
-            textTransform: "uppercase" as const,
             marginBottom: 28,
           }}
         >
-          i · F · A · B
+          i - F A B
         </div>
         <p
           style={{

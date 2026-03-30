@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, MapPin, ExternalLink, FileSearch } from "lucide-react";
+import { Calendar, MapPin, Link2, FileText } from "lucide-react";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 import { toOrdinal } from "@/lib/ordinal";
 import type { UpcomingConferenceData, PastConferenceData } from "./page";
@@ -102,10 +102,25 @@ export function ConferencesContent({ upcoming, past }: Props) {
 
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <a
-                      href="#"
+                      href={upcoming.learnMoreUrl || "/conferences"}
+                      target={
+                        /^https?:\/\//i.test(upcoming.learnMoreUrl || "")
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        /^https?:\/\//i.test(upcoming.learnMoreUrl || "")
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
                       className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ECDFD2] px-6 py-3 text-sm font-semibold text-[#081849] shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
                     >
-                      <ExternalLink size={14} />
+                      {upcoming.learnMoreUrl &&
+                      upcoming.learnMoreKind === "pdf" ? (
+                        <FileText size={14} aria-hidden />
+                      ) : (
+                        <Link2 size={14} aria-hidden />
+                      )}
                       Learn More
                     </a>
                     <Link
@@ -203,15 +218,23 @@ export function ConferencesContent({ upcoming, past }: Props) {
                       ) : null}
                     </div>
 
-                    {conf.journalUrl ? (
+                    {conf.journalHref ? (
                       <a
-                        href={conf.journalUrl}
+                        href={conf.journalHref}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="-ml-1 shrink-0 self-start rounded-lg p-2 text-[#213885] transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] md:ml-0 md:self-auto md:p-1"
-                        aria-label={`Journal link for ${conf.name}`}
+                        aria-label={
+                          conf.journalKind === "pdf"
+                            ? `Download journal PDF for ${conf.name}`
+                            : `Open journal link for ${conf.name}`
+                        }
                       >
-                        <FileSearch className="h-8 w-8" strokeWidth={1.75} aria-hidden />
+                        {conf.journalKind === "pdf" ? (
+                          <FileText className="h-8 w-8" strokeWidth={1.75} aria-hidden />
+                        ) : (
+                          <Link2 className="h-8 w-8" strokeWidth={1.75} aria-hidden />
+                        )}
                       </a>
                     ) : null}
                   </div>

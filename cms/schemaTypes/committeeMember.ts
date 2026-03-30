@@ -1,11 +1,11 @@
 import {defineField, defineType} from 'sanity'
 
 /**
- * A single member of a committee (name, role, affiliation, links).
+ * A single member of the board (name, role, affiliation, links).
  */
 export default defineType({
   name: 'committeeMember',
-  title: 'Committee member',
+  title: 'Board member',
   type: 'document',
   fields: [
     defineField({
@@ -16,10 +16,23 @@ export default defineType({
     }),
     defineField({
       name: 'role',
-      title: 'Role',
-      description: 'Position or title (e.g. Chair, Secretary)',
+      title: 'Main role',
+      description: 'Primary position or title (e.g. Chair, Secretary)',
       type: 'string',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'secondaryRole',
+      title: 'Secondary role',
+      description: 'Optional second line (e.g. co-chair, sub-board lead)',
+      type: 'string',
+    }),
+    defineField({
+      name: 'additionalInfo',
+      title: 'Additional information',
+      description: 'Extra context shown on the member card (e.g. expertise, notes)',
+      type: 'text',
+      rows: 4,
     }),
     defineField({
       name: 'image',
@@ -73,16 +86,18 @@ export default defineType({
   preview: {
     select: {
       title: 'name',
-      subtitle: 'role',
+      role: 'role',
+      secondaryRole: 'secondaryRole',
       university: 'university',
       country: 'country',
       media: 'image',
     },
-    prepare({title, subtitle, university, country, media}) {
+    prepare({title, role, secondaryRole, university, country, media}) {
       const parts = [university, country].filter(Boolean)
+      const roles = [role, secondaryRole].filter(Boolean).join(' · ')
       return {
         title: title ?? 'Untitled',
-        subtitle: [subtitle, parts.join(' · ')].filter(Boolean).join(' · '),
+        subtitle: [roles, parts.join(' · ')].filter(Boolean).join(' — '),
         media,
       }
     },

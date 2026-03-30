@@ -4,6 +4,11 @@ import type { SanityImageSource } from "@sanity/image-url";
 import { client } from "@/sanity/client";
 import { CONGRESS_LIST_QUERY } from "@/lib/congressQuery";
 import type { Congress } from "@/lib/types";
+import {
+  resolveCongressJournalHref,
+  resolveCongressJournalKind,
+} from "@/lib/journalResource";
+import type { JournalKind } from "@/lib/journalResource";
 import { toOrdinal } from "@/lib/ordinal";
 import { ConferenceHero } from "@/components/sections/ConferenceHero";
 import { ConferencesContent } from "./ConferencesContent";
@@ -24,6 +29,8 @@ export type UpcomingConferenceData = {
   theme: string;
   description: string;
   image: string;
+  learnMoreUrl: string | null;
+  learnMoreKind: JournalKind;
 };
 
 export type PastConferenceData = {
@@ -32,7 +39,8 @@ export type PastConferenceData = {
   location: string;
   name: string;
   description: string;
-  journalUrl?: string | null;
+  journalHref: string | null;
+  journalKind: JournalKind;
 };
 
 function formatDate(start?: string | null, end?: string | null): string {
@@ -98,6 +106,8 @@ export default async function ConferencesPage() {
         theme: "",
         description,
         image: imgUrl,
+        learnMoreUrl: resolveCongressJournalHref(upcomingRaw),
+        learnMoreKind: resolveCongressJournalKind(upcomingRaw),
       };
     }
 
@@ -112,7 +122,8 @@ export default async function ConferencesPage() {
           location,
           name: c.title,
           description,
-          journalUrl: c.journalUrl ?? null,
+          journalHref: resolveCongressJournalHref(c),
+          journalKind: resolveCongressJournalKind(c),
         };
       });
     }

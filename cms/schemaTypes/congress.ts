@@ -95,15 +95,40 @@ export default defineType({
       validation: (Rule) => Rule.max(1),
     }),
     defineField({
+      name: 'journalLinkType',
+      title: 'Journal / proceedings type',
+      description: 'Choose whether to link to a website or attach a PDF file.',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'External link', value: 'link'},
+          {title: 'PDF file (download)', value: 'pdf'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'link',
+    }),
+    defineField({
       name: 'journalUrl',
-      title: 'Journal link',
-      description: 'URL to the official journal or proceedings',
+      title: 'Journal URL',
+      description: 'HTTPS link to the journal or proceedings page.',
       type: 'url',
+      hidden: ({parent}) => parent?.journalLinkType === 'pdf',
       validation: (Rule) =>
         Rule.uri({
           allowRelative: false,
           scheme: ['http', 'https'],
         }),
+    }),
+    defineField({
+      name: 'journalPdf',
+      title: 'Journal PDF',
+      description: 'Upload a PDF (e.g. proceedings). Visitors will get a download/open link.',
+      type: 'file',
+      hidden: ({parent}) => parent?.journalLinkType !== 'pdf',
+      options: {
+        accept: 'application/pdf',
+      },
     }),
     defineField({
       name: 'homeEyebrow',

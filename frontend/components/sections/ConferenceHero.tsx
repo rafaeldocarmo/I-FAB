@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Hero da página Committee — mesma estrutura do MissionHero (centrado, Poppins, barra em gradiente).
+ * Hero da página Conferences — mesma estrutura do MissionHero (centrado, Poppins, barra em gradiente).
  */
 
 import { useEffect, useState } from "react";

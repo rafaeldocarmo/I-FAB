@@ -14,8 +14,8 @@ type Props = {
 export function CommitteeContent({ committee }: Props) {
   return (
     <>
-      {/* Variation A — Classic Grid (Scientific Committee) */}
-      <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
+      {/* Variation A — Classic Grid (Scientific Board) */}
+      {/* <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 text-center sm:mb-10">
             <h2
@@ -44,30 +44,24 @@ export function CommitteeContent({ committee }: Props) {
                 <div className="text-sm font-bold leading-tight text-[#081849]">{member.name}</div>
                 <div className="mt-1 text-xs font-semibold text-[#213885]">{member.role}</div>
                 <div className="mt-0.5 text-xs text-[#6B7280]">{member.affiliation}</div>
-                {/* <div className="mt-1 flex items-center justify-center gap-1 text-[11px] text-[#CCCACC]">
+                <div className="mt-1 flex items-center justify-center gap-1 text-[11px] text-[#CCCACC]">
                   <span aria-hidden>{member.country}</span>
-                </div> */}
+                </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Variation E — Hover cards (exploration CommitteeHoverCards) */}
+      {/* Variation E — Hover cards (exploration BoardHoverCards) */}
       <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 text-center sm:mb-10">
-            <p className="mb-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-[#213885]">
-              Scientific Committee
-            </p>
             <h2
               className="font-bold text-[#081849]"
-              style={{
-                
-                fontSize: "clamp(1.2rem, 2vw, 1.6rem)",
-              }}
+              style={{ fontSize: "clamp(1.2rem, 2vw, 1.6rem)" }}
             >
-              Hover to learn more
+              Hover to meet the board
             </h2>
           </div>
 
@@ -77,9 +71,9 @@ export function CommitteeContent({ committee }: Props) {
                 key={`${member.name}-${member.role}-${index}`}
                 role="article"
                 tabIndex={0}
-                className="group relative min-h-[220px] w-[200px] cursor-pointer overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-[0_2px_10px_rgba(8,24,73,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-[#213885] hover:shadow-[0_12px_32px_rgba(33,56,133,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] focus-within:-translate-y-1 focus-within:border-[#213885] focus-within:shadow-[0_12px_32px_rgba(33,56,133,0.18)]"
+                className="group relative min-h-[220px] w-[220px] cursor-pointer overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-[0_2px_10px_rgba(8,24,73,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-[#213885] hover:shadow-[0_12px_32px_rgba(33,56,133,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] focus-within:-translate-y-1 focus-within:border-[#213885] focus-within:shadow-[0_12px_32px_rgba(33,56,133,0.18)]"
               >
-                <div className="h-[140px] overflow-hidden">
+                <div className="h-[200px] overflow-hidden">
                   <ImageWithFallback
                     src={member.image}
                     alt={member.name}
@@ -88,14 +82,21 @@ export function CommitteeContent({ committee }: Props) {
                 </div>
                 <div className="p-3.5 font-sans">
                   <div className="text-[13px] font-bold text-[#081849]">{member.name}</div>
-                  <div className="mt-0.5 text-[11px] font-semibold text-[#213885]">{member.role}</div>
+                  <div className="mt-0.5 text-[11px] text-[#6B7280]">{member.affiliation}</div>
                 </div>
-                <div className="pointer-events-none absolute inset-0 flex flex-col justify-center bg-[rgba(8,24,73,0.93)] p-5 font-sans opacity-0 transition-opacity duration-250 group-hover:opacity-100 group-focus-within:opacity-100">
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-center bg-[rgba(8,24,73,0.93)] p-2 font-sans opacity-0 transition-opacity duration-250 group-hover:opacity-100 group-focus-within:opacity-100">
                   <div className="mb-1 text-sm font-bold text-white">{member.name}</div>
                   <div className="mb-2.5 text-xs font-semibold text-[#ECDFD2]">{member.role}</div>
+                  {member.secondaryRole ? (
+                    <div className="mb-2 text-[11px] font-medium text-[#ECDFD2]/90">
+                      {member.secondaryRole}
+                    </div>
+                  ) : null}
+                  {member.additionalInfo ? (
                   <p className="mb-3.5 text-xs leading-relaxed text-white/70">
-                    {member.bio ?? member.affiliation}
-                  </p>
+                      {member.additionalInfo}
+                    </p>
+                  ) : null}
                   <div className="text-[11px] text-white/50">
                     {member.affiliation}
                     {member.country ? ` · ${member.country}` : ""}
@@ -111,10 +112,10 @@ export function CommitteeContent({ committee }: Props) {
       <section  className="py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="mb-4" style={{ fontSize: "1.7rem", fontWeight: 700, color: "#081849" }}>
-            Interested in Joining the Committee?
+            Interested in Joining the Board?
           </h2>
           <p className="mx-auto mb-7 max-w-lg text-sm leading-relaxed" style={{ color: "#374151" }}>
-            i-FAB is always seeking dedicated researchers and clinicians to contribute to our global mission. Reach out to learn about involvement opportunities.
+            i-FAB is always seeking dedicated researchers and clinicians to contribute to our global mission. Reach out to learn about opportunities to join the board.
           </p>
           <a
             href="mailto:info@i-fab.org"
@@ -130,7 +131,7 @@ export function CommitteeContent({ committee }: Props) {
             }}
           >
             <Mail size={14} />
-            Contact the Committee
+            Contact the Board
           </a>
         </div>
       </section>

@@ -61,12 +61,7 @@ export function Footer() {
                 info@i-fab.org
               </a>
             </div>
-            <div className="flex items-start gap-2 mt-2">
-              <MapPin size={14} className="mt-0.5 flex-shrink-0" style={{ color: "#9ca3af" }} />
-              <span className="text-sm" style={{ color: "#9ca3af" }}>
-                International Scientific Community — Worldwide
-              </span>
-            </div>
+
             <div className="flex items-center gap-3 mt-5">
               {[
                 { icon: TwitterIcon, href: "#", label: "Twitter" },
@@ -104,7 +99,7 @@ export function Footer() {
               {[
                 { label: "Home", path: "/" },
                 { label: "Mission & Objectives", path: "/mission" },
-                { label: "Committee", path: "/committee" },
+                { label: "Board", path: "/committee" },
                 { label: "Conferences", path: "/conferences" },
                 
               ].map((item) => (

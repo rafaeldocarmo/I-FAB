@@ -18,9 +18,9 @@ const highlightCards = [
   },
   {
     icon: Users,
-    title: "Scientific Committee",
+    title: "Scientific Board",
     description:
-      "Our committee comprises world-leading researchers and clinicians dedicated to shaping the future of musculoskeletal biomechanics.",
+      "Our board comprises world-leading researchers and clinicians dedicated to shaping the future of musculoskeletal biomechanics.",
     link: "/committee",
     linkLabel: "Meet the Team",
   },

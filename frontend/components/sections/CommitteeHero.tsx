@@ -1,14 +1,14 @@
 /**
- * Hero da página Committee — mesma estrutura do MissionHero (centrado, Poppins, barra em gradiente).
+ * Hero da página Board — mesma estrutura do MissionHero (centrado, Poppins, barra em gradiente).
  */
 
 const GRADIENT_BAR = "linear-gradient(90deg, #081849 0%, #213885 100%)";
 
 const DEFAULT_QUOTE =
-  "Our committee is composed of internationally recognized experts who guide the scientific direction, governance, and activities of i-FAB.";
+  "Our board is composed of internationally recognized experts who guide the scientific direction, governance, and activities of i-FAB.";
 
 type CommitteeHeroProps = {
-  /** Rótulo superior (ex.: Scientific Committee) */
+  /** Rótulo superior (ex.: Scientific Board) */
   eyebrow?: string;
   quote?: string;
   /** Parágrafo de apoio opcional abaixo da citação */
@@ -16,7 +16,7 @@ type CommitteeHeroProps = {
 };
 
 export function CommitteeHero({
-  eyebrow = "Scientific Committee",
+  eyebrow = "Scientific Board",
   quote = DEFAULT_QUOTE,
   body,
 }: CommitteeHeroProps) {

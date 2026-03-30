@@ -4,6 +4,8 @@ export type CommitteeMember = {
   _id: string;
   name: string;
   role: string;
+  secondaryRole?: string | null;
+  additionalInfo?: string | null;
   image?: (SanityImageSource & { alt?: string | null }) | null;
   university?: string | null;
   country?: string | null;
@@ -26,6 +28,14 @@ export type Congress = {
     | Array<SanityImageSource & { alt?: string | null; caption?: string | null }>
     | null;
   journalUrl?: string | null;
+  /** `link` = external URL; `pdf` = uploaded file */
+  journalLinkType?: "link" | "pdf" | null;
+  journalPdf?: {
+    asset?: {
+      url?: string | null;
+      originalFilename?: string | null;
+    } | null;
+  } | null;
   /** Optional label above the countdown on the homepage */
   homeEyebrow?: string | null;
 };
@@ -38,4 +48,8 @@ export type UpcomingConferenceHomeProps = {
   venue?: string;
   countdownTarget?: string;
   eyebrow?: string;
+  /** Resolved journal URL (link or PDF asset); default `/conferences` */
+  learnMoreUrl?: string;
+  /** Whether the journal is a PDF file or external link (for icon) */
+  learnMoreKind?: "link" | "pdf";
 };

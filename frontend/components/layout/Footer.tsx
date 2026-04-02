@@ -47,7 +47,7 @@ export function Footer() {
               />
             </div>
             <p className="text-sm leading-relaxed max-w-xs mt-4" style={{ color: "#9ca3af" }}>
-              A global scientific community dedicated to advancing research, education, and clinical practice in foot and ankle biomechanics.
+              A global community advancing foot and ankle biomechanics—raising visibility across disciplines, bridging science and application, and connecting experts through our biannual congress and international partnerships.
             </p>
             <div className="flex items-center gap-2 mt-5">
               <a
@@ -98,7 +98,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: "Home", path: "/" },
-                { label: "Mission & Objectives", path: "/mission" },
+                { label: "About Us", path: "/mission" },
                 { label: "Board", path: "/committee" },
                 { label: "Conferences", path: "/conferences" },
                 

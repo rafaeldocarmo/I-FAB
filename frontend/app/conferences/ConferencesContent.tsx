@@ -1,10 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, MapPin, Link2, FileText } from "lucide-react";
+import { Calendar, MapPin, Link2, FileText, ImageIcon } from "lucide-react";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 import { toOrdinal } from "@/lib/ordinal";
 import type { UpcomingConferenceData, PastConferenceData } from "./page";
+import type { CongressJournalResource } from "@/lib/types";
+import { journalResourceButtonLabel } from "@/lib/journalResource";
+
+function isExternalHref(href: string) {
+  return /^https?:\/\//i.test(href);
+}
+
+function JournalKindGlyph({ kind }: { kind: CongressJournalResource["kind"] }) {
+  if (kind === "pdf") return <FileText size={14} aria-hidden />;
+  if (kind === "image") return <ImageIcon size={14} aria-hidden />;
+  return <Link2 size={14} aria-hidden />;
+}
+
+function JournalKindGlyphLarge({ kind }: { kind: CongressJournalResource["kind"] }) {
+  if (kind === "pdf") return <FileText className="h-8 w-8" strokeWidth={1.75} aria-hidden />;
+  if (kind === "image") return <ImageIcon className="h-8 w-8" strokeWidth={1.75} aria-hidden />;
+  return <Link2 className="h-8 w-8" strokeWidth={1.75} aria-hidden />;
+}
 
 type Props = {
   upcoming: UpcomingConferenceData | null;
@@ -100,29 +118,33 @@ export function ConferencesContent({ upcoming, past }: Props) {
                     <p className="mb-6 text-sm leading-relaxed text-white/75">{upcoming.description}</p>
                   ) : null}
 
-                  <div className="flex flex-col gap-3 sm:flex-row">
-                    <a
-                      href={upcoming.learnMoreUrl || "/conferences"}
-                      target={
-                        /^https?:\/\//i.test(upcoming.learnMoreUrl || "")
-                          ? "_blank"
-                          : undefined
-                      }
-                      rel={
-                        /^https?:\/\//i.test(upcoming.learnMoreUrl || "")
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ECDFD2] px-6 py-3 text-sm font-semibold text-[#081849] shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
-                    >
-                      {upcoming.learnMoreUrl &&
-                      upcoming.learnMoreKind === "pdf" ? (
-                        <FileText size={14} aria-hidden />
+                  <div className="flex flex-col flex-wrap gap-3 sm:flex-row">
+                    {(upcoming.journalResources.length > 0
+                      ? upcoming.journalResources
+                      : [{ href: "/conferences", kind: "link" as const, label: null }]
+                    ).map((item, idx, arr) => {
+                      const label = journalResourceButtonLabel(item, idx, arr.length);
+                      const ext = isExternalHref(item.href);
+                      const className =
+                        "inline-flex items-center justify-center gap-2 rounded-xl bg-[#ECDFD2] px-6 py-3 text-sm font-semibold text-[#081849] shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]";
+                      return ext ? (
+                        <a
+                          key={`${item.href}-${idx}`}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={className}
+                        >
+                          <JournalKindGlyph kind={item.kind} />
+                          {label}
+                        </a>
                       ) : (
-                        <Link2 size={14} aria-hidden />
-                      )}
-                      Learn More
-                    </a>
+                        <Link key={`${item.href}-${idx}`} href={item.href} className={className}>
+                          <JournalKindGlyph kind={item.kind} />
+                          {label}
+                        </Link>
+                      );
+                    })}
                     <Link
                       href="/join"
                       className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
@@ -171,45 +193,78 @@ export function ConferencesContent({ upcoming, past }: Props) {
                 No past conferences listed yet.
               </p>
             ) : null}
-            {past.map((conf) => (
-              <div
-                key={`${conf.year}-${conf.name}`}
-                className="group rounded-2xl p-6 transition-all duration-200"
-                style={{ backgroundColor: "#ffffff", border: "1px solid #CCCACC" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "#213885";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 20px rgba(33,56,133,0.10)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "#CCCACC";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                }}
-              >
-                <div className="flex flex-col gap-5 md:flex-row md:items-start">
-                  <div className="flex-shrink-0">
+            {past.map((conf) => {
+              const journalBlock =
+                conf.journalResources.length > 0 ? (
+                  <div className="-ml-1 flex shrink-0 flex-wrap items-center gap-1 self-start md:ml-0 md:self-auto">
+                    {conf.journalResources.map((item, idx) => {
+                      const aria =
+                        item.kind === "pdf"
+                          ? `Download PDF for ${conf.name}${item.label ? `: ${item.label}` : ""}`
+                          : item.kind === "image"
+                            ? `Open image for ${conf.name}${item.label ? `: ${item.label}` : ""}`
+                            : `Open link for ${conf.name}${item.label ? `: ${item.label}` : ""}`;
+                      return (
+                        <a
+                          key={`${item.href}-${idx}`}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={item.label?.trim() || undefined}
+                          className="rounded-lg p-2 text-[#213885] transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885]"
+                          aria-label={aria}
+                        >
+                          <JournalKindGlyphLarge kind={item.kind} />
+                        </a>
+                      );
+                    })}
+                  </div>
+                ) : null;
+
+              return (
+                <div
+                  key={`${conf.year}-${conf.name}`}
+                  className="group flex flex-col  overflow-hidden rounded-2xl border border-[#CCCACC] bg-white transition-all duration-200 hover:border-[#213885] hover:shadow-[0_4px_20px_rgba(33,56,133,0.10)] md:flex-row md:items-center"
+                >
+                  <div className="flex shrink-0 justify-center p-5 pb-0 md:justify-start md:p-6 md:pb-6 md:pr-3 w-full max-w-[360px]">
                     <div
-                      className="flex h-16 w-16 flex-col items-center justify-center rounded-xl"
-                      style={{ backgroundColor: "#ECDFD2" }}
+                      className={`flex h-[120px] w-full max-w-[360px] items-center justify-center overflow-hidden rounded-xl ${
+                        conf.image ? "transparent" : "bg-[#213885]"
+                      }`}
                     >
-                      <span
-                        className="text-base font-bold"
-                        style={{ color: "#213885", lineHeight: 1 }}
-                      >
-                        {conf.year}
-                      </span>
+                      {conf.image ? (
+                        <ImageWithFallback
+                          src={conf.image}
+                          alt={conf.imageAlt}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      ) : (
+                        <span
+                          className="px-4 text-center text-2xl font-bold tabular-nums tracking-tight"
+                          style={{ color: "#ECDFD2" }}
+                        >
+                          {conf.year}
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4">
+                  <div className="flex min-w-0 flex-1 flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between md:gap-6 md:p-6 md:pl-2">
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                        <h3 className="text-base font-bold" style={{ color: "#081849" }}>
-                          {conf.name}
-                        </h3>
-                      </div>
-                      <div className="mt-0.5 flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
-                        <MapPin size={11} className="shrink-0" />
-                        <span>{conf.location}</span>
+                      <h3 className="text-base font-bold" style={{ color: "#081849" }}>
+                        {conf.name}
+                      </h3>
+                      <div className="mt-0.5 flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1">
+                        <div className="flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
+                          <MapPin size={11} className="shrink-0 text-[#213885]" />
+                          <span>{conf.location}</span>
+                        </div>
+                        {conf.dateLine !== "—" ? (
+                          <div className="flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
+                            <Calendar size={11} className="shrink-0 text-[#213885]" />
+                            <span>{conf.dateLine}</span>
+                          </div>
+                        ) : null}
                       </div>
                       {conf.description ? (
                         <p className="mt-2 text-sm leading-relaxed" style={{ color: "#6B7280" }}>
@@ -217,30 +272,11 @@ export function ConferencesContent({ upcoming, past }: Props) {
                         </p>
                       ) : null}
                     </div>
-
-                    {conf.journalHref ? (
-                      <a
-                        href={conf.journalHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="-ml-1 shrink-0 self-start rounded-lg p-2 text-[#213885] transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] md:ml-0 md:self-auto md:p-1"
-                        aria-label={
-                          conf.journalKind === "pdf"
-                            ? `Download journal PDF for ${conf.name}`
-                            : `Open journal link for ${conf.name}`
-                        }
-                      >
-                        {conf.journalKind === "pdf" ? (
-                          <FileText className="h-8 w-8" strokeWidth={1.75} aria-hidden />
-                        ) : (
-                          <Link2 className="h-8 w-8" strokeWidth={1.75} aria-hidden />
-                        )}
-                      </a>
-                    ) : null}
+                    {journalBlock}
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

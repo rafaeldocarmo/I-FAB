@@ -55,7 +55,7 @@ export function CommitteeContent({ committee }: Props) {
 
       {/* Variation E — Hover cards (exploration BoardHoverCards) */}
       <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 text-center sm:mb-10">
             <h2
               className="font-bold text-[#081849]"

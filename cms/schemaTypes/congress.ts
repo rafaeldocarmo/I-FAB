@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 /**
  * A congress / conference event with location, dates, media, and journal link.
@@ -95,10 +95,116 @@ export default defineType({
       validation: (Rule) => Rule.max(1),
     }),
     defineField({
+      name: 'journalItems',
+      title: 'Journal / proceedings',
+      description:
+        'Add one or more external links, PDFs, or images (e.g. proceedings, programme). Shown on the site as separate actions.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'congressJournalItem',
+          title: 'Journal item',
+          fields: [
+            defineField({
+              name: 'kind',
+              title: 'Type',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'External link', value: 'link'},
+                  {title: 'PDF file', value: 'pdf'},
+                  {title: 'Image (full size)', value: 'image'},
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'link',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'label',
+              title: 'Label (optional)',
+              description: 'Short text on the button or next to the icon, e.g. “Programme PDF”.',
+              type: 'string',
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+              hidden: ({parent}) => parent?.kind !== 'link',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const p = context.parent as {kind?: string}
+                  if (p?.kind === 'link' && !(typeof value === 'string' && value.trim()))
+                    return 'URL is required for an external link'
+                  return true
+                }).uri({
+                  allowRelative: false,
+                  scheme: ['http', 'https'],
+                }),
+            }),
+            defineField({
+              name: 'file',
+              title: 'PDF file',
+              type: 'file',
+              hidden: ({parent}) => parent?.kind !== 'pdf',
+              options: {accept: 'application/pdf'},
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const p = context.parent as {kind?: string}
+                  if (p?.kind === 'pdf' && !value) return 'Upload a PDF file'
+                  return true
+                }),
+            }),
+            defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: {hotspot: true},
+              hidden: ({parent}) => parent?.kind !== 'image',
+              fields: [
+                defineField({
+                  name: 'alt',
+                  type: 'string',
+                  title: 'Alternative text',
+                }),
+              ],
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const p = context.parent as {kind?: string}
+                  if (p?.kind === 'image' && !value) return 'Select an image'
+                  return true
+                }),
+            }),
+          ],
+          preview: {
+            select: {kind: 'kind', label: 'label', url: 'url', media: 'image'},
+            prepare({kind, label, url, media}) {
+              const fallback =
+                kind === 'link' ? (url as string) || 'Link' : kind === 'pdf' ? 'PDF' : 'Image'
+              return {
+                title: (label as string) || fallback,
+                subtitle:
+                  kind === 'link'
+                    ? 'External link'
+                    : kind === 'pdf'
+                      ? 'PDF file'
+                      : 'Image',
+                media,
+              }
+            },
+          },
+        }),
+      ],
+    }),
+    defineField({
       name: 'journalLinkType',
-      title: 'Journal / proceedings type',
-      description: 'Choose whether to link to a website or attach a PDF file.',
+      title: 'Journal / proceedings (legacy — single)',
+      description:
+        'Used only if “Journal / proceedings” above is empty. Prefer adding items in the list above.',
       type: 'string',
+      hidden: ({document}) =>
+        Array.isArray(document?.journalItems) && document!.journalItems!.length > 0,
       options: {
         list: [
           {title: 'External link', value: 'link'},
@@ -110,10 +216,11 @@ export default defineType({
     }),
     defineField({
       name: 'journalUrl',
-      title: 'Journal URL',
-      description: 'HTTPS link to the journal or proceedings page.',
+      title: 'Journal URL (legacy)',
       type: 'url',
-      hidden: ({parent}) => parent?.journalLinkType === 'pdf',
+      hidden: ({document}) =>
+        (Array.isArray(document?.journalItems) && document!.journalItems!.length > 0) ||
+        document?.journalLinkType === 'pdf',
       validation: (Rule) =>
         Rule.uri({
           allowRelative: false,
@@ -122,10 +229,11 @@ export default defineType({
     }),
     defineField({
       name: 'journalPdf',
-      title: 'Journal PDF',
-      description: 'Upload a PDF (e.g. proceedings). Visitors will get a download/open link.',
+      title: 'Journal PDF (legacy)',
       type: 'file',
-      hidden: ({parent}) => parent?.journalLinkType !== 'pdf',
+      hidden: ({document}) =>
+        (Array.isArray(document?.journalItems) && document!.journalItems!.length > 0) ||
+        document?.journalLinkType !== 'pdf',
       options: {
         accept: 'application/pdf',
       },

@@ -1,63 +1,119 @@
 "use client";
 
-import { Globe, Info, Link2, MessageCircle, Network } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
 
-/* Texto institucional — apenas trechos do material fornecido (sem conteúdo inventado). */
+/* Texto institucional — material acordado (sem conteúdo inventado). */
 
-/** Parágrafos da secção Mission (o primeiro já aparece como citação no MissionHero). */
+/** Parágrafos iniciais da secção Mission (a citação do hero vem de mission/page.tsx). */
 const MISSION_PARAGRAPHS = [
   "i-FAB activities seek to enable more effective approaches to researching the foot and ankle, accelerate our ability to address the unique challenges that the foot and ankle pose for biomechanics researchers, health care professionals and industry, and foster seamless activities between researchers and research users.",
   "The International Foot and Ankle Biomechanics Community (i-FAB) is an international collaborative activity which will have an important impact on the foot and ankle biomechanics community. It was launched on July 2nd 2007 at the foot and ankle session of the International Society of Biomechanics (ISB) meeting in Taipei, Taiwan.",
 ];
 
-const OBJECTIVES_GENERAL = [
-  "Providing information on the global activities related to foot and ankle biomechanics",
-  "Connecting people working in the foot and ankle biomechanics domain regardless of location and discipline",
-  "Facilitating debate on key issues for the community",
-  "Creating coordinated community wide activities",
-  "Developing a profile for an international critical mass of research activity related to foot and ankle biomechanics",
+const THE_FOOT_BODY =
+  "The foot and ankle represent one of the most complex mechanical structures in the human body, consisting of multiple joints, bones, muscles, tendons, and ligaments that work together to support locomotion. Understanding this system requires advanced experimental biomechanics, computational modeling, and engineering approaches.";
+
+const SCIENTIFIC_VALUE_INTRO =
+  "A central mission of i-FAB is to promote the scientific value of biomechanics research. By bridging the gap between laboratory findings and applied solutions, i-FAB ensures that:";
+
+const SCIENTIFIC_VALUE_BULLETS = [
+  "Footwear and orthotics industries integrate research-based designs.",
+  "Motion capture and modeling technologies are applied to sports and performance analysis.",
+  "Engineering and biomechanics inform next-generation implants and materials.",
 ];
 
-const SPECIFIC_OBJECTIVES = [
-  "Increase the profile of foot and ankle biomechanics research within academic, clinical and industry communities",
-  "Promote the value of foot and ankle biomechanics research to research users (industry and clinical communities)",
-  "Develop a co-ordinated approach to addressing the challenges which experimental and computational biomechanics of the foot and ankle pose",
-  "Enable better co-ordination of multidisciplinary research",
-  "Enable more effective co-ordination of foot and ankle biomechanics research between groups in different countries",
+const SCIENTIFIC_VALUE_OUTRO =
+  "This close connection between science and application positions i-FAB as a leading force in the field.";
+
+const SECTION_TITLE_WHAT_WE_DO = "What we do";
+
+type ObjectivePillar = {
+  id: number;
+  color: string;
+  lead: string;
+  body: string;
+};
+
+/**
+ * Pilares operacionais + objetivos estratégicos (layout numerado em colunas).
+ */
+const OBJECTIVES_PILLARS: ObjectivePillar[] = [
+  {
+    id: 1,
+    color: "#213885",
+    lead: "Raising visibility",
+    body:
+      "By showcasing biomechanics at international congresses, conferences, and collaborative events, we ensure that foot and ankle research gains recognition across disciplines, and we increase visibility of biomechanics research in academic, clinical, and industrial communities.",
+  },
+  {
+    id: 2,
+    color: "#081849",
+    lead: "Bridging academia and industry",
+    body:
+      "i-FAB provides a platform where universities, sports science labs, orthopaedic engineers, and footwear companies can exchange knowledge. We promote the scientific value of foot and ankle biomechanics to research users, including footwear designers, orthotics manufacturers, sports performance experts, and surgical innovators.",
+  },
+  {
+    id: 3,
+    color: "#2c5282",
+    lead: "Encouraging multidisciplinary collaboration and coordinating research",
+    body:
+      "We actively connect biomechanists, engineers, podiatrists, orthopaedic specialists, and computational modelers, ensuring new discoveries have maximum reach. We coordinate international research to address the complex challenges of experimental and computational biomechanics, and encourage collaboration between biomechanics, engineering, podiatry, orthopaedics, sports science, and industry.",
+  },
+  {
+    id: 4,
+    color: "#1a365d",
+    lead: "Providing global networking opportunities",
+    body:
+      "Through the biannual i-FAB Congress and partnerships with major biomechanics societies, we amplify the scientific importance of foot and ankle research worldwide.",
+  },
 ];
+
+function ObjectivesNumberedPillars() {
+  const objectives = OBJECTIVES_PILLARS;
+
+  return (
+    <div
+      className="bg-white px-4 py-10 sm:px-8 sm:py-12 md:px-12 md:py-[52px] rounded-2xl"
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
+      <div className="mb-11 flex flex-wrap items-end gap-5">
+        <h2
+          className="m-0 text-[clamp(1.4rem,2.5vw,1.8rem)] font-bold leading-tight text-[#081849]"
+        >
+          {SECTION_TITLE_WHAT_WE_DO}
+        </h2>
+        <div className="h-px min-w-[40px] flex-1 bg-[#ECDFD2]" />
+      </div>
+
+      <div className="grid grid-cols-1 divide-y divide-[#ECDFD2] lg:grid-cols-4 lg:divide-x lg:divide-y-0">
+        {objectives.map((obj) => (
+          <div key={obj.id} className="py-10 first:pt-0 last:pb-0 lg:px-7 lg:py-0 lg:first:pl-0 lg:last:pr-0">
+            <div
+              className="mb-3 text-[52px] font-black leading-none opacity-[0.15]"
+              style={{ color: obj.color }}
+            >
+              {String(obj.id).padStart(2, "0")}
+            </div>
+
+            <div
+              className="mb-3.5 h-[3px] w-8 rounded-sm"
+              style={{ backgroundColor: obj.color }}
+            />
+
+            <div className="mb-3 text-[13px] font-bold leading-snug text-[#081849]">{obj.lead}</div>
+
+            <p className="m-0 text-[13px] leading-[1.75] text-[#6B7280]">{obj.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const HOW_WE_DO = [
-  "We run a biannual i-FAB congress that is organised to facilitate making connections between different sectors, or increase the profile of foot biomechanics in a new territory. We also try to connect disciplines that traditionally might not have a strong biomechanics component.",
-  "We also routinely host and Chair sessions at major international conferences including the Footwear Biomechanics Group, International Society of Biomechanics, World Council of Biomechanics, EFAS, and others too.",
+  "One of the core initiatives of i-FAB is its biannual congress, an international meeting designed to showcase cutting-edge biomechanics research; build bridges between academia, industry, and applied practice; foster connections between disciplines that traditionally might not intersect; and highlight biomechanics in new regions and territories.",
+  "Beyond its congress, i-FAB also organizes and contributes to sessions at major international conferences such as the Footwear Biomechanics Group, International Society of Biomechanics, World Council of Biomechanics, and EFAS.",
   "This is an open community – if you have an idea for a new initiative that can further our aims please contact us via email",
-];
-
-const VALUE_ICONS: LucideIcon[] = [Info, Network, MessageCircle, Link2, Globe];
-
-/** Títulos curtos alinhados ao sentido de cada aim; texto = material original. */
-const IFAB_AIMS: { title: string; text: string }[] = [
-  {
-    title: "Connect across disciplines and regions",
-    text: "to connect people working in the foot and ankle biomechanics domain regardless of discipline, sector and location",
-  },
-  {
-    title: "Integrate research",
-    text: "to promote integration of research activities",
-  },
-  {
-    title: "Accelerate research",
-    text: "to accelerate research developments",
-  },
-  {
-    title: "Community-wide coordination",
-    text: "to create coordinated community wide activities",
-  },
-  {
-    title: "International collaboration on challenges",
-    text: "to build international activities to address common research challenges.",
-  },
 ];
 
 export function MissionContent() {
@@ -86,49 +142,36 @@ export function MissionContent() {
               />
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Objetivos gerais (lista) */}
-      <section className="bg-[#f9f7f5] py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-10 text-[clamp(1.65rem,2.8vw,2.15rem)] font-bold text-[#081849]">
-            What are our objectives?
-          </h2>
-          <ul className="grid gap-4 md:gap-5">
-            {OBJECTIVES_GENERAL.map((item, i) => (
-              <li
-                key={i}
-                className="flex gap-4 rounded-xl bg-white px-6 py-5 text-base leading-relaxed text-[#374151] md:text-lg"
-              >
-                <span
-                  className="mt-2.5 h-2 w-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: "#213885" }}
-                  aria-hidden
-                />
-                {item}
-              </li>
+          <p className="mb-5 text-2xl font-semibold uppercase tracking-widest text-[#213885] mt-20">
+            Promoting the Scientific Value of Biomechanics
+          </p>
+          <p className="mb-3">{SCIENTIFIC_VALUE_INTRO}</p>
+          <ul className="list-disc space-y-3 pl-6 marker:text-[#213885] mb-5">
+            {SCIENTIFIC_VALUE_BULLETS.map((item) => (
+              <li key={item}>{item}</li>
             ))}
           </ul>
+          <p>{SCIENTIFIC_VALUE_OUTRO}</p>
         </div>
       </section>
 
-      {/* Objetivos específicos | Como fazemos — duas colunas */}
+      {/* Pilares / o que fazemos (lista numerada) */}
+      <section className=" py-16 sm:py-20" style={{ background: "linear-gradient(135deg,rgb(24, 49, 124) 0%,rgb(36, 60, 141) 100%)" }}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ObjectivesNumberedPillars />
+        </div>
+      </section>
+
+      {/* THE FOOT + imagem | Como fazemos + modelo */}
       <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Texto à esquerda, imagem à direita — alinhamento vertical ao centro em lg */}
           <div className="mb-14 grid grid-cols-1 items-center gap-10 lg:mb-16 lg:grid-cols-2 lg:gap-16">
-            <div className="min-w-0">
-              <h2 className="mb-6 text-[clamp(1.45rem,2.2vw,1.9rem)] font-bold text-[#081849]">
-                Our specific objectives are to:
+            <div className="min-w-0 space-y-6 text-base leading-relaxed text-[#374151] md:text-lg">
+              <h2 className="text-[clamp(1.45rem,2.2vw,1.9rem)] font-bold text-[#081849]">
+                THE FOOT
               </h2>
-              <ol className="list-decimal space-y-5 pl-6 text-base leading-relaxed text-[#374151] marker:text-[#213885] md:text-lg">
-                {SPECIFIC_OBJECTIVES.map((item) => (
-                  <li key={item} className="pl-1">
-                    {item}
-                  </li>
-                ))}
-              </ol>
+              <p>{THE_FOOT_BODY}</p>
             </div>
             <div className="relative w-full min-w-0 overflow-hidden rounded-2xl lg:self-center">
               <Image
@@ -142,7 +185,6 @@ export function MissionContent() {
             </div>
           </div>
 
-          {/* Em lg: imagem à esquerda, texto à direita; no mobile: texto primeiro, imagem abaixo */}
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div className="relative order-2 w-full min-w-0 overflow-hidden rounded-2xl lg:order-1 lg:self-center">
               <Image
@@ -167,7 +209,6 @@ export function MissionContent() {
           </div>
         </div>
       </section>
-
 
       <div className="h-10 bg-white" aria-hidden />
     </>

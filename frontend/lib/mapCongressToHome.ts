@@ -1,9 +1,6 @@
 import type { Congress, UpcomingConferenceHomeProps } from "@/lib/types";
 import { formatConferenceHomeDate } from "@/lib/conferenceDates";
-import {
-  resolveCongressJournalHref,
-  resolveCongressJournalKind,
-} from "@/lib/journalResource";
+import { resolveCongressJournalItems } from "@/lib/journalResource";
 
 export function pickUpcomingCongress(
   congresses: Congress[],
@@ -22,8 +19,7 @@ export function mapCongressToHomeProps(
     [c.city, c.country].filter(Boolean).join(", ") || undefined;
   const date = formatConferenceHomeDate(c.startDate, c.endDate) || undefined;
 
-  const journalHref = resolveCongressJournalHref(c);
-  const journalKind = resolveCongressJournalKind(c);
+  const learnMoreItems = resolveCongressJournalItems(c);
   return {
     name: c.title,
     location,
@@ -31,7 +27,6 @@ export function mapCongressToHomeProps(
     venue: c.venue ?? undefined,
     countdownTarget: c.startDate ?? undefined,
     eyebrow: c.homeEyebrow ?? undefined,
-    learnMoreUrl: journalHref || undefined,
-    learnMoreKind: journalKind,
+    learnMoreItems: learnMoreItems.length > 0 ? learnMoreItems : undefined,
   };
 }

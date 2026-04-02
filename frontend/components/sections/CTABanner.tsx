@@ -25,7 +25,7 @@ export function CTABanner() {
           className="mb-8 text-sm leading-relaxed"
           style={{ color: "rgba(255,255,255,0.7)" }}
         >
-          Connect with leading researchers and clinicians worldwide. Stay updated on the latest advances in foot and ankle biomechanics.
+          Connect with researchers, clinicians, and industry partners worldwide. Join a network that amplifies foot and ankle biomechanics through the biannual i-FAB Congress and global collaboration.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link

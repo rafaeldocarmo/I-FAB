@@ -13,6 +13,23 @@ export type CommitteeMember = {
   socialUrl?: string | null;
 };
 
+export type CongressJournalItem = {
+  _key?: string;
+  kind?: "link" | "pdf" | "image" | null;
+  label?: string | null;
+  url?: string | null;
+  file?: {
+    asset?: {
+      url?: string | null;
+      originalFilename?: string | null;
+    } | null;
+  } | null;
+  image?: {
+    alt?: string | null;
+    asset?: { url?: string | null } | null;
+  } | null;
+};
+
 export type Congress = {
   _id: string;
   title: string;
@@ -27,8 +44,10 @@ export type Congress = {
   images?:
     | Array<SanityImageSource & { alt?: string | null; caption?: string | null }>
     | null;
+  /** Multiple journal / proceedings entries (preferred). */
+  journalItems?: CongressJournalItem[] | null;
   journalUrl?: string | null;
-  /** `link` = external URL; `pdf` = uploaded file */
+  /** `link` = external URL; `pdf` = uploaded file — legacy when journalItems is empty */
   journalLinkType?: "link" | "pdf" | null;
   journalPdf?: {
     asset?: {
@@ -40,6 +59,13 @@ export type Congress = {
   homeEyebrow?: string | null;
 };
 
+/** Resolved journal row for UI (link, PDF, or image URL). */
+export type CongressJournalResource = {
+  href: string;
+  kind: "link" | "pdf" | "image";
+  label?: string | null;
+};
+
 /** Props for `UpcomingConferenceHome` (CMS or defaults). */
 export type UpcomingConferenceHomeProps = {
   name?: string;
@@ -48,8 +74,9 @@ export type UpcomingConferenceHomeProps = {
   venue?: string;
   countdownTarget?: string;
   eyebrow?: string;
-  /** Resolved journal URL (link or PDF asset); default `/conferences` */
+  /** One or more journal / proceedings actions from CMS */
+  learnMoreItems?: CongressJournalResource[];
+  /** @deprecated use learnMoreItems */
   learnMoreUrl?: string;
-  /** Whether the journal is a PDF file or external link (for icon) */
   learnMoreKind?: "link" | "pdf";
 };

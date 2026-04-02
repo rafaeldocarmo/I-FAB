@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FileText, Link2 } from "lucide-react";
-import type { UpcomingConferenceHomeProps } from "@/lib/types";
-import type { JournalKind } from "@/lib/journalResource";
+import { FileText, Link2, Image as ImageIcon } from "lucide-react";
+import type { CongressJournalResource, UpcomingConferenceHomeProps } from "@/lib/types";
+import {
+  journalResourceButtonLabel,
+  type JournalKind,
+} from "@/lib/journalResource";
 
 /**
  * Secção home — layout alinhado a UpcomingCountdown (exploration ConferencesSection),
@@ -25,6 +28,34 @@ const defaults = {
   learnMoreUrl: "/conferences",
   learnMoreKind: "link" satisfies JournalKind,
 };
+
+function learnMoreListFromProps(
+  props: UpcomingConferenceHomeProps,
+): CongressJournalResource[] {
+  if (props.learnMoreItems && props.learnMoreItems.length > 0)
+    return props.learnMoreItems;
+  if (props.learnMoreUrl)
+    return [
+      {
+        href: props.learnMoreUrl,
+        kind: (props.learnMoreKind ?? "link") as CongressJournalResource["kind"],
+        label: null,
+      },
+    ];
+  return [
+    {
+      href: defaults.learnMoreUrl,
+      kind: "link" as const,
+      label: null,
+    },
+  ];
+}
+
+function LearnMoreIcon({ kind }: { kind: CongressJournalResource["kind"] }) {
+  if (kind === "pdf") return <FileText className="h-4 w-4 shrink-0" aria-hidden />;
+  if (kind === "image") return <ImageIcon className="h-4 w-4 shrink-0" aria-hidden />;
+  return <Link2 className="h-4 w-4 shrink-0" aria-hidden />;
+}
 
 function useCountdown(target: string) {
   const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 });
@@ -62,6 +93,8 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
     ),
   } as typeof defaults & { learnMoreKind?: JournalKind };
 
+  const learnMoreItems = learnMoreListFromProps(props);
+
   const { d, h, m, s } = useCountdown(data.countdownTarget);
   const city = cityFromLocation(data.location);
   const headline = `${data.name} · ${city}`;
@@ -74,9 +107,6 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
     [s, "Sec"],
   ];
 
-  const learnMoreHref = data.learnMoreUrl || "/conferences";
-  const learnMoreIsExternal = /^https?:\/\//i.test(learnMoreHref);
-  const learnMoreKind = data.learnMoreKind ?? "link";
   const learnMoreClassName =
     "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[10px] border px-8 py-3 text-sm font-semibold transition-colors hover:bg-white/70 hover:translate-y-[-2px] shadow-[0_4px_16px_rgba(0,0,0,0.1)]";
 
@@ -136,37 +166,33 @@ export function UpcomingConferenceHome(props: UpcomingConferenceHomeProps) {
           >
             Register Interest
           </Link>
-          {learnMoreIsExternal ? (
-            <a
-              href={learnMoreHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={learnMoreClassName}
-              style={{
-                borderColor: "rgba(33,56,133,0.28)",
-                color: BRAND,
-              }}
-            >
-              {learnMoreKind === "pdf" ? (
-                <FileText className="h-4 w-4 shrink-0" aria-hidden />
-              ) : (
-                <Link2 className="h-4 w-4 shrink-0" aria-hidden />
-              )}
-              Learn More
-            </a>
-          ) : (
-            <Link
-              href={learnMoreHref}
-              className={learnMoreClassName}
-              style={{
-                borderColor: "rgba(33,56,133,0.28)",
-                color: BRAND,
-              }}
-            >
-              <Link2 className="h-4 w-4 shrink-0" aria-hidden />
-              Learn More
-            </Link>
-          )}
+          {learnMoreItems.map((item, idx) => {
+            const href = item.href;
+            const external = /^https?:\/\//i.test(href);
+            const label = journalResourceButtonLabel(item, idx, learnMoreItems.length);
+            const btnStyle = {
+              borderColor: "rgba(33,56,133,0.28)",
+              color: BRAND,
+            } as const;
+            return external ? (
+              <a
+                key={`${href}-${idx}`}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={learnMoreClassName}
+                style={btnStyle}
+              >
+                <LearnMoreIcon kind={item.kind} />
+                {label}
+              </a>
+            ) : (
+              <Link key={`${href}-${idx}`} href={href} className={learnMoreClassName} style={btnStyle}>
+                <LearnMoreIcon kind={item.kind} />
+                {label}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -12,7 +12,7 @@ const highlightCards = [
     icon: Globe,
     title: "Our Mission",
     description:
-      "To foster international collaboration and advance knowledge in foot and ankle biomechanics through research, education, and community engagement.",
+      "Increase visibility of biomechanics research, promote the scientific value of foot and ankle biomechanics to research users, coordinate international research, and encourage multidisciplinary collaboration across engineering, podiatry, orthopaedics, sports science, and industry.",
     link: "/mission",
     linkLabel: "Learn More",
   },
@@ -20,7 +20,7 @@ const highlightCards = [
     icon: Users,
     title: "Scientific Board",
     description:
-      "Our board comprises world-leading researchers and clinicians dedicated to shaping the future of musculoskeletal biomechanics.",
+      "Our board comprises world-leading researchers and clinicians who guide the scientific direction of foot and ankle biomechanics and help connect disciplines across the community.",
     link: "/committee",
     linkLabel: "Meet the Team",
   },
@@ -28,7 +28,7 @@ const highlightCards = [
     icon: Calendar,
     title: "Conferences",
     description:
-      "i-FAB hosts biennial world congresses that unite clinicians, engineers, and researchers from across the globe.",
+      "The biannual i-FAB Congress showcases cutting-edge research and builds bridges between academia, industry, and applied practice—alongside sessions at major international conferences worldwide.",
     link: "/conferences",
     linkLabel: "View Events",
   },
@@ -63,9 +63,11 @@ export function HighlightCards() {
             className="mx-auto max-w-2xl text-base leading-relaxed md:text-lg"
             style={{ color: "rgba(255,255,255,0.88)" }}
           >
-            i-FAB brings together the world&apos;s foremost experts in foot and
-            ankle biomechanics to share knowledge, collaborate on research, and
-            influence clinical practice globally.
+            We raise the profile of foot and ankle research through international
+            events and partnerships, bridge universities and industry, and connect
+            experts across biomechanics, engineering, and clinical fields — so
+            science translates into better footwear, orthotics, performance
+            insight, and surgical innovation.
           </p>
         </div>
 

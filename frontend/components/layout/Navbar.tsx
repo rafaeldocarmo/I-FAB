@@ -21,7 +21,7 @@ import ifabLogo from "@/public/iFABlogoforweb.png";
 import ifabLogoPNG from "@/public/logoFooter.png";
 
 const NAV_LINKS = [
-  { label: "Mission", href: "/mission" },
+  { label: "About Us", href: "/mission" },
   { label: "Board", href: "/committee" },
   { label: "Conferences", href: "/conferences" },
   { label: "Join", href: "/join" },

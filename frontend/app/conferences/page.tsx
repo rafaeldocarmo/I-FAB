@@ -4,11 +4,8 @@ import type { SanityImageSource } from "@sanity/image-url";
 import { client } from "@/sanity/client";
 import { CONGRESS_LIST_QUERY } from "@/lib/congressQuery";
 import type { Congress } from "@/lib/types";
-import {
-  resolveCongressJournalHref,
-  resolveCongressJournalKind,
-} from "@/lib/journalResource";
-import type { JournalKind } from "@/lib/journalResource";
+import { resolveCongressJournalItems } from "@/lib/journalResource";
+import type { CongressJournalResource } from "@/lib/types";
 import { toOrdinal } from "@/lib/ordinal";
 import { ConferenceHero } from "@/components/sections/ConferenceHero";
 import { ConferencesContent } from "./ConferencesContent";
@@ -29,18 +26,20 @@ export type UpcomingConferenceData = {
   theme: string;
   description: string;
   image: string;
-  learnMoreUrl: string | null;
-  learnMoreKind: JournalKind;
+  journalResources: CongressJournalResource[];
 };
 
 export type PastConferenceData = {
   edition: string;
   year: string;
+  /** Formatted congress dates with year, e.g. "14-17 September, 2024" */
+  dateLine: string;
   location: string;
   name: string;
   description: string;
-  journalHref: string | null;
-  journalKind: JournalKind;
+  image: string | null;
+  imageAlt: string;
+  journalResources: CongressJournalResource[];
 };
 
 function formatDate(start?: string | null, end?: string | null): string {
@@ -106,24 +105,40 @@ export default async function ConferencesPage() {
         theme: "",
         description,
         image: imgUrl,
-        learnMoreUrl: resolveCongressJournalHref(upcomingRaw),
-        learnMoreKind: resolveCongressJournalKind(upcomingRaw),
+        journalResources: resolveCongressJournalItems(upcomingRaw),
       };
     }
 
     if (pastRaw.length > 0) {
       past = pastRaw.map((c) => {
         const year = c.startDate ? new Date(c.startDate).getFullYear().toString() : "—";
+        const datePart = formatDate(c.startDate, c.endDate);
+        const dateLine =
+          datePart && year !== "—" ? `${datePart}, ${year}` : datePart || year;
         const location = [c.venue, c.city, c.country].filter(Boolean).join(", ") || "—";
         const description = typeof c.description === "string" ? c.description : "";
+        const firstImage = c.images?.[0];
+        const imgUrl = firstImage
+          ? urlFor(firstImage)?.width(1200).auto("format").url() ?? null
+          : null;
+        const imageAlt =
+          firstImage &&
+          typeof firstImage === "object" &&
+          "alt" in firstImage &&
+          typeof firstImage.alt === "string" &&
+          firstImage.alt.trim()
+            ? firstImage.alt.trim()
+            : `${c.title} — ${year}`;
         return {
           edition: c.editionNumber ? toOrdinal(c.editionNumber) : "—",
           year,
+          dateLine,
           location,
           name: c.title,
           description,
-          journalHref: resolveCongressJournalHref(c),
-          journalKind: resolveCongressJournalKind(c),
+          image: imgUrl,
+          imageAlt,
+          journalResources: resolveCongressJournalItems(c),
         };
       });
     }

@@ -11,6 +11,13 @@ import { ChevronRight } from "lucide-react";
 const GRADIENT_BAR = "linear-gradient(90deg, #081849 0%, #213885 100%)";
 const CAROUSEL_IMAGES = ["/carrossel1.png", "/carrossel2.jpg", "/carrossel3.png",'/carrossel4.png','/carrossel5.jpg', '/carrossel6.jpg', '/carrossel7.jpg', '/carrossel8.jpg'];
 
+const CONGRESS_AIMS = [
+  "Showcase cutting-edge biomechanics research.",
+  "Build bridges between academia, industry, and applied practice.",
+  "Foster connections between disciplines that traditionally might not intersect.",
+  "Highlight biomechanics in new regions and territories.",
+];
+
 export function ConferenceHero() {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -25,7 +32,7 @@ export function ConferenceHero() {
     <section className="bg-white md:px-4 pb-20 pt-24 sm:px-6 sm:pb-28 sm:pt-28 md:pb-12 md:pt-32 lg:px-8 lg:pb-8 lg:pt-36">
       <div className="mx-auto max-w-4xl text-center lg:max-w-5xl">
         <p className="mb-2 text-[20px] font-semibold uppercase tracking-[0.22em] text-[#213885] md:mb-3">
-          World Congresses
+          Congresses
         </p>
       </div>
 
@@ -34,20 +41,14 @@ export function ConferenceHero() {
                 <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-14">
                     <div className="space-y-6 text-base leading-relaxed text-[#374151] md:text-lg lg:text-[1.125rem]">
                         <p className="mb-5 text-xl font-semibold uppercase tracking-widest text-[#213885]">
-                        We have a biannual i-FAB congress to
+                        Our biannual i-FAB congress is an international meeting designed to
                         </p>
-                        <div className="flex items-start gap-2.5">
-                          <ChevronRight className="mt-1.5 h-5 w-5 shrink-0 text-[#213885]" />
-                          <p className="m-0">Connect people interested in foot and ankle biomechanics across different sectors</p>
-                        </div>
-                        <div className="flex items-start gap-2.5">
-                          <ChevronRight className="mt-1.5 h-5 w-5 shrink-0 text-[#213885]" />
-                          <p className="m-0">Increase the profile of foot biomechanics in a new territory</p>
-                        </div>
-                        <div className="flex items-start gap-2.5">
-                          <ChevronRight className="mt-1.5 h-5 w-5 shrink-0 text-[#213885]" />
-                          <p className="m-0">Connect with disciplines that might not normally have a strong biomechanics component</p>
-                        </div>
+                        {CONGRESS_AIMS.map((line) => (
+                          <div key={line} className="flex items-start gap-2.5">
+                            <ChevronRight className="mt-1.5 h-5 w-5 shrink-0 text-[#213885]" />
+                            <p className="m-0">{line}</p>
+                          </div>
+                        ))}
                     </div>
                     <div className="relative w-full overflow-hidden rounded-2xl">
                     <div className="relative h-[300px] w-full sm:h-[360px] lg:h-[330px]">

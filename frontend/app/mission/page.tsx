@@ -2,9 +2,9 @@ import { MissionHero } from "@/components/sections/MissionHero";
 import { MissionContent } from "@/app/mission/MissionContent";
 
 export const metadata = {
-  title: "Mission & Objectives — i-FAB",
+  title: "About Us — i-FAB",
   description:
-    "The International Foot and Ankle Biomechanics Community (i-FAB) is an international collaborative community of all those interested in foot and ankle biomechanics.",
+    "i-FAB promotes the scientific value of foot and ankle biomechanics, raises visibility through international congresses and events, bridges academia and industry, and encourages multidisciplinary collaboration worldwide.",
 };
 
 const MISSION_HERO_QUOTE =

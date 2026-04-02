@@ -64,6 +64,8 @@ export type CongressJournalResource = {
   href: string;
   kind: "link" | "pdf" | "image";
   label?: string | null;
+  /** Sanity `originalFilename` for PDF assets (past conferences UI). */
+  fileName?: string | null;
 };
 
 /** Props for `UpcomingConferenceHome` (CMS or defaults). */

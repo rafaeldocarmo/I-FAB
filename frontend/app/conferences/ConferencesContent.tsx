@@ -24,6 +24,14 @@ function JournalKindGlyphLarge({ kind }: { kind: CongressJournalResource["kind"]
   return <Link2 className="h-8 w-8" strokeWidth={1.75} aria-hidden />;
 }
 
+/** Nome do ficheiro PDF para mostrar (preferir `originalFilename`, senão label do CMS). */
+function pastConferencePdfCaption(item: CongressJournalResource): string | null {
+  if (item.kind !== "pdf") return null;
+  const fromFile = item.fileName?.trim();
+  if (fromFile) return fromFile;
+  return item.label?.trim() || null;
+}
+
 type Props = {
   upcoming: UpcomingConferenceData | null;
   past: PastConferenceData[];
@@ -196,11 +204,12 @@ export function ConferencesContent({ upcoming, past }: Props) {
             {past.map((conf) => {
               const journalBlock =
                 conf.journalResources.length > 0 ? (
-                  <div className="-ml-1 flex shrink-0 flex-wrap items-center gap-1 self-start md:ml-0 md:self-auto">
+                  <div className="-ml-1 flex  max-w-full shrink-0 flex-wrap content-start items-start justify-center gap-2 self-center md:ml-0 md:max-w-[min(100%,280px)] md:items-start md:justify-end md:self-auto lg:max-w-[min(100%,320px)]">
                     {conf.journalResources.map((item, idx) => {
+                      const pdfCaption = pastConferencePdfCaption(item);
                       const aria =
                         item.kind === "pdf"
-                          ? `Download PDF for ${conf.name}${item.label ? `: ${item.label}` : ""}`
+                          ? `Download PDF for ${conf.name}${pdfCaption ? `: ${pdfCaption}` : ""}`
                           : item.kind === "image"
                             ? `Open image for ${conf.name}${item.label ? `: ${item.label}` : ""}`
                             : `Open link for ${conf.name}${item.label ? `: ${item.label}` : ""}`;
@@ -210,11 +219,22 @@ export function ConferencesContent({ upcoming, past }: Props) {
                           href={item.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          title={item.label?.trim() || undefined}
-                          className="rounded-lg p-2 text-[#213885] transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885]"
+                          title={
+                            pdfCaption ||
+                            item.label?.trim() ||
+                            (item.kind === "link" ? item.href : undefined)
+                          }
+                          className="inline-flex max-w-[200px] items-center gap-2 rounded-lg p-2 text-[#213885] transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#213885] sm:max-w-[220px]"
                           aria-label={aria}
                         >
-                          <JournalKindGlyphLarge kind={item.kind} />
+                          <span className="shrink-0">
+                            <JournalKindGlyphLarge kind={item.kind} />
+                          </span>
+                          {pdfCaption ? (
+                            <span className="min-w-0 flex-1 truncate text-left text-[11px] leading-tight text-[#6B7280]">
+                              {pdfCaption}
+                            </span>
+                          ) : null}
                         </a>
                       );
                     })}
@@ -224,7 +244,7 @@ export function ConferencesContent({ upcoming, past }: Props) {
               return (
                 <div
                   key={`${conf.year}-${conf.name}`}
-                  className="group flex flex-col  overflow-hidden rounded-2xl border border-[#CCCACC] bg-white transition-all duration-200 hover:border-[#213885] hover:shadow-[0_4px_20px_rgba(33,56,133,0.10)] md:flex-row md:items-center"
+                  className="group flex flex-col items-center overflow-hidden rounded-2xl border border-[#CCCACC] bg-white transition-all duration-200 hover:border-[#213885] hover:shadow-[0_4px_20px_rgba(33,56,133,0.10)] md:flex-row md:items-center"
                 >
                   <div className="flex shrink-0 justify-center p-5 pb-0 md:justify-start md:p-6 md:pb-6 md:pr-3 w-full max-w-[360px]">
                     <div
@@ -249,25 +269,34 @@ export function ConferencesContent({ upcoming, past }: Props) {
                     </div>
                   </div>
 
-                  <div className="flex min-w-0 flex-1 flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between md:gap-6 md:p-6 md:pl-2">
-                    <div className="min-w-0 flex-1">
+                  <div className="flex min-w-0 flex-1 flex-col gap-3 p-5 text-center md:flex-row md:items-center md:justify-between md:gap-6 md:p-6 md:pl-2 md:text-left">
+                    <div className="flex min-w-0 flex-1 flex-col items-center md:items-start">
                       <h3 className="text-base font-bold" style={{ color: "#081849" }}>
                         {conf.name}
                       </h3>
-                      <div className="mt-0.5 flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1">
-                        <div className="flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
+                      <div className="mt-0.5 flex flex-col items-center gap-1 md:flex-row md:flex-wrap md:items-center md:gap-x-4 md:gap-y-1">
+                        <div
+                          className="flex items-center justify-center gap-1.5 text-xs md:justify-start"
+                          style={{ color: "#6B7280" }}
+                        >
                           <MapPin size={11} className="shrink-0 text-[#213885]" />
                           <span>{conf.location}</span>
                         </div>
                         {conf.dateLine !== "—" ? (
-                          <div className="flex items-center gap-1.5 text-xs" style={{ color: "#6B7280" }}>
+                          <div
+                            className="flex items-center justify-center gap-1.5 text-xs md:justify-start"
+                            style={{ color: "#6B7280" }}
+                          >
                             <Calendar size={11} className="shrink-0 text-[#213885]" />
                             <span>{conf.dateLine}</span>
                           </div>
                         ) : null}
                       </div>
                       {conf.description ? (
-                        <p className="mt-2 text-sm leading-relaxed" style={{ color: "#6B7280" }}>
+                        <p
+                          className="mt-2 max-w-prose text-sm leading-relaxed md:max-w-none"
+                          style={{ color: "#6B7280" }}
+                        >
                           {conf.description}
                         </p>
                       ) : null}

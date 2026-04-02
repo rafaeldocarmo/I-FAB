@@ -30,7 +30,8 @@ export function resolveCongressJournalItems(c: Congress): CongressJournalResourc
         if (u) out.push({ href: u, kind: "link", label: row.label });
       } else if (k === "pdf") {
         const u = row.file?.asset?.url?.trim();
-        if (u) out.push({ href: u, kind: "pdf", label: row.label });
+        const fn = row.file?.asset?.originalFilename?.trim();
+        if (u) out.push({ href: u, kind: "pdf", label: row.label, fileName: fn || null });
       } else if (k === "image") {
         const u = row.image?.asset?.url?.trim();
         if (u) out.push({ href: u, kind: "image", label: row.label });
@@ -41,7 +42,12 @@ export function resolveCongressJournalItems(c: Congress): CongressJournalResourc
 
   const href = legacyJournalHref(c);
   if (!href) return [];
-  return [{ href, kind: legacyJournalKind(c), label: null }];
+  const legacyKind = legacyJournalKind(c);
+  const legacyFile =
+    legacyKind === "pdf"
+      ? c.journalPdf?.asset?.originalFilename?.trim() || null
+      : null;
+  return [{ href, kind: legacyKind, label: null, fileName: legacyFile }];
 }
 
 /** First journal href, or null (legacy helper). */

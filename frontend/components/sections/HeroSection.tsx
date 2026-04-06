@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import ifabLogo from "@/public/iFABlogoforweb.png";
 
 export function HeroSection() {
   return (
@@ -22,11 +23,12 @@ export function HeroSection() {
           }}
         />
         <Image
-          src="/iFABlogoforweb.png"
+          src={ifabLogo}
           alt="i-FAB logo"
-          width={150}
-          height={150}
+          priority
           style={{
+            width: 150,
+            height: "auto",
             margin: "0 auto 24px",
           }}
         />

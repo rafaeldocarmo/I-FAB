@@ -38,12 +38,11 @@ export function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <Image 
-                style={{
-                  height: 150,
-                  width: "auto"
-                }} 
+                style={{ height: 150, width: "auto" }}
+                className="h-[150px] w-auto"
                 src={ifabLogo} 
-                alt="logo"
+                alt="i-FAB logo"
+                loading="eager"
               />
             </div>
             <p className="text-sm leading-relaxed max-w-xs mt-4" style={{ color: "#9ca3af" }}>
@@ -58,6 +57,7 @@ export function Footer() {
                   key={label}
                   href={href}
                   target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200"
                   style={{ backgroundColor: "rgba(255,255,255,0.08)" }}

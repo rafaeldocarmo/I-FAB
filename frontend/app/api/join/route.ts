@@ -6,27 +6,76 @@ import {
   type JoinPayload,
 } from "@/lib/joinEmail";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_FIELD_LEN = 500;
+const ALLOWED_ROLES = new Set(["academic", "industry", "clinician", "other"]);
+
+function sanitize(raw: unknown, maxLen = MAX_FIELD_LEN): string {
+  if (typeof raw !== "string") return "";
+  return raw.trim().slice(0, maxLen);
+}
+
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const required = ["fullName", "email", "mainRole"] as const;
-    for (const key of required) {
-      if (typeof body[key] !== "string" || !String(body[key]).trim()) {
-        return NextResponse.json(
-          { ok: false, error: "Missing fields" },
-          { status: 400 },
-        );
-      }
+    const ct = req.headers.get("content-type") ?? "";
+    if (!ct.includes("application/json")) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid content type" },
+        { status: 415 },
+      );
+    }
+
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid body" },
+        { status: 400 },
+      );
+    }
+
+    const b = body as Record<string, unknown>;
+    const fullName = sanitize(b.fullName);
+    const email = sanitize(b.email, 254);
+    const mainRole = sanitize(b.mainRole, 50);
+
+    if (!fullName || !email || !mainRole) {
+      return NextResponse.json(
+        { ok: false, error: "Missing fields" },
+        { status: 400 },
+      );
+    }
+
+    if (!EMAIL_RE.test(email)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid email" },
+        { status: 400 },
+      );
+    }
+
+    if (!ALLOWED_ROLES.has(mainRole)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid role" },
+        { status: 400 },
+      );
     }
 
     const payload: JoinPayload = {
-      fullName: String(body.fullName).trim(),
-      email: String(body.email).trim(),
-      employer: String(body.employer ?? "").trim(),
-      city: String(body.city ?? "").trim(),
-      country: String(body.country ?? "").trim(),
-      mainRole: String(body.mainRole).trim(),
-      otherRole: String(body.otherRole ?? "").trim(),
+      fullName,
+      email,
+      employer: sanitize(b.employer),
+      city: sanitize(b.city),
+      country: sanitize(b.country),
+      mainRole,
+      otherRole: sanitize(b.otherRole),
     };
 
     const apiKey = process.env.RESEND_API_KEY;

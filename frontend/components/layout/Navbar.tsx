@@ -68,6 +68,7 @@ function NavLogo({ scrolled }: { scrolled: boolean }) {
     <Link href="/" className="flex items-center gap-2.5">
       <Image
         style={{ height: 60, width: "auto" }}
+        className="h-[60px] w-auto"
         src={scrolled ? ifabLogoPNG : ifabLogo}
         alt="i-FAB"
       />

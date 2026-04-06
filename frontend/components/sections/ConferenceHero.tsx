@@ -44,7 +44,7 @@ export function ConferenceHero() {
   return (
     <section className="bg-white pb-20 pt-24 sm:pb-28 sm:pt-28 md:px-4 md:pb-12 md:pt-32 lg:px-8 lg:pb-8 lg:pt-36">
       <div className="mx-auto max-w-4xl text-center lg:max-w-5xl">
-        <p className="mb-2 text-[20px] font-semibold uppercase tracking-[0.22em] text-[#213885] md:mb-3">
+        <p className="mb-2 text-[20px] font-bold uppercase tracking-[0.22em] text-[#213885] md:mb-3 md:text-3xl">
           Congresses
         </p>
       </div>

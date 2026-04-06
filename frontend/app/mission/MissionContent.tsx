@@ -121,6 +121,26 @@ const HOW_WE_DO = [
 export function MissionContent() {
   return (
     <>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-10" style={{ background: "linear-gradient(135deg,rgb(24, 49, 124) 0%,rgb(36, 60, 141) 100%)" }}>
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16  max-w-7xl mx-auto lg:px-8">
+            <div className="min-w-0 space-y-6 text-base leading-relaxed text-[#374151] md:text-lg">
+              <h2 className="text-[clamp(1.45rem,2.2vw,1.9rem)] font-bold text-[#fff]">
+                THE FOOT
+              </h2>
+              <p className="text-[#fff]">{THE_FOOT_BODY}</p>
+            </div>
+            <div className="relative w-full min-w-0 overflow-hidden rounded-2xl lg:self-center">
+              <Image
+                src="/Foot.jpg"
+                alt="Foot"
+                width={1200}
+                height={900}
+                className="h-auto w-full max-h-[min(420px,55vh)] object-cover object-center lg:max-h-[min(480px,65vh)]"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+        </div>
       {/* Missão + imagem */}
       <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -154,17 +174,19 @@ export function MissionContent() {
               )}
             </div>
           </div>
-
-          <p className="mb-5 text-2xl font-semibold uppercase tracking-widest text-[#213885] mt-20">
-            Promoting the Scientific Value of Biomechanics
-          </p>
-          <p className="mb-3">{SCIENTIFIC_VALUE_INTRO}</p>
-          <ul className="list-disc space-y-3 pl-6 marker:text-[#213885] mb-5">
-            {SCIENTIFIC_VALUE_BULLETS.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <p>{SCIENTIFIC_VALUE_OUTRO}</p>
+            
+          <div className="m-auto">
+            <p className="mb-5 text-2xl font-semibold uppercase tracking-widest text-[#213885] mt-20">
+              Promoting the Scientific Value of Biomechanics
+            </p>
+            <p className="mb-3">{SCIENTIFIC_VALUE_INTRO}</p>
+            <ul className="list-disc space-y-3 pl-6 marker:text-[#213885] mb-5">
+              {SCIENTIFIC_VALUE_BULLETS.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p>{SCIENTIFIC_VALUE_OUTRO}</p>
+          </div>
         </div>
       </section>
 
@@ -178,24 +200,6 @@ export function MissionContent() {
       {/* THE FOOT + imagem | Como fazemos + modelo */}
       <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 grid grid-cols-1 items-center gap-10 lg:mb-16 lg:grid-cols-2 lg:gap-16">
-            <div className="min-w-0 space-y-6 text-base leading-relaxed text-[#374151] md:text-lg">
-              <h2 className="text-[clamp(1.45rem,2.2vw,1.9rem)] font-bold text-[#081849]">
-                THE FOOT
-              </h2>
-              <p>{THE_FOOT_BODY}</p>
-            </div>
-            <div className="relative w-full min-w-0 overflow-hidden rounded-2xl lg:self-center">
-              <Image
-                src="/Foot.jpg"
-                alt="Foot"
-                width={1200}
-                height={900}
-                className="h-auto w-full max-h-[min(420px,55vh)] object-cover object-center lg:max-h-[min(480px,65vh)]"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          </div>
 
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div className="relative order-2 w-full min-w-0 overflow-hidden rounded-2xl lg:order-1 lg:self-center">

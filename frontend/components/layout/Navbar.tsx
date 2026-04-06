@@ -22,7 +22,7 @@ import ifabLogoPNG from "@/public/logoFooter.png";
 
 const NAV_LINKS = [
   { label: "About Us", href: "/mission" },
-  { label: "Board", href: "/committee" },
+  { label: "Scientific Board", href: "/committee" },
   { label: "Conferences", href: "/conferences" },
   { label: "Join", href: "/join" },
 ] as const;

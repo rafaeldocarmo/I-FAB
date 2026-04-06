@@ -99,7 +99,7 @@ export function Footer() {
               {[
                 { label: "Home", path: "/" },
                 { label: "About Us", path: "/mission" },
-                { label: "Board", path: "/committee" },
+                { label: "Scientific Board", path: "/committee" },
                 { label: "Conferences", path: "/conferences" },
                 
               ].map((item) => (

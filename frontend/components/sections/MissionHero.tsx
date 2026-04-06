@@ -31,11 +31,11 @@ export function MissionHero({
       <div className="mx-auto max-w-4xl text-center lg:max-w-5xl">
 
 
-        <p className="mb-10 text-sm font-semibold uppercase tracking-[0.22em] text-[#213885] md:mb-12 md:text-base">
+        <p className="mb-10 text-sm font-bold uppercase tracking-[0.22em] text-[#213885] md:mb-12 md:text-3xl">
           Our Mission
         </p>
 
-        <blockquote className="mb-10 px-1 text-[clamp(1.1rem,2.4vw,1.65rem)] font-bold leading-[1.45] text-[#081849] md:mb-12 md:px-4 md:text-[clamp(1.15rem,2.2vw,1.75rem)] lg:leading-[1.4]">
+        <blockquote className="mb-10 px-1 text-[clamp(1.1rem,2.4vw,1.65rem)] font-semibold leading-[1.45] text-[#081849] md:mb-12 md:px-4 md:text-[1.3rem] lg:leading-[1.4]">
           &ldquo;{quote}&rdquo;
         </blockquote>
 

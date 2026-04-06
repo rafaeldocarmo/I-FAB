@@ -1,16 +1,38 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PublicCarouselSlide } from "@/lib/publicCarouselSlides";
+
+/** Ordem aleatória (Fisher–Yates); cópia nova. */
+function shuffleSlides<T>(items: T[]): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
 
 export type PublicImageCarouselProps = {
   slides: PublicCarouselSlide[];
   /** Acessível — ex.: "Congress photo gallery" */
   ariaLabel?: string;
   className?: string;
+  /**
+   * Se true (default), baralha os slides após montar no cliente (nova ordem em cada visita / refresh).
+   * O primeiro render iguala o servidor; em seguida a ordem muda (sem erro de hidratação).
+   */
+  shuffleSlides?: boolean;
   /**
    * `hero` — autoplay, sem setas, sem bullets, altura fixa (como o antigo ConferenceHero).
    * `default` — setas + bullets, sem autoplay.
@@ -33,7 +55,25 @@ export function PublicImageCarousel({
   autoPlayInterval: autoPlayIntervalProp,
   showArrows: showArrowsProp,
   showDots: showDotsProp,
+  shuffleSlides: shuffleSlidesProp = true,
 }: PublicImageCarouselProps) {
+  const slidesKey = slides.map((s) => s.src).join("\0");
+  const slidesRef = useRef(slides);
+  useLayoutEffect(() => {
+    slidesRef.current = slides;
+  });
+
+  const [orderedSlides, setOrderedSlides] = useState<PublicCarouselSlide[]>(slides);
+
+  useEffect(() => {
+    const s = slidesRef.current;
+    if (!shuffleSlidesProp || s.length <= 1) {
+      setOrderedSlides(s);
+      return;
+    }
+    setOrderedSlides(shuffleSlides(s));
+  }, [shuffleSlidesProp, slidesKey]);
+
   const isHero = variant === "hero";
   const autoPlayInterval = useMemo(() => {
     if (autoPlayIntervalProp != null) return autoPlayIntervalProp;
@@ -41,11 +81,11 @@ export function PublicImageCarousel({
   }, [autoPlayIntervalProp, isHero]);
 
   const showArrows =
-    showArrowsProp ?? (!isHero && slides.length > 1 && autoPlayInterval <= 0);
+    showArrowsProp ?? (!isHero && orderedSlides.length > 1 && autoPlayInterval <= 0);
   const showDots = showDotsProp ?? !isHero;
   const needsNavState = showArrows || showDots;
 
-  const enableLoop = slides.length > 1;
+  const enableLoop = orderedSlides.length > 1;
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: enableLoop,
     align: "start",
@@ -83,15 +123,19 @@ export function PublicImageCarousel({
   }, [emblaApi, onSelect, needsNavState]);
 
   useEffect(() => {
-    if (!emblaApi || slides.length <= 1) return;
+    if (!emblaApi || orderedSlides.length <= 1) return;
     if (autoPlayInterval <= 0) return;
     const id = window.setInterval(() => {
       emblaApi.scrollNext();
     }, autoPlayInterval);
     return () => window.clearInterval(id);
-  }, [emblaApi, slides.length, autoPlayInterval]);
+  }, [emblaApi, orderedSlides.length, autoPlayInterval]);
 
-  if (!slides.length) return null;
+  useEffect(() => {
+    emblaApi?.reInit();
+  }, [emblaApi, orderedSlides]);
+
+  if (!orderedSlides.length) return null;
 
   const frameClass = isHero
     ? "overflow-hidden rounded-2xl"
@@ -112,12 +156,12 @@ export function PublicImageCarousel({
       <div className={frameClass}>
         <div ref={emblaRef} className="overflow-hidden">
           <div className="flex touch-pan-y">
-            {slides.map((slide, i) => (
+            {orderedSlides.map((slide, i) => (
               <div
-                key={`${slide.src}-${i}`}
+                key={slide.src}
                 className="min-w-0 shrink-0 grow-0 basis-full"
                 aria-roledescription="slide"
-                aria-label={`${i + 1} of ${slides.length}`}
+                aria-label={`${i + 1} of ${orderedSlides.length}`}
               >
                 <div className={slideImageShellClass}>
                   <Image
@@ -134,7 +178,7 @@ export function PublicImageCarousel({
           </div>
         </div>
 
-        {slides.length > 1 && showArrows ? (
+        {orderedSlides.length > 1 && showArrows ? (
           <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-2 md:px-3">
             <button
               type="button"
@@ -158,13 +202,13 @@ export function PublicImageCarousel({
           </div>
         ) : null}
 
-        {slides.length > 1 && showDots ? (
+        {orderedSlides.length > 1 && showDots ? (
           <div
             className="flex justify-center gap-2 border-t border-[#E8E4E0] bg-white/90 px-4 py-3"
             role="tablist"
             aria-label="Slide indicators"
           >
-            {slides.map((_, i) => (
+            {orderedSlides.map((_, i) => (
               <button
                 key={i}
                 type="button"

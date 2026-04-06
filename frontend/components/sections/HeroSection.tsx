@@ -73,58 +73,6 @@ export function HeroSection() {
         </p>
         <div
           style={{
-            display: "flex",
-            gap: 36,
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <Link
-            href="/conferences"
-            className="text-[#6B7280] border-b-2 border-transparent hover:text-[#213885] hover:border-[#213885]"
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              textDecoration: "none",
-              paddingBottom: 3,
-            }}
-          >
-            Explore Conferences <ArrowRight size={16} />
-          </Link>
-          <Link
-            href="/mission"
-            className="text-[#6B7280] border-b-2 border-transparent hover:text-[#213885] hover:border-[#213885]"
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              textDecoration: "none",
-            }}
-          >
-            Our Mission <ChevronRight size={16} />
-          </Link>
-          <Link
-            href="/committee"
-            className="text-[#6B7280] border-b-2 border-transparent hover:text-[#213885] hover:border-[#213885]"
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              textDecoration: "none",
-            }}
-          >
-            Our Board <ChevronRight size={16} />
-          </Link>
-        </div>
-        <div
-          style={{
             width: 64,
             height: 3,
             backgroundColor: "#213885",

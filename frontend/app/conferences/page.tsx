@@ -27,6 +27,8 @@ export type UpcomingConferenceData = {
   description: string;
   image: string;
   journalResources: CongressJournalResource[];
+  /** Coluna da imagem no card upcoming (Conferences) */
+  imageBackdrop: "light" | "dark";
 };
 
 export type PastConferenceData = {
@@ -106,6 +108,8 @@ export default async function ConferencesPage() {
         description,
         image: imgUrl,
         journalResources: resolveCongressJournalItems(upcomingRaw),
+        imageBackdrop:
+          upcomingRaw.upcomingCardImageBackdrop === "light" ? "light" : "dark",
       };
     }
 

@@ -22,5 +22,6 @@ export const CONGRESS_LIST_QUERY = `*[_type == "congress"] | order(startDate des
       originalFilename
     }
   },
-  homeEyebrow
+  homeEyebrow,
+  upcomingCardImageBackdrop
 }`;

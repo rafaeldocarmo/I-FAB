@@ -91,7 +91,7 @@ function ObjectivesNumberedPillars() {
         {objectives.map((obj) => (
           <div key={obj.id} className="py-10 first:pt-0 last:pb-0 lg:px-7 lg:py-0 lg:first:pl-0 lg:last:pr-0">
             <div
-              className="mb-3 text-[52px] font-black leading-none opacity-[0.15]"
+              className="mb-3 text-[52px] font-black leading-none opacity-[0.35]"
               style={{ color: obj.color }}
             >
               {String(obj.id).padStart(2, "0")}
@@ -124,9 +124,9 @@ export function MissionContent() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-10" style={{ background: "linear-gradient(135deg,rgb(24, 49, 124) 0%,rgb(36, 60, 141) 100%)" }}>
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16  max-w-7xl mx-auto lg:px-8">
             <div className="min-w-0 space-y-6 text-base leading-relaxed text-[#374151] md:text-lg">
-              <h2 className="text-[clamp(1.45rem,2.2vw,1.9rem)] font-bold text-[#fff]">
-                THE FOOT
-              </h2>
+            <p className="mb-5 text-2xl font-bold uppercase tracking-widest text-[#fff]">
+              The Foot
+              </p>
               <p className="text-[#fff]">{THE_FOOT_BODY}</p>
             </div>
             <div className="relative w-full min-w-0 overflow-hidden rounded-2xl lg:self-center">

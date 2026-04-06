@@ -59,39 +59,62 @@ export function ConferencesContent({ upcoming, past }: Props) {
           </div>
 
           {upcoming ? (
-            <div
-              className="overflow-hidden rounded-3xl md:shadow-[0_12px_48px_rgba(8,24,73,0.45)]"
-              style={{
-                background: "linear-gradient(145deg, #081849 0%, #213885 48%,rgb(27, 57, 141) 100%)",
-              }}
-            >
+            <div className="overflow-hidden rounded-3xl md:shadow-[0_12px_48px_rgba(8,24,73,0.45)]">
               <div className="grid grid-cols-1 lg:grid-cols-2">
-                <div className="relative h-64 min-h-64 lg:min-h-[320px] lg:h-auto">
+                <div
+                  className={`relative flex h-64 min-h-64 items-center justify-center lg:min-h-[320px] lg:h-auto ${
+                    upcoming.imageBackdrop === "light"
+                      ? "bg-[#f9f7f5]"
+                      : "bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
+                  }`}
+                >
                   {upcoming.image ? (
                     <ImageWithFallback
                       src={upcoming.image}
                       alt={upcoming.name}
-                      className="h-full w-full object-cover"
+                      className="w-[80%]"
                     />
                   ) : (
                     <div
-                      className="h-full min-h-64 w-full bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
+                      className={`h-full min-h-64 w-full ${
+                        upcoming.imageBackdrop === "light"
+                          ? "bg-[#E8E4E0]"
+                          : "bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
+                      }`}
                       aria-hidden
                     />
                   )}
                   {upcoming.edition != null ? (
                     <div className="absolute bottom-6 left-6">
-                      <div className="text-5xl font-bold text-[#213885]">
+                      <div
+                        className={`text-5xl font-bold ${
+                          upcoming.imageBackdrop === "light"
+                            ? "text-[#213885]"
+                            : "text-white"
+                        }`}
+                      >
                         {toOrdinal(upcoming.edition)}
                       </div>
-                      <div className="text-xs font-semibold uppercase tracking-widest text-[#213885]">
+                      <div
+                        className={`text-xs font-semibold uppercase tracking-widest ${
+                          upcoming.imageBackdrop === "light"
+                            ? "text-[#213885]"
+                            : "text-white"
+                        }`}
+                      >
                         Edition
                       </div>
                     </div>
                   ) : null}
                 </div>
 
-                <div className="border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-10">
+                <div
+                  className="border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-10"
+                  style={{
+                    background:
+                      "linear-gradient(145deg, #081849 0%, #213885 48%, rgb(27, 57, 141) 100%)",
+                  }}
+                >
                   <div className="mb-3 flex flex-wrap items-center gap-2">
                     <span className="rounded-full bg-[#ECDFD2] px-2.5 py-1 text-xs font-semibold text-[#081849]">
                       {upcoming.edition != null
@@ -155,7 +178,7 @@ export function ConferencesContent({ upcoming, past }: Props) {
                     })}
                     <Link
                       href="/join"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 hover:translate-y-[-2px]"
                     >
                       Register Interest
                     </Link>

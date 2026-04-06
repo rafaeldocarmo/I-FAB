@@ -49,29 +49,15 @@ export function Footer() {
             <p className="text-sm leading-relaxed max-w-xs mt-4" style={{ color: "#9ca3af" }}>
               A global community advancing foot and ankle biomechanics—raising visibility across disciplines, bridging science and application, and connecting experts through our biannual congress and international partnerships.
             </p>
-            <div className="flex items-center gap-2 mt-5">
-              <a
-                href="mailto:info@i-fab.org"
-                className="flex items-center gap-2 text-sm transition-colors duration-200"
-                style={{ color: "#ECDFD2" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#ECDFD2")}
-              >
-                <Mail size={14} />
-                info@i-fab.org
-              </a>
-            </div>
 
             <div className="flex items-center gap-3 mt-5">
               {[
-                { icon: TwitterIcon, href: "#", label: "Twitter" },
-                { icon: LinkedinIcon, href: "#", label: "LinkedIn" },
-                { icon: YoutubeIcon, href: "#", label: "YouTube" },
-                { icon: Globe, href: "#", label: "Website" },
+                { icon: LinkedinIcon, href: "https://www.linkedin.com/groups/16319003/", label: "LinkedIn" },
               ].map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
                   aria-label={label}
                   className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200"
                   style={{ backgroundColor: "rgba(255,255,255,0.08)" }}

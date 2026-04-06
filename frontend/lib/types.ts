@@ -57,6 +57,8 @@ export type Congress = {
   } | null;
   /** Optional label above the countdown on the homepage */
   homeEyebrow?: string | null;
+  /** Conferences upcoming card: `light` = pale image column; `dark` = brand gradient */
+  upcomingCardImageBackdrop?: "light" | "dark" | null;
 };
 
 /** Resolved journal row for UI (link, PDF, or image URL). */

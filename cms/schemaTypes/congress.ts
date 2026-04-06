@@ -95,6 +95,21 @@ export default defineType({
       validation: (Rule) => Rule.max(1),
     }),
     defineField({
+      name: 'upcomingCardImageBackdrop',
+      title: 'Conferences — upcoming card: image column background',
+      description:
+        'Controls the area behind the photo on the Conferences page. Light = pale background (edition text in dark blue). Dark = brand blue gradient (edition text in white).',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Light (no blue)', value: 'light'},
+          {title: 'Dark / brand (no white)', value: 'dark'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'dark',
+    }),
+    defineField({
       name: 'journalItems',
       title: 'Journal / proceedings',
       description:

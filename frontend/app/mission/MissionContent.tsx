@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { PublicImageCarousel } from "@/components/public/PublicImageCarousel";
+import { ABOUT_CAROUSEL_SLIDES } from "@/lib/publicCarouselSlides";
 
 /* Texto institucional — material acordado (sem conteúdo inventado). */
 
@@ -131,15 +133,25 @@ export function MissionContent() {
                 <p key={i}>{p}</p>
               ))}
             </div>
-            <div className="relative w-full overflow-hidden rounded-2xl">
-              <Image
-                src="/mission1.png"
-                alt="i-FAB mission"
-                width={1200}
-                height={900}
-                className="h-auto w-full max-h-[min(520px,70vh)] object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+            <div className="relative min-w-0 w-full">
+              {ABOUT_CAROUSEL_SLIDES.length > 0 ? (
+                <PublicImageCarousel
+                  variant="hero"
+                  slides={ABOUT_CAROUSEL_SLIDES}
+                  ariaLabel="i-FAB mission gallery"
+                />
+              ) : (
+                <div className="relative overflow-hidden rounded-2xl">
+                  <Image
+                    src="/mission1.png"
+                    alt="i-FAB mission"
+                    width={1200}
+                    height={900}
+                    className="h-auto w-full max-h-[min(520px,70vh)] object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
+              )}
             </div>
           </div>
 

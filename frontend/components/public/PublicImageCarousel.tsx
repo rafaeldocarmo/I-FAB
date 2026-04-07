@@ -42,10 +42,18 @@ export type PublicImageCarouselProps = {
   autoPlayInterval?: number;
   showArrows?: boolean;
   showDots?: boolean;
+  /**
+   * `cover` — preenche o quadro (pode cortar).
+   * `contain` — imagem inteira visível, até 100% da largura/altura do quadro, sem distorção; barras com `letterboxBackground`.
+   */
+  imageFit?: "cover" | "contain";
+  /** Cor de fundo atrás da imagem quando `imageFit` é `contain` (formato diferente do quadro). */
+  letterboxBackground?: string;
 };
 
 const BRAND = "#213885";
 const NAVY = "#081849";
+const DEFAULT_LETTERBOX_BG = "#E5E7EB";
 
 export function PublicImageCarousel({
   slides,
@@ -56,6 +64,8 @@ export function PublicImageCarousel({
   showArrows: showArrowsProp,
   showDots: showDotsProp,
   shuffleSlides: shuffleSlidesProp = true,
+  imageFit = "cover",
+  letterboxBackground = DEFAULT_LETTERBOX_BG,
 }: PublicImageCarouselProps) {
   const slidesKey = slides.map((s) => s.src).join("\0");
   const slidesRef = useRef(slides);
@@ -137,13 +147,16 @@ export function PublicImageCarousel({
 
   if (!orderedSlides.length) return null;
 
+  const frameShadow = "shadow-[0_8px_32px_rgba(8,24,73,0.08)]";
   const frameClass = isHero
-    ? "overflow-hidden rounded-2xl"
-    : "overflow-hidden rounded-2xl border border-[#E8E4E0] bg-[#f9f7f5] shadow-[0_8px_32px_rgba(8,24,73,0.08)]";
+    ? `overflow-hidden rounded-2xl ${frameShadow}`
+    : `overflow-hidden rounded-2xl border border-[#E8E4E0] bg-[#f9f7f5] ${frameShadow}`;
 
   const slideImageShellClass = isHero
     ? "relative h-[300px] w-full sm:h-[360px] lg:h-[330px]"
     : "relative aspect-[16/10] w-full md:aspect-[2/1]";
+  const imageObjectClass =
+    imageFit === "contain" ? "object-contain" : "object-cover";
 
   return (
     <div
@@ -163,12 +176,19 @@ export function PublicImageCarousel({
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${orderedSlides.length}`}
               >
-                <div className={slideImageShellClass}>
+                <div
+                  className={slideImageShellClass}
+                  style={
+                    imageFit === "contain"
+                      ? { backgroundColor: letterboxBackground }
+                      : undefined
+                  }
+                >
                   <Image
                     src={slide.src}
                     alt={slide.alt}
                     fill
-                    className="object-cover"
+                    className={imageObjectClass}
                     sizes="(max-width: 1280px) 100vw, 1280px"
                     priority={i === 0}
                   />

@@ -70,6 +70,7 @@ export function ConferenceHero() {
                   variant="hero"
                   slides={slides}
                   ariaLabel="i-FAB congress gallery"
+                  imageFit="contain"
                 />
               ) : null}
             </div>

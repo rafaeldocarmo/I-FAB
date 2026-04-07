@@ -53,7 +53,8 @@ export type PublicImageCarouselProps = {
 
 const BRAND = "#213885";
 const NAVY = "#081849";
-const DEFAULT_LETTERBOX_BG = "#E5E7EB";
+/** Cinza mais marcado atrás da imagem em `imageFit="contain"` (barras letterbox). */
+const DEFAULT_LETTERBOX_BG = "#e6e6e680";
 
 export function PublicImageCarousel({
   slides,

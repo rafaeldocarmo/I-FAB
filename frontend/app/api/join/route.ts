@@ -121,7 +121,7 @@ export async function POST(req: Request) {
       ...(cc.length > 0 ? { cc } : {}),
       ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
-      subject: `Join i-FAB: ${payload.fullName}`,
+      subject: `i-FAB - New Join i-FAB submission: ${payload.fullName}`,
       html: buildJoinNotificationHtml(payload),
     });
 

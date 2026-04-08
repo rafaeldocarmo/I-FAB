@@ -106,7 +106,7 @@ export async function POST(req: Request) {
       ...(cc.length > 0 ? { cc } : {}),
       ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
-      subject: `Contact the Board: ${payload.name}`,
+      subject: `i-FAB - New Contact the Board message: ${payload.name}`,
       html: buildContactBoardNotificationHtml(payload),
     });
 

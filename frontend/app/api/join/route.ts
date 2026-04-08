@@ -15,6 +15,18 @@ function sanitize(raw: unknown, maxLen = MAX_FIELD_LEN): string {
   return raw.trim().slice(0, maxLen);
 }
 
+/** Lista separada por vírgulas → emails (ex.: `JOIN_NOTIFICATION_TO`). */
+function parseEmailList(raw: string | undefined): string[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/** Resend: máximo 50 destinatários no total (to + cc + bcc). */
+const RESEND_MAX_RECIPIENTS = 50;
+
 export async function POST(req: Request) {
   try {
     const ct = req.headers.get("content-type") ?? "";
@@ -92,11 +104,21 @@ export async function POST(req: Request) {
       );
     }
 
-    const to = toRaw
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const to = parseEmailList(toRaw);
     if (to.length === 0) {
+      return NextResponse.json(
+        { ok: false, error: "not_configured" },
+        { status: 503 },
+      );
+    }
+
+    const cc = parseEmailList(process.env.JOIN_NOTIFICATION_CC);
+    const bcc = parseEmailList(process.env.JOIN_NOTIFICATION_BCC);
+
+    if (to.length + cc.length + bcc.length > RESEND_MAX_RECIPIENTS) {
+      console.error(
+        `[api/join] Too many recipients (max ${RESEND_MAX_RECIPIENTS} total for to+cc+bcc)`,
+      );
       return NextResponse.json(
         { ok: false, error: "not_configured" },
         { status: 503 },
@@ -107,6 +129,8 @@ export async function POST(req: Request) {
     const { error } = await resend.emails.send({
       from,
       to,
+      ...(cc.length > 0 ? { cc } : {}),
+      ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
       subject: `Join i-FAB: ${payload.fullName}`,
       html: buildJoinNotificationHtml(payload),

@@ -49,9 +49,11 @@ if (typeof globalThis !== "undefined") {
   }, RATE_LIMIT_WINDOW_MS);
 }
 
+const RATE_LIMITED_POST_APIS = ["/api/join", "/api/contact-board"];
+
 export function proxy(request: NextRequest) {
   if (
-    request.nextUrl.pathname === "/api/join" &&
+    RATE_LIMITED_POST_APIS.includes(request.nextUrl.pathname) &&
     request.method === "POST"
   ) {
     const ip =

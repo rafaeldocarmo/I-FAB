@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 import {
-  buildJoinNotificationHtml,
-  type JoinPayload,
+  buildContactBoardNotificationHtml,
+  type ContactBoardPayload,
 } from "@/lib/joinEmail";
 import { parseEmailList, RESEND_MAX_RECIPIENTS } from "@/lib/emailList";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_FIELD_LEN = 500;
-const ALLOWED_ROLES = new Set(["academic", "industry", "clinician", "other"]);
+const MAX_NAME_LEN = 200;
+const MAX_MESSAGE_LEN = 5000;
 
-function sanitize(raw: unknown, maxLen = MAX_FIELD_LEN): string {
+function sanitize(raw: unknown, maxLen: number): string {
   if (typeof raw !== "string") return "";
   return raw.trim().slice(0, maxLen);
 }
@@ -44,11 +44,11 @@ export async function POST(req: Request) {
     }
 
     const b = body as Record<string, unknown>;
-    const fullName = sanitize(b.fullName);
+    const name = sanitize(b.name, MAX_NAME_LEN);
     const email = sanitize(b.email, 254);
-    const mainRole = sanitize(b.mainRole, 50);
+    const message = sanitize(b.message, MAX_MESSAGE_LEN);
 
-    if (!fullName || !email || !mainRole) {
+    if (!name || !email || !message) {
       return NextResponse.json(
         { ok: false, error: "Missing fields" },
         { status: 400 },
@@ -62,22 +62,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!ALLOWED_ROLES.has(mainRole)) {
-      return NextResponse.json(
-        { ok: false, error: "Invalid role" },
-        { status: 400 },
-      );
-    }
-
-    const payload: JoinPayload = {
-      fullName,
-      email,
-      employer: sanitize(b.employer),
-      city: sanitize(b.city),
-      country: sanitize(b.country),
-      mainRole,
-      otherRole: sanitize(b.otherRole),
-    };
+    const payload: ContactBoardPayload = { name, email, message };
 
     const apiKey = process.env.RESEND_API_KEY;
     const from = process.env.RESEND_FROM_EMAIL;
@@ -85,7 +70,7 @@ export async function POST(req: Request) {
 
     if (!apiKey || !from || !toRaw) {
       console.error(
-        "[api/join] Missing RESEND_API_KEY, RESEND_FROM_EMAIL, or JOIN_NOTIFICATION_TO",
+        "[api/contact-board] Missing RESEND_API_KEY, RESEND_FROM_EMAIL, or JOIN_NOTIFICATION_TO",
       );
       return NextResponse.json(
         { ok: false, error: "not_configured" },
@@ -106,7 +91,7 @@ export async function POST(req: Request) {
 
     if (to.length + cc.length + bcc.length > RESEND_MAX_RECIPIENTS) {
       console.error(
-        `[api/join] Too many recipients (max ${RESEND_MAX_RECIPIENTS} total for to+cc+bcc)`,
+        `[api/contact-board] Too many recipients (max ${RESEND_MAX_RECIPIENTS} total for to+cc+bcc)`,
       );
       return NextResponse.json(
         { ok: false, error: "not_configured" },
@@ -121,12 +106,12 @@ export async function POST(req: Request) {
       ...(cc.length > 0 ? { cc } : {}),
       ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
-      subject: `Join i-FAB: ${payload.fullName}`,
-      html: buildJoinNotificationHtml(payload),
+      subject: `Contact the Board: ${payload.name}`,
+      html: buildContactBoardNotificationHtml(payload),
     });
 
     if (error) {
-      console.error("[api/join] Resend:", error);
+      console.error("[api/contact-board] Resend:", error);
       return NextResponse.json(
         { ok: false, error: "email_failed" },
         { status: 502 },
@@ -135,7 +120,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (e) {
-    console.error("[api/join]", e);
+    console.error("[api/contact-board]", e);
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 }

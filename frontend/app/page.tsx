@@ -1,3 +1,4 @@
+import { OfficialSiteBadge } from "@/components/public/OfficialSiteBadge";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { HighlightCards } from "@/components/sections/HighlightCards";
 import { UpcomingConferenceHome } from "@/components/sections/UpcomingConferenceHome";
@@ -25,6 +26,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <OfficialSiteBadge />
       <HeroSection />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

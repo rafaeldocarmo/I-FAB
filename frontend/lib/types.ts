@@ -32,6 +32,8 @@ export type CongressJournalItem = {
 
 export type Congress = {
   _id: string;
+  /** When true, excluded from site queries via GROQ; optional for typed drafts. */
+  hiddenFromWebsite?: boolean | null;
   title: string;
   slug?: { current?: string | null } | null;
   venue?: string | null;
@@ -70,14 +72,17 @@ export type CongressJournalResource = {
   fileName?: string | null;
 };
 
-/** Props for `UpcomingConferenceHome` (CMS or defaults). */
+/** Props for `UpcomingConferenceHome` (all from CMS when `schedule` is non-null). */
 export type UpcomingConferenceHomeProps = {
-  name?: string;
-  location?: string;
-  date?: string;
+  name: string;
+  location: string;
+  date: string;
   venue?: string;
-  countdownTarget?: string;
+  countdownTarget: string;
   eyebrow?: string;
+  editionNumber?: number | null;
+  /** Plain text description from CMS (rich text omitted). */
+  description?: string | null;
   /** One or more journal / proceedings actions from CMS */
   learnMoreItems?: CongressJournalResource[];
   /** @deprecated use learnMoreItems */

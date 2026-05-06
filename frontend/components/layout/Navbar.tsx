@@ -85,13 +85,15 @@ export function Navbar() {
 
   useEffect(() => {
     const sync = () => setScrolled(window.scrollY > 20);
-    sync();
+    queueMicrotask(sync);
     window.addEventListener("scroll", sync, { passive: true });
     return () => window.removeEventListener("scroll", sync);
   }, []);
 
   useEffect(() => {
-    setScrolled(window.scrollY > 20);
+    queueMicrotask(() => {
+      setScrolled(window.scrollY > 20);
+    });
   }, [pathname]);
 
   useEffect(() => {

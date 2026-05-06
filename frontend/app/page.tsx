@@ -20,9 +20,7 @@ export default async function HomePage() {
     fetchOptions,
   );
   const upcoming = pickUpcomingCongress(congressesRaw);
-  const upcomingHomeProps = upcoming
-    ? mapCongressToHomeProps(upcoming)
-    : {};
+  const schedule = upcoming ? mapCongressToHomeProps(upcoming) : null;
 
   return (
     <>
@@ -35,7 +33,7 @@ export default async function HomePage() {
 
       <HighlightCards />
 
-      <UpcomingConferenceHome {...upcomingHomeProps} />
+      <UpcomingConferenceHome schedule={schedule} />
 
       <CTABanner />
     </>

@@ -14,7 +14,8 @@ const MONTHS = [
 ];
 
 /**
- * Human-readable range for the homepage countdown block (e.g. "September 14–17, 2026").
+ * Human-readable range with year — homepage countdown, Conferences “Upcoming”, and anywhere
+ * the CMS congress dates should read the same (e.g. "September 14–17, 2026").
  */
 export function formatConferenceHomeDate(
   start?: string | null,

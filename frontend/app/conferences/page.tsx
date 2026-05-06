@@ -7,6 +7,8 @@ import type { Congress } from "@/lib/types";
 import { resolveCongressJournalItems } from "@/lib/journalResource";
 import type { CongressJournalResource } from "@/lib/types";
 import { toOrdinal } from "@/lib/ordinal";
+import { formatConferenceHomeDate } from "@/lib/conferenceDates";
+import { pickUpcomingCongress } from "@/lib/mapCongressToHome";
 import { ConferenceHero } from "@/components/sections/ConferenceHero";
 import { ConferencesContent } from "./ConferencesContent";
 
@@ -91,7 +93,7 @@ export default async function ConferencesPage() {
   let past: PastConferenceData[] = [];
 
   if (congressesRaw.length > 0) {
-    const upcomingRaw = congressesRaw.find((c) => c.startDate && new Date(c.startDate) > now);
+    const upcomingRaw = pickUpcomingCongress(congressesRaw, now);
     const pastRaw = congressesRaw.filter((c) => !c.startDate || new Date(c.startDate) <= now);
 
     if (upcomingRaw) {
@@ -102,8 +104,11 @@ export default async function ConferencesPage() {
       upcoming = {
         edition: upcomingRaw.editionNumber ?? null,
         name: upcomingRaw.title,
-        location: [upcomingRaw.city, upcomingRaw.country].filter(Boolean).join(", ") || "—",
-        date: formatDate(upcomingRaw.startDate, upcomingRaw.endDate) || "—",
+        location:
+          [upcomingRaw.venue, upcomingRaw.city, upcomingRaw.country]
+            .filter(Boolean)
+            .join(", ") || "—",
+        date: formatConferenceHomeDate(upcomingRaw.startDate, upcomingRaw.endDate) || "—",
         theme: "",
         description,
         image: imgUrl,

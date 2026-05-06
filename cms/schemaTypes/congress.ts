@@ -260,6 +260,17 @@ export default defineType({
         'Short line above the countdown on the homepage (e.g. "Countdown to i-FAB 2026"). Leave empty to use the site default.',
       type: 'string',
     }),
+    defineField({
+      name: 'hiddenFromWebsite',
+      title: 'Hide',
+      description:
+        'When on, this congress won’t appear on the public website (homepage or Conferences page).',
+      type: 'boolean',
+      initialValue: false,
+      options: {
+        layout: 'switch',
+      },
+    }),
   ],
   preview: {
     select: {
@@ -268,8 +279,9 @@ export default defineType({
       country: 'country',
       startDate: 'startDate',
       media: 'images.0',
+      hiddenFromWebsite: 'hiddenFromWebsite',
     },
-    prepare({title, city, country, startDate, media}) {
+    prepare({title, city, country, startDate, media, hiddenFromWebsite}) {
       const location = [city, country].filter(Boolean).join(', ')
       const dateLabel = startDate
         ? new Date(startDate).toLocaleDateString(undefined, {
@@ -278,7 +290,9 @@ export default defineType({
             day: 'numeric',
           })
         : undefined
-      const subtitle = [location, dateLabel].filter(Boolean).join(' · ')
+      const parts = [location, dateLabel].filter(Boolean)
+      if (hiddenFromWebsite) parts.push('Hidden')
+      const subtitle = parts.join(' · ')
       return {
         title: title ?? 'Untitled',
         subtitle: subtitle || undefined,

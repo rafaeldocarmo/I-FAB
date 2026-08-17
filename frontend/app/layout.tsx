@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { inter, poppins } from "@/app/fonts";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -15,7 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="font-sans">
+    <html
+      lang="en"
+      className={`${poppins.variable} ${inter.variable} font-sans`}
+    >
       <body className="min-h-screen flex flex-col font-sans" style={{ backgroundColor: "#ffffff" }}>
         <Navbar />
         {/* Variant C nav: transparente sobre o hero — conteúdo começa no topo (padding do hero cobre a barra) */}

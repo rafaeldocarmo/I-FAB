@@ -75,8 +75,7 @@ function ObjectivesNumberedPillars() {
 
   return (
     <div
-      className="bg-white px-4 py-10 sm:px-8 sm:py-12 md:px-12 md:py-[52px] rounded-2xl"
-      style={{ fontFamily: "'Inter', sans-serif" }}
+      className="bg-white px-4 py-10 sm:px-8 sm:py-12 md:px-12 md:py-[52px] rounded-2xl font-inter"
     >
       <div className="mb-11 flex flex-wrap items-end gap-5">
         <h2

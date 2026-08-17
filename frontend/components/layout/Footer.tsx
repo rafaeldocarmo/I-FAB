@@ -136,24 +136,24 @@ export function Footer() {
             © {new Date().getFullYear()} International Foot and Ankle Biomechanics Community (i-FAB). All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <a
-              href="#"
+            <Link
+              href="/privacy"
               className="text-xs transition-colors"
               style={{ color: "#6B7280" }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#9ca3af")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "#6B7280")}
             >
               Privacy Policy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/terms"
               className="text-xs transition-colors"
               style={{ color: "#6B7280" }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#9ca3af")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "#6B7280")}
             >
               Terms of Use
-            </a>
+            </Link>
           </div>
         </div>
       </div>

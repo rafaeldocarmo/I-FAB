@@ -2,23 +2,41 @@ import type { Congress, UpcomingConferenceHomeProps } from "@/lib/types";
 import { formatConferenceHomeDate } from "@/lib/conferenceDates";
 import { resolveCongressJournalItems } from "@/lib/journalResource";
 
+/** Epoch ms for a CMS date, or `null` when absent/unparseable. */
+function congressTime(raw?: string | null): number | null {
+  if (!raw) return null;
+  const t = new Date(raw).getTime();
+  return Number.isNaN(t) ? null : t;
+}
+
+/**
+ * Every congress that has not finished yet, soonest first — including one that is
+ * currently running. A congress counts as running until `endDate`; without an
+ * `endDate` it is over once `startDate` passes.
+ *
+ * Callers must treat this as the single source of truth for the upcoming/past split:
+ * anything not returned here is past, which keeps every congress on exactly one list.
+ */
+export function listUpcomingCongresses(
+  congresses: Congress[],
+  now: Date = new Date(),
+): Congress[] {
+  const tNow = now.getTime();
+  return congresses
+    .filter((c) => {
+      const start = congressTime(c.startDate);
+      if (start === null) return false;
+      return (congressTime(c.endDate) ?? start) >= tNow;
+    })
+    .sort((a, b) => (congressTime(a.startDate) ?? 0) - (congressTime(b.startDate) ?? 0));
+}
+
+/** The next congress, or the one running right now; `null` when there is none. */
 export function pickUpcomingCongress(
   congresses: Congress[],
   now: Date = new Date(),
 ): Congress | null {
-  let best: Congress | null = null;
-  let bestTime = Infinity;
-  const tNow = now.getTime();
-  for (const c of congresses) {
-    if (!c.startDate) continue;
-    const t = new Date(c.startDate).getTime();
-    if (Number.isNaN(t) || t <= tNow) continue;
-    if (t < bestTime) {
-      bestTime = t;
-      best = c;
-    }
-  }
-  return best;
+  return listUpcomingCongresses(congresses, now)[0] ?? null;
 }
 
 export function mapCongressToHomeProps(

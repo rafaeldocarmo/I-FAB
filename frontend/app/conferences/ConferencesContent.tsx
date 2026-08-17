@@ -33,9 +33,142 @@ function pastConferencePdfCaption(item: CongressJournalResource): string | null 
 }
 
 type Props = {
-  upcoming: UpcomingConferenceData | null;
+  /** Every congress that has not finished yet, soonest first. */
+  upcoming: UpcomingConferenceData[];
   past: PastConferenceData[];
 };
+
+function UpcomingConferenceCard({ upcoming }: { upcoming: UpcomingConferenceData }) {
+  return (
+    <div className="overflow-hidden rounded-3xl md:shadow-[0_12px_48px_rgba(8,24,73,0.45)]">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div
+          className={`relative flex h-64 min-h-64 items-center justify-center lg:min-h-[320px] lg:h-auto ${
+            upcoming.imageBackdrop === "light"
+              ? "bg-[#f9f7f5]"
+              : "bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
+          }`}
+        >
+          {upcoming.image ? (
+            <ImageWithFallback
+              src={upcoming.image}
+              alt={upcoming.name}
+              className="w-[80%]"
+            />
+          ) : (
+            <div
+              className={`h-full min-h-64 w-full ${
+                upcoming.imageBackdrop === "light"
+                  ? "bg-[#E8E4E0]"
+                  : "bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
+              }`}
+              aria-hidden
+            />
+          )}
+          {upcoming.edition != null ? (
+            <div className="absolute bottom-6 left-6">
+              <div
+                className={`text-5xl font-bold ${
+                  upcoming.imageBackdrop === "light"
+                    ? "text-[#213885]"
+                    : "text-white"
+                }`}
+              >
+                {toOrdinal(upcoming.edition)}
+              </div>
+              <div
+                className={`text-xs font-semibold uppercase tracking-widest ${
+                  upcoming.imageBackdrop === "light"
+                    ? "text-[#213885]"
+                    : "text-white"
+                }`}
+              >
+                Edition
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div
+          className="border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-10"
+          style={{
+            background:
+              "linear-gradient(145deg, #081849 0%, #213885 48%, rgb(27, 57, 141) 100%)",
+          }}
+        >
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-[#ECDFD2] px-2.5 py-1 text-xs font-semibold text-[#081849]">
+              {upcoming.edition != null
+                ? `${toOrdinal(upcoming.edition)} Congress`
+                : "Congress"}
+            </span>
+          </div>
+
+          <h3
+            className={`text-[1.5rem] font-bold text-white ${upcoming.theme.trim() ? "mb-2" : "mb-5"}`}
+          >
+            {upcoming.name}
+          </h3>
+          {upcoming.theme.trim() ? (
+            <p className="mb-5 text-xs font-medium italic text-[#ECDFD2]/90">
+              Theme: &ldquo;{upcoming.theme}&rdquo;
+            </p>
+          ) : null}
+
+          <div className="mb-6 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2 text-sm text-white/90">
+              <MapPin size={14} className="shrink-0 text-[#ECDFD2]" />
+              <span>{upcoming.location}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-white/90">
+              <Calendar size={14} className="shrink-0 text-[#ECDFD2]" />
+              <span>{upcoming.date}</span>
+            </div>
+          </div>
+
+          {upcoming.description.trim() ? (
+            <p className="mb-6 text-sm leading-relaxed text-white/75">{upcoming.description}</p>
+          ) : null}
+
+          <div className="flex flex-col flex-wrap gap-3 sm:flex-row">
+            {(upcoming.journalResources.length > 0
+              ? upcoming.journalResources
+              : [{ href: "/conferences", kind: "link" as const, label: null }]
+            ).map((item, idx, arr) => {
+              const label = journalResourceButtonLabel(item, idx, arr.length);
+              const ext = isExternalHref(item.href);
+              const className =
+                "inline-flex items-center justify-center gap-2 rounded-xl bg-[#ECDFD2] px-6 py-3 text-sm font-semibold text-[#081849] shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]";
+              return ext ? (
+                <a
+                  key={`${item.href}-${idx}`}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  <JournalKindGlyph kind={item.kind} />
+                  {label}
+                </a>
+              ) : (
+                <Link key={`${item.href}-${idx}`} href={item.href} className={className}>
+                  <JournalKindGlyph kind={item.kind} />
+                  {label}
+                </Link>
+              );
+            })}
+            <Link
+              href="/join"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 hover:translate-y-[-2px]"
+            >
+              Register Interest
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ConferencesContent({ upcoming, past }: Props) {
   return (
@@ -46,9 +179,9 @@ export function ConferencesContent({ upcoming, past }: Props) {
           <div className="flex items-center gap-3 mb-10">
             <div className="w-1 h-8 rounded-full" style={{ backgroundColor: "#213885" }} />
             <h2 style={{  fontSize: "clamp(1.5rem, 2.5vw, 2rem)", fontWeight: 700, color: "#081849" }}>
-              Upcoming Conference
+              Upcoming Conference{upcoming.length > 1 ? "s" : ""}
             </h2>
-            {upcoming ? (
+            {upcoming.length > 0 ? (
               <span
                 className="px-3 py-1 rounded-full text-xs font-semibold ml-2"
                 style={{ backgroundColor: "#213885", color: "#ffffff" }}
@@ -58,133 +191,11 @@ export function ConferencesContent({ upcoming, past }: Props) {
             ) : null}
           </div>
 
-          {upcoming ? (
-            <div className="overflow-hidden rounded-3xl md:shadow-[0_12px_48px_rgba(8,24,73,0.45)]">
-              <div className="grid grid-cols-1 lg:grid-cols-2">
-                <div
-                  className={`relative flex h-64 min-h-64 items-center justify-center lg:min-h-[320px] lg:h-auto ${
-                    upcoming.imageBackdrop === "light"
-                      ? "bg-[#f9f7f5]"
-                      : "bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
-                  }`}
-                >
-                  {upcoming.image ? (
-                    <ImageWithFallback
-                      src={upcoming.image}
-                      alt={upcoming.name}
-                      className="w-[80%]"
-                    />
-                  ) : (
-                    <div
-                      className={`h-full min-h-64 w-full ${
-                        upcoming.imageBackdrop === "light"
-                          ? "bg-[#E8E4E0]"
-                          : "bg-gradient-to-br from-[#081849] via-[#213885] to-[#1e3a8a]"
-                      }`}
-                      aria-hidden
-                    />
-                  )}
-                  {upcoming.edition != null ? (
-                    <div className="absolute bottom-6 left-6">
-                      <div
-                        className={`text-5xl font-bold ${
-                          upcoming.imageBackdrop === "light"
-                            ? "text-[#213885]"
-                            : "text-white"
-                        }`}
-                      >
-                        {toOrdinal(upcoming.edition)}
-                      </div>
-                      <div
-                        className={`text-xs font-semibold uppercase tracking-widest ${
-                          upcoming.imageBackdrop === "light"
-                            ? "text-[#213885]"
-                            : "text-white"
-                        }`}
-                      >
-                        Edition
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-
-                <div
-                  className="border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-10"
-                  style={{
-                    background:
-                      "linear-gradient(145deg, #081849 0%, #213885 48%, rgb(27, 57, 141) 100%)",
-                  }}
-                >
-                  <div className="mb-3 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-[#ECDFD2] px-2.5 py-1 text-xs font-semibold text-[#081849]">
-                      {upcoming.edition != null
-                        ? `${toOrdinal(upcoming.edition)} Congress`
-                        : "Congress"}
-                    </span>
-                  </div>
-
-                  <h3
-                    className={`text-[1.5rem] font-bold text-white ${upcoming.theme.trim() ? "mb-2" : "mb-5"}`}
-                  >
-                    {upcoming.name}
-                  </h3>
-                  {upcoming.theme.trim() ? (
-                    <p className="mb-5 text-xs font-medium italic text-[#ECDFD2]/90">
-                      Theme: &ldquo;{upcoming.theme}&rdquo;
-                    </p>
-                  ) : null}
-
-                  <div className="mb-6 flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 text-sm text-white/90">
-                      <MapPin size={14} className="shrink-0 text-[#ECDFD2]" />
-                      <span>{upcoming.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-white/90">
-                      <Calendar size={14} className="shrink-0 text-[#ECDFD2]" />
-                      <span>{upcoming.date}</span>
-                    </div>
-                  </div>
-
-                  {upcoming.description.trim() ? (
-                    <p className="mb-6 text-sm leading-relaxed text-white/75">{upcoming.description}</p>
-                  ) : null}
-
-                  <div className="flex flex-col flex-wrap gap-3 sm:flex-row">
-                    {(upcoming.journalResources.length > 0
-                      ? upcoming.journalResources
-                      : [{ href: "/conferences", kind: "link" as const, label: null }]
-                    ).map((item, idx, arr) => {
-                      const label = journalResourceButtonLabel(item, idx, arr.length);
-                      const ext = isExternalHref(item.href);
-                      const className =
-                        "inline-flex items-center justify-center gap-2 rounded-xl bg-[#ECDFD2] px-6 py-3 text-sm font-semibold text-[#081849] shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]";
-                      return ext ? (
-                        <a
-                          key={`${item.href}-${idx}`}
-                          href={item.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={className}
-                        >
-                          <JournalKindGlyph kind={item.kind} />
-                          {label}
-                        </a>
-                      ) : (
-                        <Link key={`${item.href}-${idx}`} href={item.href} className={className}>
-                          <JournalKindGlyph kind={item.kind} />
-                          {label}
-                        </Link>
-                      );
-                    })}
-                    <Link
-                      href="/join"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/80 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 hover:translate-y-[-2px]"
-                    >
-                      Register Interest
-                    </Link>
-                  </div>
-                </div>
-              </div>
+          {upcoming.length > 0 ? (
+            <div className="space-y-8">
+              {upcoming.map((conf) => (
+                <UpcomingConferenceCard key={conf.id} upcoming={conf} />
+              ))}
             </div>
           ) : (
             <div className="rounded-2xl border border-[#E8E4E0] bg-[#f9f7f5] px-6 py-14 text-center sm:px-10">

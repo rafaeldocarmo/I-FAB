@@ -8,7 +8,7 @@ import { resolveCongressJournalItems } from "@/lib/journalResource";
 import type { CongressJournalResource } from "@/lib/types";
 import { toOrdinal } from "@/lib/ordinal";
 import { formatConferenceHomeDate } from "@/lib/conferenceDates";
-import { pickUpcomingCongress } from "@/lib/mapCongressToHome";
+import { listUpcomingCongresses } from "@/lib/mapCongressToHome";
 import { ConferenceHero } from "@/components/sections/ConferenceHero";
 import { ConferencesContent } from "./ConferencesContent";
 
@@ -21,6 +21,7 @@ const urlFor = (source: SanityImageSource) =>
     : null;
 
 export type UpcomingConferenceData = {
+  id: string;
   edition: number | null;
   name: string;
   location: string;
@@ -46,6 +47,24 @@ export type PastConferenceData = {
   journalResources: CongressJournalResource[];
 };
 
+function toUpcoming(c: Congress): UpcomingConferenceData {
+  const firstImage = c.images?.[0];
+  return {
+    id: c._id,
+    edition: c.editionNumber ?? null,
+    name: c.title,
+    location:
+      [c.venue, c.city, c.country].filter(Boolean).join(", ") || "—",
+    date: formatConferenceHomeDate(c.startDate, c.endDate) || "—",
+    theme: "",
+    description: typeof c.description === "string" ? c.description : "",
+    image: firstImage ? urlFor(firstImage)?.width(900).url() ?? "" : "",
+    journalResources: resolveCongressJournalItems(c),
+    imageBackdrop: c.upcomingCardImageBackdrop === "light" ? "light" : "dark",
+  };
+}
+
+/** Past-conference date line, e.g. "14-17 September" (year is appended by `toPast`). */
 function formatDate(start?: string | null, end?: string | null): string {
   if (!start) return "";
   const s = new Date(start);
@@ -75,6 +94,33 @@ function formatDate(start?: string | null, end?: string | null): string {
   return `${startDay} ${startMonth}`;
 }
 
+function toPast(c: Congress): PastConferenceData {
+  const year = c.startDate ? new Date(c.startDate).getFullYear().toString() : "—";
+  const datePart = formatDate(c.startDate, c.endDate);
+  const firstImage = c.images?.[0];
+  const imageAlt =
+    firstImage &&
+    typeof firstImage === "object" &&
+    "alt" in firstImage &&
+    typeof firstImage.alt === "string" &&
+    firstImage.alt.trim()
+      ? firstImage.alt.trim()
+      : `${c.title} — ${year}`;
+
+  return {
+    edition: c.editionNumber ? toOrdinal(c.editionNumber) : "—",
+    year,
+    dateLine:
+      datePart && year !== "—" ? `${datePart}, ${year}` : datePart || year,
+    location: [c.venue, c.city, c.country].filter(Boolean).join(", ") || "—",
+    name: c.title,
+    description: typeof c.description === "string" ? c.description : "",
+    image: firstImage ? urlFor(firstImage)?.width(1200).auto("format").url() ?? null : null,
+    imageAlt,
+    journalResources: resolveCongressJournalItems(c),
+  };
+}
+
 export const metadata = {
   title: "Conferences — i-FAB",
   description:
@@ -89,69 +135,13 @@ export default async function ConferencesPage() {
   );
 
   const now = new Date();
-  let upcoming: UpcomingConferenceData | null = null;
-  let past: PastConferenceData[] = [];
+  // Single split: everything not upcoming is past, so no congress can fall through
+  // the gap and disappear from the page.
+  const upcomingRaw = listUpcomingCongresses(congressesRaw, now);
+  const upcomingIds = new Set(upcomingRaw.map((c) => c._id));
 
-  if (congressesRaw.length > 0) {
-    const upcomingRaw = pickUpcomingCongress(congressesRaw, now);
-    const pastRaw = congressesRaw.filter((c) => !c.startDate || new Date(c.startDate) <= now);
-
-    if (upcomingRaw) {
-      const firstImage = upcomingRaw.images?.[0];
-      const imgUrl = firstImage ? urlFor(firstImage)?.width(900).url() ?? "" : "";
-      const description =
-        typeof upcomingRaw.description === "string" ? upcomingRaw.description : "";
-      upcoming = {
-        edition: upcomingRaw.editionNumber ?? null,
-        name: upcomingRaw.title,
-        location:
-          [upcomingRaw.venue, upcomingRaw.city, upcomingRaw.country]
-            .filter(Boolean)
-            .join(", ") || "—",
-        date: formatConferenceHomeDate(upcomingRaw.startDate, upcomingRaw.endDate) || "—",
-        theme: "",
-        description,
-        image: imgUrl,
-        journalResources: resolveCongressJournalItems(upcomingRaw),
-        imageBackdrop:
-          upcomingRaw.upcomingCardImageBackdrop === "light" ? "light" : "dark",
-      };
-    }
-
-    if (pastRaw.length > 0) {
-      past = pastRaw.map((c) => {
-        const year = c.startDate ? new Date(c.startDate).getFullYear().toString() : "—";
-        const datePart = formatDate(c.startDate, c.endDate);
-        const dateLine =
-          datePart && year !== "—" ? `${datePart}, ${year}` : datePart || year;
-        const location = [c.venue, c.city, c.country].filter(Boolean).join(", ") || "—";
-        const description = typeof c.description === "string" ? c.description : "";
-        const firstImage = c.images?.[0];
-        const imgUrl = firstImage
-          ? urlFor(firstImage)?.width(1200).auto("format").url() ?? null
-          : null;
-        const imageAlt =
-          firstImage &&
-          typeof firstImage === "object" &&
-          "alt" in firstImage &&
-          typeof firstImage.alt === "string" &&
-          firstImage.alt.trim()
-            ? firstImage.alt.trim()
-            : `${c.title} — ${year}`;
-        return {
-          edition: c.editionNumber ? toOrdinal(c.editionNumber) : "—",
-          year,
-          dateLine,
-          location,
-          name: c.title,
-          description,
-          image: imgUrl,
-          imageAlt,
-          journalResources: resolveCongressJournalItems(c),
-        };
-      });
-    }
-  }
+  const upcoming = upcomingRaw.map(toUpcoming);
+  const past = congressesRaw.filter((c) => !upcomingIds.has(c._id)).map(toPast);
 
   return (
     <div>

@@ -135,26 +135,14 @@ export function Footer() {
           <p className="text-xs" style={{ color: "#6B7280" }}>
             © {new Date().getFullYear()} International Foot and Ankle Biomechanics Community (i-FAB). All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/privacy"
-              className="text-xs transition-colors"
-              style={{ color: "#6B7280" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#9ca3af")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#6B7280")}
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="text-xs transition-colors"
-              style={{ color: "#6B7280" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#9ca3af")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#6B7280")}
-            >
-              Terms of Use
-            </Link>
-          </div>
+          {/*
+            Privacy Policy / Terms of Use links intentionally omitted.
+
+            The pages exist at /privacy and /terms but are unreviewed drafts
+            carrying placeholder text, so nothing should lead a visitor to
+            them. Restore this block once the copy has been through legal
+            review and the draft banner is removed.
+          */}
         </div>
       </div>
     </footer>

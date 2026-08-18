@@ -3,17 +3,51 @@ import { Resend } from "resend";
 
 import {
   buildJoinNotificationHtml,
+  buildJoinNotificationText,
   type JoinPayload,
 } from "@/lib/joinEmail";
 import { parseEmailList, RESEND_MAX_RECIPIENTS } from "@/lib/emailList";
+import { ALLOWED_JOIN_ROLES } from "@/lib/joinRoles";
+import { getWriteClient } from "@/sanity/writeClient";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_FIELD_LEN = 500;
-const ALLOWED_ROLES = new Set(["academic", "industry", "clinician", "other"]);
 
 function sanitize(raw: unknown, maxLen = MAX_FIELD_LEN): string {
   if (typeof raw !== "string") return "";
   return raw.trim().slice(0, maxLen);
+}
+
+/**
+ * Store the submission so the board can review it in the Studio.
+ *
+ * Best-effort on purpose: if the write token is missing or Sanity is
+ * unavailable we log and carry on, because the notification email is the
+ * record that actually has to reach a person. Failing the request here would
+ * lose the submission entirely and show the visitor an error for a problem
+ * that does not affect them.
+ */
+async function persistSubmission(
+  payload: JoinPayload,
+  submittedAt: Date,
+): Promise<void> {
+  const sanity = getWriteClient();
+  if (!sanity) {
+    console.warn(
+      "[api/join] SANITY_API_WRITE_TOKEN not set — submission emailed but not saved to the Studio",
+    );
+    return;
+  }
+
+  try {
+    await sanity.create({
+      _type: "joinSubmission",
+      ...payload,
+      submittedAt: submittedAt.toISOString(),
+    });
+  } catch (e) {
+    console.error("[api/join] Sanity write failed:", e);
+  }
 }
 
 export async function POST(req: Request) {
@@ -62,7 +96,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!ALLOWED_ROLES.has(mainRole)) {
+    if (!ALLOWED_JOIN_ROLES.has(mainRole)) {
       return NextResponse.json(
         { ok: false, error: "Invalid role" },
         { status: 400 },
@@ -114,6 +148,9 @@ export async function POST(req: Request) {
       );
     }
 
+    const submittedAt = new Date();
+    await persistSubmission(payload, submittedAt);
+
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
       from,
@@ -122,7 +159,8 @@ export async function POST(req: Request) {
       ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
       subject: `i-FAB - New Join i-FAB submission: ${payload.fullName}`,
-      html: buildJoinNotificationHtml(payload),
+      html: buildJoinNotificationHtml(payload, submittedAt),
+      text: buildJoinNotificationText(payload, submittedAt),
     });
 
     if (error) {

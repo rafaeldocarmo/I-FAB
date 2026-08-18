@@ -2,14 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import { JOIN_ROLES } from "@/lib/joinRoles";
 
-const ROLES = [
-  { value: "", label: "Choose a role" },
-  { value: "academic", label: "Academic" },
-  { value: "industry", label: "Industry" },
-  { value: "clinician", label: "Clinician" },
-  { value: "other", label: "Other" },
-] as const;
+const ROLES = [{ value: "", label: "Choose a role" }, ...JOIN_ROLES] as const;
 
 const inputClass =
   "w-full rounded-lg border-2 border-[#213885] bg-white px-4 py-3 text-[15px] text-[#081849] shadow-sm transition-[box-shadow,border-color] placeholder:text-[#9CA3AF] focus:border-[#081849] focus:outline-none focus:ring-2 focus:ring-[#213885]/25";

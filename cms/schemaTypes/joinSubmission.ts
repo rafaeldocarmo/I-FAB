@@ -4,26 +4,32 @@ import {defineField, defineType} from 'sanity'
  * A submission from the public "Join i-FAB" form.
  *
  * These documents are created by the website (`/api/join`) using a write token,
- * never by hand in the Studio. The type is read-only so an editor cannot
+ * never by hand in the Studio. Every field is read-only so an editor cannot
  * silently alter what somebody actually submitted — the record is evidence of a
- * submission, not editable content. Deleting is still allowed, which is what
- * handling an erasure request needs.
+ * submission, not editable content.
+ *
+ * `readOnly` is set per field rather than on the document type on purpose:
+ * marking the whole type read-only also disables the document actions, which
+ * would take away deletion — exactly what is needed to honour an erasure
+ * request. Field-level read-only affects the form inputs only.
+ *
+ * None of this constrains the HTTP API, which is how the site writes.
  */
 export default defineType({
   name: 'joinSubmission',
   title: 'Join submission',
   type: 'document',
-  readOnly: true,
   fields: [
-    defineField({name: 'fullName', title: 'Full name', type: 'string'}),
-    defineField({name: 'email', title: 'Email', type: 'string'}),
-    defineField({name: 'employer', title: 'Employer', type: 'string'}),
-    defineField({name: 'city', title: 'City', type: 'string'}),
-    defineField({name: 'country', title: 'Country', type: 'string'}),
+    defineField({name: 'fullName', title: 'Full name', type: 'string', readOnly: true}),
+    defineField({name: 'email', title: 'Email', type: 'string', readOnly: true}),
+    defineField({name: 'employer', title: 'Employer', type: 'string', readOnly: true}),
+    defineField({name: 'city', title: 'City', type: 'string', readOnly: true}),
+    defineField({name: 'country', title: 'Country', type: 'string', readOnly: true}),
     defineField({
       name: 'mainRole',
       title: 'Main role',
       type: 'string',
+      readOnly: true,
       options: {
         list: [
           {title: 'Academic', value: 'academic'},
@@ -38,8 +44,9 @@ export default defineType({
       title: 'Other role',
       description: 'Free text, filled in when the main role is "Other"',
       type: 'string',
+      readOnly: true,
     }),
-    defineField({name: 'submittedAt', title: 'Submitted at', type: 'datetime'}),
+    defineField({name: 'submittedAt', title: 'Submitted at', type: 'datetime', readOnly: true}),
   ],
   preview: {
     select: {

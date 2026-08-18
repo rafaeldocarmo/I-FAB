@@ -28,6 +28,13 @@ jobs:
 
       - run: npm ci
 
+      # next-env.d.ts is gitignored but listed in tsconfig include, and it is
+      # what declares the module types for static image imports. On a clean
+      # checkout it does not exist yet, so tsc fails on every `import logo from
+      # "@/public/*.png"`. typegen writes it without a full build.
+      - name: Generate Next types
+        run: npx next typegen
+
       - name: Typecheck
         run: npx tsc --noEmit
 

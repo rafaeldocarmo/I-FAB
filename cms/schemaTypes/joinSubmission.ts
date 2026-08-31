@@ -28,21 +28,13 @@ export default defineType({
     defineField({
       name: 'mainRole',
       title: 'Main role',
+      description: 'Free text, as typed by the submitter',
       type: 'string',
       readOnly: true,
-      options: {
-        list: [
-          {title: 'Academic', value: 'academic'},
-          {title: 'Industry', value: 'industry'},
-          {title: 'Clinician', value: 'clinician'},
-          {title: 'Other', value: 'other'},
-        ],
-      },
     }),
     defineField({
-      name: 'otherRole',
-      title: 'Other role',
-      description: 'Free text, filled in when the main role is "Other"',
+      name: 'researchLine',
+      title: 'Research line',
       type: 'string',
       readOnly: true,
     }),
@@ -53,22 +45,13 @@ export default defineType({
       title: 'fullName',
       email: 'email',
       mainRole: 'mainRole',
-      otherRole: 'otherRole',
+      researchLine: 'researchLine',
       employer: 'employer',
       country: 'country',
       submittedAt: 'submittedAt',
     },
-    prepare({title, email, mainRole, otherRole, employer, country, submittedAt}) {
-      const roleLabels: Record<string, string> = {
-        academic: 'Academic',
-        industry: 'Industry',
-        clinician: 'Clinician',
-        other: 'Other',
-      }
-      const role =
-        mainRole === 'other' && otherRole
-          ? `Other — ${otherRole}`
-          : (roleLabels[mainRole as string] ?? mainRole)
+    prepare({title, email, mainRole, researchLine, employer, country, submittedAt}) {
+      const role = [mainRole, researchLine].filter(Boolean).join(' · ')
       const where = [employer, country].filter(Boolean).join(', ')
       const when = submittedAt
         ? new Date(submittedAt).toLocaleDateString(undefined, {

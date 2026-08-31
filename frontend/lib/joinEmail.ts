@@ -6,7 +6,6 @@ import {
   escapeHtml,
   renderEmailShell,
 } from "@/lib/emailLayout";
-import { joinRoleLabel } from "@/lib/joinRoles";
 
 /** Re-exported so existing importers keep working. */
 export { escapeHtml };
@@ -18,19 +17,12 @@ export type JoinPayload = {
   city: string;
   country: string;
   mainRole: string;
-  otherRole: string;
+  researchLine: string;
 };
 
 /** "London, United Kingdom", or whichever half was filled in. */
 function formatLocation(p: JoinPayload): string {
   return [p.city, p.country].filter(Boolean).join(", ");
-}
-
-function formatRole(p: JoinPayload): string {
-  const label = joinRoleLabel(p.mainRole);
-  return p.mainRole === "other" && p.otherRole
-    ? `${label} — ${p.otherRole}`
-    : label;
 }
 
 function formatSubmittedAt(when: Date): string {
@@ -41,15 +33,11 @@ export function buildJoinNotificationHtml(
   p: JoinPayload,
   submittedAt: Date = new Date(),
 ): string {
-  const roleHtml =
-    p.mainRole === "other" && p.otherRole
-      ? `${emailBadge(joinRoleLabel(p.mainRole))} <span style="color:#1f2937;">${escapeHtml(p.otherRole)}</span>`
-      : emailBadge(joinRoleLabel(p.mainRole));
-
   const bodyHtml = [
     emailRow("Full name", p.fullName),
     emailRowRaw("Email", emailLink(p.email)),
-    emailRowRaw("Main role", roleHtml),
+    emailRowRaw("Main role", emailBadge(p.mainRole)),
+    emailRow("Research line", p.researchLine),
     emailRow("Employer", p.employer),
     emailRow("Location", formatLocation(p)),
     emailRow("Submitted", formatSubmittedAt(submittedAt)),
@@ -59,7 +47,7 @@ export function buildJoinNotificationHtml(
     eyebrow: "Join i-FAB",
     heading: "New membership interest",
     intro: `${p.fullName} has asked to join the i-FAB community.`,
-    preheader: `${p.fullName} — ${formatRole(p)}${formatLocation(p) ? ` — ${formatLocation(p)}` : ""}`,
+    preheader: `${p.fullName} — ${p.mainRole}${formatLocation(p) ? ` — ${formatLocation(p)}` : ""}`,
     bodyHtml,
     footerNote:
       "Reply to this email to answer them directly — the reply-to address is already set to the sender. This submission is also saved in the Sanity Studio.",
@@ -77,12 +65,13 @@ export function buildJoinNotificationText(
     "",
     `${p.fullName} has asked to join the i-FAB community.`,
     "",
-    `Full name: ${p.fullName}`,
-    `Email:     ${p.email}`,
-    `Main role: ${formatRole(p)}`,
-    `Employer:  ${p.employer || "—"}`,
-    `Location:  ${formatLocation(p) || "—"}`,
-    `Submitted: ${formatSubmittedAt(submittedAt)}`,
+    `Full name:     ${p.fullName}`,
+    `Email:         ${p.email}`,
+    `Main role:     ${p.mainRole}`,
+    `Research line: ${p.researchLine || "—"}`,
+    `Employer:      ${p.employer || "—"}`,
+    `Location:      ${formatLocation(p) || "—"}`,
+    `Submitted:     ${formatSubmittedAt(submittedAt)}`,
     "",
     "Reply to this email to answer them directly.",
     "This submission is also saved in the Sanity Studio.",

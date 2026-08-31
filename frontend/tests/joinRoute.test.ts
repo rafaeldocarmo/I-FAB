@@ -27,8 +27,8 @@ const VALID = {
   employer: "Universidade de Lisboa",
   city: "Lisboa",
   country: "Portugal",
-  mainRole: "academic",
-  otherRole: "",
+  mainRole: "Clinician",
+  researchLine: "Foot kinematics",
 };
 
 function post(body: unknown, contentType = "application/json") {
@@ -81,16 +81,15 @@ describe("POST /api/join — rejected input", () => {
     await expect(res.json()).resolves.toMatchObject({ error: "Invalid email" });
   });
 
-  it("rejects a role outside the allow-list", async () => {
-    const res = await POST(post({ ...VALID, mainRole: "astronaut" }));
-    expect(res.status).toBe(400);
-    await expect(res.json()).resolves.toMatchObject({ error: "Invalid role" });
-    expect(sendMock).not.toHaveBeenCalled();
+  it("accepts any non-empty role, now that it is free text", async () => {
+    const res = await POST(post({ ...VALID, mainRole: "Biomechanics engineer" }));
+    expect(res.status).toBe(200);
+    expect(createMock.mock.calls[0][0].mainRole).toBe("Biomechanics engineer");
   });
 
   it("never sends or stores anything for rejected input", async () => {
     await POST(post({ ...VALID, email: "nope" }));
-    await POST(post({ ...VALID, mainRole: "astronaut" }));
+    await POST(post({ ...VALID, mainRole: "" }));
     expect(sendMock).not.toHaveBeenCalled();
     expect(createMock).not.toHaveBeenCalled();
   });
@@ -128,7 +127,8 @@ describe("POST /api/join — accepted submission", () => {
       _type: "joinSubmission",
       fullName: "Ana Ribeiro",
       email: "ana@universidade.pt",
-      mainRole: "academic",
+      mainRole: "Clinician",
+      researchLine: "Foot kinematics",
     });
     expect(createMock.mock.calls[0][0].submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 

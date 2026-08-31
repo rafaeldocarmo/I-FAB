@@ -2,9 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
-import { JOIN_ROLES } from "@/lib/joinRoles";
-
-const ROLES = [{ value: "", label: "Choose a role" }, ...JOIN_ROLES] as const;
 
 const inputClass =
   "w-full rounded-lg border-2 border-[#213885] bg-white px-4 py-3 text-[15px] text-[#081849] shadow-sm transition-[box-shadow,border-color] placeholder:text-[#9CA3AF] focus:border-[#081849] focus:outline-none focus:ring-2 focus:ring-[#213885]/25";
@@ -28,7 +25,7 @@ export function JoinForm() {
       city: String(fd.get("city") ?? "").trim(),
       country: String(fd.get("country") ?? "").trim(),
       mainRole: String(fd.get("mainRole") ?? "").trim(),
-      otherRole: String(fd.get("otherRole") ?? "").trim(),
+      researchLine: String(fd.get("researchLine") ?? "").trim(),
     };
 
     if (!payload.fullName || !payload.email || !payload.mainRole) {
@@ -179,33 +176,26 @@ export function JoinForm() {
             <label htmlFor="join-mainRole" className={labelClass}>
               Main role
             </label>
-            <select
+            <input
               id="join-mainRole"
               name="mainRole"
-              className={`${inputClass} cursor-pointer appearance-none bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat pr-10`}
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23213885' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-              }}
-              defaultValue=""
+              type="text"
+              autoComplete="organization-title"
+              className={inputClass}
+              placeholder="Researcher, podiatrist, engineer…"
               required
-            >
-              {ROLES.map((r) => (
-                <option key={r.value || "placeholder"} value={r.value} disabled={r.value === ""}>
-                  {r.label}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div>
-            <label htmlFor="join-otherRole" className={labelClass}>
-              Other (if main role is not an option)
+            <label htmlFor="join-researchLine" className={labelClass}>
+              Research line
             </label>
             <input
-              id="join-otherRole"
-              name="otherRole"
+              id="join-researchLine"
+              name="researchLine"
               type="text"
               className={inputClass}
-              placeholder="Describe your role if needed"
+              placeholder="Your area of research"
             />
           </div>
         </div>

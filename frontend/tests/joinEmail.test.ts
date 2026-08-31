@@ -5,7 +5,6 @@ import {
   buildJoinNotificationText,
   type JoinPayload,
 } from "@/lib/joinEmail";
-import { ALLOWED_JOIN_ROLES, JOIN_ROLES, joinRoleLabel } from "@/lib/joinRoles";
 
 const WHEN = new Date("2026-08-17T14:32:00Z");
 
@@ -15,8 +14,8 @@ const payload = (extra: Partial<JoinPayload> = {}): JoinPayload => ({
   employer: "Universidade de Lisboa",
   city: "Lisboa",
   country: "Portugal",
-  mainRole: "academic",
-  otherRole: "",
+  mainRole: "Academic",
+  researchLine: "Foot kinematics",
   ...extra,
 });
 
@@ -44,6 +43,7 @@ describe("buildJoinNotificationHtml", () => {
     expect(html).toContain("Universidade de Lisboa");
     expect(html).toContain("Lisboa, Portugal");
     expect(html).toContain("Academic");
+    expect(html).toContain("Foot kinematics");
     expect(html).toContain("2026-08-17 14:32 UTC");
   });
 
@@ -53,8 +53,8 @@ describe("buildJoinNotificationHtml", () => {
       payload({
         fullName: "<script>alert(1)</script>",
         employer: '"><img src=x onerror=alert(1)>',
-        otherRole: "O'Brien & sons",
-        mainRole: "other",
+        researchLine: "O'Brien & sons",
+        mainRole: "<b>Clinician</b>",
       }),
       WHEN,
     );
@@ -73,12 +73,18 @@ describe("buildJoinNotificationHtml", () => {
     expect(html).toContain("—");
   });
 
-  it("appends the free-text role when the main role is 'other'", () => {
+  it("shows the role exactly as it was typed", () => {
     const html = buildJoinNotificationHtml(
-      payload({ mainRole: "other", otherRole: "Orthotics designer" }),
+      payload({ mainRole: "Orthotics product designer" }),
       WHEN,
     );
-    expect(html).toContain("Orthotics designer");
+    expect(html).toContain("Orthotics product designer");
+  });
+
+  it("shows an em dash when no research line was given", () => {
+    const html = buildJoinNotificationHtml(payload({ researchLine: "" }), WHEN);
+    expect(html).toContain("Research line");
+    expect(html).toContain("—");
   });
 
   it("produces a self-contained HTML document", () => {
@@ -106,28 +112,12 @@ describe("buildJoinNotificationText", () => {
     expect(text).toContain("Ana Ribeiro");
     expect(text).toContain("ana@universidade.pt");
     expect(text).toContain("Academic");
+    expect(text).toContain("Foot kinematics");
     expect(text).toContain("Lisboa, Portugal");
     expect(text).toContain("2026-08-17 14:32 UTC");
   });
 
   it("contains no markup", () => {
     expect(buildJoinNotificationText(payload(), WHEN)).not.toMatch(/<[a-z]/i);
-  });
-});
-
-describe("joinRoles", () => {
-  it("keeps the allow-list in step with the offered options", () => {
-    expect([...ALLOWED_JOIN_ROLES].sort()).toEqual(
-      JOIN_ROLES.map((r) => r.value).sort(),
-    );
-  });
-
-  it("labels every known role", () => {
-    expect(joinRoleLabel("academic")).toBe("Academic");
-    expect(joinRoleLabel("clinician")).toBe("Clinician");
-  });
-
-  it("falls back to the raw value for anything unknown", () => {
-    expect(joinRoleLabel("astronaut")).toBe("astronaut");
   });
 });

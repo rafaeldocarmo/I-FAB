@@ -7,7 +7,6 @@ import {
   type JoinPayload,
 } from "@/lib/joinEmail";
 import { parseEmailList, RESEND_MAX_RECIPIENTS } from "@/lib/emailList";
-import { ALLOWED_JOIN_ROLES } from "@/lib/joinRoles";
 import { getWriteClient } from "@/sanity/writeClient";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -80,7 +79,7 @@ export async function POST(req: Request) {
     const b = body as Record<string, unknown>;
     const fullName = sanitize(b.fullName);
     const email = sanitize(b.email, 254);
-    const mainRole = sanitize(b.mainRole, 50);
+    const mainRole = sanitize(b.mainRole);
 
     if (!fullName || !email || !mainRole) {
       return NextResponse.json(
@@ -96,13 +95,6 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!ALLOWED_JOIN_ROLES.has(mainRole)) {
-      return NextResponse.json(
-        { ok: false, error: "Invalid role" },
-        { status: 400 },
-      );
-    }
-
     const payload: JoinPayload = {
       fullName,
       email,
@@ -110,7 +102,7 @@ export async function POST(req: Request) {
       city: sanitize(b.city),
       country: sanitize(b.country),
       mainRole,
-      otherRole: sanitize(b.otherRole),
+      researchLine: sanitize(b.researchLine),
     };
 
     const apiKey = process.env.RESEND_API_KEY;

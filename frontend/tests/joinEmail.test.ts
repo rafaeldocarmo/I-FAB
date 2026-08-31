@@ -16,6 +16,7 @@ const payload = (extra: Partial<JoinPayload> = {}): JoinPayload => ({
   country: "Portugal",
   mainRole: "Academic",
   researchLine: "Foot kinematics",
+  message: "Looking forward to the next congress.",
   ...extra,
 });
 
@@ -44,6 +45,7 @@ describe("buildJoinNotificationHtml", () => {
     expect(html).toContain("Lisboa, Portugal");
     expect(html).toContain("Academic");
     expect(html).toContain("Foot kinematics");
+    expect(html).toContain("Looking forward to the next congress.");
     expect(html).toContain("2026-08-17 14:32 UTC");
   });
 
@@ -81,6 +83,30 @@ describe("buildJoinNotificationHtml", () => {
     expect(html).toContain("Orthotics product designer");
   });
 
+  it("keeps the submitter's own line breaks in the message", () => {
+    const html = buildJoinNotificationHtml(
+      payload({ message: "First line.\n\nSecond line." }),
+      WHEN,
+    );
+    expect(html).toContain("white-space:pre-wrap");
+    expect(html).toContain("First line.\n\nSecond line.");
+  });
+
+  it("escapes markup inside the message", () => {
+    const html = buildJoinNotificationHtml(
+      payload({ message: "<img src=x onerror=alert(1)> & <b>bold</b>" }),
+      WHEN,
+    );
+    expect(html).not.toContain("<img src=x");
+    expect(html).not.toContain("<b>bold</b>");
+    expect(html).toContain("&lt;b&gt;bold&lt;/b&gt;");
+  });
+
+  it("shows an em dash when no message was given", () => {
+    const html = buildJoinNotificationHtml(payload({ message: "" }), WHEN);
+    expect(html).toContain("Message");
+  });
+
   it("shows an em dash when no research line was given", () => {
     const html = buildJoinNotificationHtml(payload({ researchLine: "" }), WHEN);
     expect(html).toContain("Research line");
@@ -113,6 +139,7 @@ describe("buildJoinNotificationText", () => {
     expect(text).toContain("ana@universidade.pt");
     expect(text).toContain("Academic");
     expect(text).toContain("Foot kinematics");
+    expect(text).toContain("Looking forward to the next congress.");
     expect(text).toContain("Lisboa, Portugal");
     expect(text).toContain("2026-08-17 14:32 UTC");
   });

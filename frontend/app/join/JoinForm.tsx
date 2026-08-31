@@ -26,6 +26,7 @@ export function JoinForm() {
       country: String(fd.get("country") ?? "").trim(),
       mainRole: String(fd.get("mainRole") ?? "").trim(),
       researchLine: String(fd.get("researchLine") ?? "").trim(),
+      message: String(fd.get("message") ?? "").trim(),
     };
 
     if (!payload.fullName || !payload.email || !payload.mainRole) {
@@ -198,6 +199,20 @@ export function JoinForm() {
               placeholder="Your area of research"
             />
           </div>
+        </div>
+
+        <div className="mt-6 md:mt-7">
+          <label htmlFor="join-message" className={labelClass}>
+            Anything else you would like to tell us?
+          </label>
+          <textarea
+            id="join-message"
+            name="message"
+            rows={6}
+            maxLength={5000}
+            className={`${inputClass} min-h-[140px] resize-y`}
+            placeholder="Your interests, what you hope to get from i-FAB, or anything else…"
+          />
         </div>
 
         {errorMessage ? (

@@ -38,6 +38,14 @@ export default defineType({
       type: 'string',
       readOnly: true,
     }),
+    defineField({
+      name: 'message',
+      title: 'Message',
+      description: 'Free text the submitter chose to add',
+      type: 'text',
+      rows: 6,
+      readOnly: true,
+    }),
     defineField({name: 'submittedAt', title: 'Submitted at', type: 'datetime', readOnly: true}),
   ],
   preview: {

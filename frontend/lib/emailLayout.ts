@@ -50,6 +50,20 @@ export function emailRowRaw(label: string, valueHtml: string): string {
   </tr>`;
 }
 
+/**
+ * Label plus a multi-line value. `pre-wrap` keeps the submitter's own line
+ * breaks, and `break-word` stops a long unbroken string widening the table
+ * past the 600px frame.
+ */
+export function emailRowBlock(label: string, value: string): string {
+  return `<tr>
+    <td style="padding:14px 0 6px;font-family:${FONT_STACK};font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:${EMAIL_BRAND.blue};">${escapeHtml(label)}</td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 14px;border-bottom:1px solid ${EMAIL_BRAND.hairline};"><div style="white-space:pre-wrap;word-break:break-word;font-family:${FONT_STACK};font-size:16px;line-height:1.6;color:${EMAIL_BRAND.text};">${escapeHtml(value || "—")}</div></td>
+  </tr>`;
+}
+
 /** Small pill, e.g. for the submitted role. */
 export function emailBadge(text: string): string {
   return `<span style="display:inline-block;padding:5px 12px;background-color:${EMAIL_BRAND.sand};color:${EMAIL_BRAND.navy};border-radius:999px;font-family:${FONT_STACK};font-size:13px;font-weight:700;">${escapeHtml(text)}</span>`;

@@ -11,6 +11,8 @@ import { getWriteClient } from "@/sanity/writeClient";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_FIELD_LEN = 500;
+/** The free-text box needs far more room than the single-line fields. */
+const MAX_MESSAGE_LEN = 5000;
 
 function sanitize(raw: unknown, maxLen = MAX_FIELD_LEN): string {
   if (typeof raw !== "string") return "";
@@ -103,6 +105,7 @@ export async function POST(req: Request) {
       country: sanitize(b.country),
       mainRole,
       researchLine: sanitize(b.researchLine),
+      message: sanitize(b.message, MAX_MESSAGE_LEN),
     };
 
     const apiKey = process.env.RESEND_API_KEY;

@@ -29,6 +29,7 @@ const VALID = {
   country: "Portugal",
   mainRole: "Clinician",
   researchLine: "Foot kinematics",
+  message: "Looking forward to the next congress.",
 };
 
 function post(body: unknown, contentType = "application/json") {
@@ -129,6 +130,7 @@ describe("POST /api/join — accepted submission", () => {
       email: "ana@universidade.pt",
       mainRole: "Clinician",
       researchLine: "Foot kinematics",
+      message: "Looking forward to the next congress.",
     });
     expect(createMock.mock.calls[0][0].submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 
@@ -144,6 +146,17 @@ describe("POST /api/join — accepted submission", () => {
   it("trims input and caps over-long fields", async () => {
     await POST(post({ ...VALID, fullName: `  ${"a".repeat(600)}  ` }));
     expect(createMock.mock.calls[0][0].fullName).toHaveLength(500);
+  });
+
+  it("gives the message a much larger cap than the single-line fields", async () => {
+    await POST(post({ ...VALID, message: "m".repeat(6000) }));
+    expect(createMock.mock.calls[0][0].message).toHaveLength(5000);
+  });
+
+  it("accepts a submission with no message", async () => {
+    const res = await POST(post({ ...VALID, message: "" }));
+    expect(res.status).toBe(200);
+    expect(createMock.mock.calls[0][0].message).toBe("");
   });
 
   it("omits cc and bcc when they are not configured", async () => {

@@ -2,6 +2,7 @@ import {
   emailBadge,
   emailLink,
   emailRow,
+  emailRowBlock,
   emailRowRaw,
   escapeHtml,
   renderEmailShell,
@@ -18,6 +19,7 @@ export type JoinPayload = {
   country: string;
   mainRole: string;
   researchLine: string;
+  message: string;
 };
 
 /** "London, United Kingdom", or whichever half was filled in. */
@@ -40,6 +42,7 @@ export function buildJoinNotificationHtml(
     emailRow("Research line", p.researchLine),
     emailRow("Employer", p.employer),
     emailRow("Location", formatLocation(p)),
+    emailRowBlock("Message", p.message),
     emailRow("Submitted", formatSubmittedAt(submittedAt)),
   ].join("\n");
 
@@ -72,6 +75,9 @@ export function buildJoinNotificationText(
     `Employer:      ${p.employer || "—"}`,
     `Location:      ${formatLocation(p) || "—"}`,
     `Submitted:     ${formatSubmittedAt(submittedAt)}`,
+    "",
+    "Message:",
+    p.message || "—",
     "",
     "Reply to this email to answer them directly.",
     "This submission is also saved in the Sanity Studio.",

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import { Mail } from "lucide-react";
-import { ContactBoardModal } from "@/components/committee/ContactBoardModal";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 import type { CommitteeMemberDisplay } from "./page";
 
@@ -14,8 +13,6 @@ type Props = {
  * Secção principal: variação A (Classic Grid) + variação E (cartões com overlay ao hover/focus).
  */
 export function CommitteeContent({ committee }: Props) {
-  const [contactBoardOpen, setContactBoardOpen] = useState(false);
-
   return (
     <>
       {/* Variation A — Classic Grid (Scientific Board) */}
@@ -121,8 +118,8 @@ export function CommitteeContent({ committee }: Props) {
           <p className="mx-auto mb-7 max-w-lg text-sm leading-relaxed" style={{ color: "#374151" }}>
             i-FAB is always seeking dedicated researchers and clinicians to contribute to our global mission. Reach out to learn about opportunities to join the board.
           </p>
-          <button
-            type="button"
+          <Link
+            href="/join"
             className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold text-white transition-all duration-200"
             style={{ background: "linear-gradient(135deg, #213885, #081849)", boxShadow: "0 4px 16px rgba(33,56,133,0.3)" }}
             onMouseEnter={(e) => {
@@ -133,18 +130,12 @@ export function CommitteeContent({ committee }: Props) {
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
               (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(33,56,133,0.3)";
             }}
-            onClick={() => setContactBoardOpen(true)}
           >
             <Mail size={14} aria-hidden />
             Contact the Board
-          </button>
+          </Link>
         </div>
       </section>
-
-      <ContactBoardModal
-        open={contactBoardOpen}
-        onClose={() => setContactBoardOpen(false)}
-      />
     </>
   );
 }

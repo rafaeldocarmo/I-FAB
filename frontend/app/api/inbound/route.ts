@@ -39,11 +39,18 @@ export async function POST(req: Request) {
   // The signature covers the exact bytes sent, so verify before parsing.
   const payload = await req.text();
 
-  // The SDK wants the three signing headers, not the whole Headers object.
+  // Resend signs with Svix and sends `svix-*` headers. The `webhook-*` names
+  // are the standard-webhooks spelling the SDK uses internally when it hands
+  // these to the verifier, not what arrives on the wire — reading those alone
+  // yields empty strings and every real delivery fails verification. Accept
+  // both, so this keeps working if Resend moves to the standard names.
+  const header = (svix: string, standard: string) =>
+    req.headers.get(svix) ?? req.headers.get(standard) ?? "";
+
   const signingHeaders = {
-    id: req.headers.get("webhook-id") ?? "",
-    timestamp: req.headers.get("webhook-timestamp") ?? "",
-    signature: req.headers.get("webhook-signature") ?? "",
+    id: header("svix-id", "webhook-id"),
+    timestamp: header("svix-timestamp", "webhook-timestamp"),
+    signature: header("svix-signature", "webhook-signature"),
   };
 
   const resend = new Resend(apiKey);

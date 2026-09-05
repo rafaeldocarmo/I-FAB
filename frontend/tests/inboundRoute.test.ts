@@ -16,9 +16,9 @@ function post(body: unknown, headers: Record<string, string> = {}) {
   return new Request("http://localhost/api/inbound", {
     method: "POST",
     headers: {
-      "webhook-id": "msg_1",
-      "webhook-timestamp": "1755000000",
-      "webhook-signature": "v1,sig",
+      "svix-id": "msg_1",
+      "svix-timestamp": "1755000000",
+      "svix-signature": "v1,sig",
       ...headers,
     },
     body: typeof body === "string" ? body : JSON.stringify(body),
@@ -62,6 +62,38 @@ describe("POST /api/inbound", () => {
       id: "msg_1",
       timestamp: "1755000000",
       signature: "v1,sig",
+    });
+  });
+
+  /**
+   * Regression: the route first read only `webhook-*`, the spelling the SDK
+   * uses internally. Resend sends `svix-*`, so every real delivery arrived
+   * with empty signing values and was rejected.
+   */
+  it("reads the svix-* headers Resend actually sends", async () => {
+    await POST(post(RECEIVED));
+    expect(verifyMock.mock.calls[0][0].headers).toEqual({
+      id: "msg_1",
+      timestamp: "1755000000",
+      signature: "v1,sig",
+    });
+  });
+
+  it("still accepts the standard webhook-* spelling", async () => {
+    const req = new Request("http://localhost/api/inbound", {
+      method: "POST",
+      headers: {
+        "webhook-id": "msg_2",
+        "webhook-timestamp": "1755000001",
+        "webhook-signature": "v1,other",
+      },
+      body: JSON.stringify(RECEIVED),
+    });
+    await POST(req);
+    expect(verifyMock.mock.calls[0][0].headers).toEqual({
+      id: "msg_2",
+      timestamp: "1755000001",
+      signature: "v1,other",
     });
   });
 

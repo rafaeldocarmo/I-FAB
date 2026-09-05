@@ -17,6 +17,7 @@ const payload = (extra: Partial<JoinPayload> = {}): JoinPayload => ({
   mainRole: "Academic",
   researchLine: "Foot kinematics",
   message: "Looking forward to the next congress.",
+  communicationsConsent: false,
   ...extra,
 });
 
@@ -105,6 +106,22 @@ describe("buildJoinNotificationHtml", () => {
   it("shows an em dash when no message was given", () => {
     const html = buildJoinNotificationHtml(payload({ message: "" }), WHEN);
     expect(html).toContain("Message");
+  });
+
+  it("tells the board when someone opted in to email updates", () => {
+    const html = buildJoinNotificationHtml(
+      payload({ communicationsConsent: true }),
+      WHEN,
+    );
+    expect(html).toContain("Opted in");
+  });
+
+  it("warns the board plainly when someone did not opt in", () => {
+    const html = buildJoinNotificationHtml(
+      payload({ communicationsConsent: false }),
+      WHEN,
+    );
+    expect(html).toContain("do not add to any mailing list");
   });
 
   it("shows an em dash when no research line was given", () => {

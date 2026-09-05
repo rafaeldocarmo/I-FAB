@@ -8,6 +8,10 @@ import {
 } from "@/lib/joinEmail";
 import { parseEmailList, RESEND_MAX_RECIPIENTS } from "@/lib/emailList";
 import { getWriteClient } from "@/sanity/writeClient";
+import {
+  COMMUNICATIONS_CONSENT_TEXT,
+  COMMUNICATIONS_CONSENT_VERSION,
+} from "@/lib/consent";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_FIELD_LEN = 500;
@@ -45,6 +49,15 @@ async function persistSubmission(
       _type: "joinSubmission",
       ...payload,
       submittedAt: submittedAt.toISOString(),
+      // Stored only when consent was actually given, and with the wording that
+      // was on screen: proving consent means being able to show what was
+      // agreed to, not just that a box was ticked.
+      ...(payload.communicationsConsent
+        ? {
+            consentText: COMMUNICATIONS_CONSENT_TEXT,
+            consentVersion: COMMUNICATIONS_CONSENT_VERSION,
+          }
+        : {}),
     });
   } catch (e) {
     console.error("[api/join] Sanity write failed:", e);
@@ -106,6 +119,9 @@ export async function POST(req: Request) {
       mainRole,
       researchLine: sanitize(b.researchLine),
       message: sanitize(b.message, MAX_MESSAGE_LEN),
+      // Only an explicit `true` counts. Anything else - absent, "false",
+      // "on", null - is not consent.
+      communicationsConsent: b.communicationsConsent === true,
     };
 
     const apiKey = process.env.RESEND_API_KEY;

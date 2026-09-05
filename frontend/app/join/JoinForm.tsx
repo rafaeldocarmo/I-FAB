@@ -2,6 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import {
+  COLLECTION_NOTICE,
+  COMMUNICATIONS_CONSENT_TEXT,
+} from "@/lib/consent";
 
 const inputClass =
   "w-full rounded-lg border-2 border-[#213885] bg-white px-4 py-3 text-[15px] text-[#081849] shadow-sm transition-[box-shadow,border-color] placeholder:text-[#9CA3AF] focus:border-[#081849] focus:outline-none focus:ring-2 focus:ring-[#213885]/25";
@@ -27,6 +31,8 @@ export function JoinForm() {
       mainRole: String(fd.get("mainRole") ?? "").trim(),
       researchLine: String(fd.get("researchLine") ?? "").trim(),
       message: String(fd.get("message") ?? "").trim(),
+      // An unchecked box is absent from FormData entirely.
+      communicationsConsent: fd.get("communicationsConsent") === "on",
     };
 
     if (!payload.fullName || !payload.email || !payload.mainRole) {
@@ -213,6 +219,28 @@ export function JoinForm() {
             className={`${inputClass} min-h-[140px] resize-y`}
             placeholder="Your interests, what you hope to get from i-FAB, or anything else…"
           />
+        </div>
+
+        {/*
+          Two deliberately separate things: the notice is information we owe
+          everyone, the checkbox is consent for a different purpose. Bundling
+          them into a single "I accept" would invalidate the consent.
+        */}
+        <div className="mt-8 rounded-xl border border-[#213885]/15 bg-[#f9f7f5] p-5">
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              name="communicationsConsent"
+              className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-[#213885]"
+            />
+            <span className="text-left text-sm leading-relaxed text-[#374151]">
+              {COMMUNICATIONS_CONSENT_TEXT}
+            </span>
+          </label>
+
+          <p className="mt-4 border-t border-[#213885]/10 pt-4 text-left text-xs leading-relaxed text-[#6B7280]">
+            {COLLECTION_NOTICE}
+          </p>
         </div>
 
         {errorMessage ? (

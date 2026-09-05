@@ -46,6 +46,28 @@ export default defineType({
       rows: 6,
       readOnly: true,
     }),
+    defineField({
+      name: 'communicationsConsent',
+      title: 'Consented to email updates',
+      description:
+        'Only submissions with this ticked may be added to a mailing list. Consent given here cannot be assumed for anyone who left it unticked.',
+      type: 'boolean',
+      readOnly: true,
+    }),
+    defineField({
+      name: 'consentText',
+      title: 'Consent wording shown',
+      description: 'The exact text the person agreed to, kept as proof',
+      type: 'text',
+      rows: 3,
+      readOnly: true,
+    }),
+    defineField({
+      name: 'consentVersion',
+      title: 'Consent version',
+      type: 'string',
+      readOnly: true,
+    }),
     defineField({name: 'submittedAt', title: 'Submitted at', type: 'datetime', readOnly: true}),
   ],
   preview: {
@@ -54,13 +76,15 @@ export default defineType({
       email: 'email',
       mainRole: 'mainRole',
       researchLine: 'researchLine',
+      communicationsConsent: 'communicationsConsent',
       employer: 'employer',
       country: 'country',
       submittedAt: 'submittedAt',
     },
-    prepare({title, email, mainRole, researchLine, employer, country, submittedAt}) {
+    prepare({title, email, mainRole, researchLine, employer, country, submittedAt, communicationsConsent}) {
       const role = [mainRole, researchLine].filter(Boolean).join(' · ')
       const where = [employer, country].filter(Boolean).join(', ')
+      const optIn = communicationsConsent ? '✉ opted in' : undefined
       const when = submittedAt
         ? new Date(submittedAt).toLocaleDateString(undefined, {
             year: 'numeric',
@@ -70,7 +94,7 @@ export default defineType({
         : undefined
       return {
         title: title ?? email ?? 'Unnamed submission',
-        subtitle: [role, where, when].filter(Boolean).join(' · '),
+        subtitle: [role, where, when, optIn].filter(Boolean).join(' · '),
       }
     },
   },

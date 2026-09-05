@@ -20,6 +20,7 @@ export type JoinPayload = {
   mainRole: string;
   researchLine: string;
   message: string;
+  communicationsConsent: boolean;
 };
 
 /** "London, United Kingdom", or whichever half was filled in. */
@@ -43,6 +44,12 @@ export function buildJoinNotificationHtml(
     emailRow("Employer", p.employer),
     emailRow("Location", formatLocation(p)),
     emailRowBlock("Message", p.message),
+    emailRow(
+      "Email updates",
+      p.communicationsConsent
+        ? "Opted in — may be contacted about congresses and community news"
+        : "Not opted in — do not add to any mailing list",
+    ),
     emailRow("Submitted", formatSubmittedAt(submittedAt)),
   ].join("\n");
 
@@ -78,6 +85,8 @@ export function buildJoinNotificationText(
     "",
     "Message:",
     p.message || "—",
+    "",
+    `Email updates:  ${p.communicationsConsent ? "opted in" : "NOT opted in — do not add to any mailing list"}`,
     "",
     "Reply to this email to answer them directly.",
     "This submission is also saved in the Sanity Studio.",

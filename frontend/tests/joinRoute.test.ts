@@ -30,6 +30,7 @@ const VALID = {
   mainRole: "Clinician",
   researchLine: "Foot kinematics",
   message: "Looking forward to the next congress.",
+  communicationsConsent: false,
 };
 
 function post(body: unknown, contentType = "application/json") {
@@ -131,6 +132,7 @@ describe("POST /api/join — accepted submission", () => {
       mainRole: "Clinician",
       researchLine: "Foot kinematics",
       message: "Looking forward to the next congress.",
+      communicationsConsent: false,
     });
     expect(createMock.mock.calls[0][0].submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 
@@ -172,6 +174,33 @@ describe("POST /api/join — accepted submission", () => {
     expect(sendMock.mock.calls[0][0].cc).toEqual(["cc@x.com", "cc2@x.com"]);
     expect(sendMock.mock.calls[0][0].bcc).toEqual(["bcc@x.com"]);
   });
+});
+
+describe("POST /api/join — communications consent", () => {
+  it("stores the wording and version as proof when someone opts in", async () => {
+    await POST(post({ ...VALID, communicationsConsent: true }));
+    const doc = createMock.mock.calls[0][0];
+    expect(doc.communicationsConsent).toBe(true);
+    expect(doc.consentText).toContain("i-FAB may email me occasionally");
+    expect(doc.consentVersion).toBe("2026-08-18");
+  });
+
+  it("stores no consent proof when the box was left unticked", async () => {
+    await POST(post({ ...VALID, communicationsConsent: false }));
+    const doc = createMock.mock.calls[0][0];
+    expect(doc.communicationsConsent).toBe(false);
+    expect(doc).not.toHaveProperty("consentText");
+    expect(doc).not.toHaveProperty("consentVersion");
+  });
+
+  /** Consent has to be an affirmative act, so only a real `true` counts. */
+  it.each([undefined, "on", "true", 1, null, {}])(
+    "treats %o as no consent",
+    async (value) => {
+      await POST(post({ ...VALID, communicationsConsent: value }));
+      expect(createMock.mock.calls[0][0].communicationsConsent).toBe(false);
+    },
+  );
 });
 
 describe("POST /api/join — degradation", () => {

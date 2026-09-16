@@ -102,11 +102,11 @@ function HomeConferenceScheduleEmpty() {
         className="mb-4 text-[clamp(1.25rem,2.2vw,1.65rem)] font-bold leading-snug"
         style={{ color: NAVY }}
       >
-        No upcoming congress scheduled yet
+        No upcoming meeting scheduled yet
       </h2>
       <p className="mx-auto max-w-md text-[15px] leading-relaxed text-[#6B7280]">
-        There is no upcoming congress scheduled at the moment. Explore past events on the conferences
-        page and join the community to hear when the next World Congress is announced.
+        There is no upcoming meeting scheduled at the moment. Explore past events on the conferences
+        page and join the community to hear when the next World Meeting is announced.
       </p>
       <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
         <Link
@@ -150,7 +150,7 @@ export function UpcomingConferenceHome({ schedule }: Props) {
   const eyebrow =
     typeof schedule.eyebrow === "string" && schedule.eyebrow.trim()
       ? schedule.eyebrow.trim()
-      : "Next i-FAB Congress";
+      : "Next iFAB Meeting";
 
   const learnMoreItems = learnMoreListFromSchedule(schedule);
   const units: [number, string][] = [
@@ -188,7 +188,7 @@ export function UpcomingConferenceHome({ schedule }: Props) {
               className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
               style={{ backgroundColor: "#ECDFD2", color: NAVY }}
             >
-              {toOrdinal(schedule.editionNumber)} World Congress
+              {toOrdinal(schedule.editionNumber)} World Meeting
             </span>
           </p>
         ) : null}

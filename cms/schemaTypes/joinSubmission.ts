@@ -29,7 +29,7 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Join i-FAB', value: 'join'},
+          {title: 'Join iFAB', value: 'join'},
           {title: 'Contact the board', value: 'contact'},
         ],
       },

@@ -19,13 +19,13 @@ export function CTABanner() {
             fontWeight: 700,
           }}
         >
-          Join the Global i-FAB Community
+          Join the Global iFAB Community
         </h2>
         <p
           className="mb-8 text-sm leading-relaxed"
           style={{ color: "rgba(255,255,255,0.7)" }}
         >
-          Connect with researchers, clinicians, and industry partners worldwide. Join a network that amplifies foot and ankle biomechanics through the biannual i-FAB Congress and global collaboration.
+          Connect with researchers, clinicians, and industry partners worldwide. Join a network that amplifies foot and ankle biomechanics through the biannual iFAB Meeting and global collaboration.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link

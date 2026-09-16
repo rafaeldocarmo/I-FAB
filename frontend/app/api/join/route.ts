@@ -189,7 +189,7 @@ export async function POST(req: Request) {
       ...(cc.length > 0 ? { cc } : {}),
       ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
-      subject: `i-FAB - ${PURPOSE_LABEL[payload.purpose]}: ${payload.fullName}`,
+      subject: `iFAB - ${PURPOSE_LABEL[payload.purpose]}: ${payload.fullName}`,
       html: buildJoinNotificationHtml(payload, submittedAt),
       text: buildJoinNotificationText(payload, submittedAt),
     });

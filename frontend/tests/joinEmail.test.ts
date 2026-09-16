@@ -17,7 +17,7 @@ const payload = (extra: Partial<JoinPayload> = {}): JoinPayload => ({
   country: "Portugal",
   mainRole: "Academic",
   researchLine: "Foot kinematics",
-  message: "Looking forward to the next congress.",
+  message: "Looking forward to the next meeting.",
   communicationsConsent: false,
   ...extra,
 });
@@ -42,8 +42,8 @@ describe("purpose framing", () => {
   it("frames membership interest as a decision to make", () => {
     const html = buildJoinNotificationHtml(payload({ purpose: "join" }), WHEN);
     expect(html).toContain("New membership interest");
-    expect(html).toContain("has asked to join the i-FAB community");
-    expect(html).toContain("Join i-FAB");
+    expect(html).toContain("has asked to join the iFAB community");
+    expect(html).toContain("Join iFAB");
   });
 
   /** The board triages from the subject and the first line, so the two must not look alike. */
@@ -59,7 +59,7 @@ describe("purpose framing", () => {
       "Contact the board",
     );
     expect(buildJoinNotificationText(payload({ purpose: "join" }), WHEN)).toContain(
-      "Join i-FAB",
+      "Join iFAB",
     );
   });
 });
@@ -73,7 +73,7 @@ describe("buildJoinNotificationHtml", () => {
     expect(html).toContain("Lisboa, Portugal");
     expect(html).toContain("Academic");
     expect(html).toContain("Foot kinematics");
-    expect(html).toContain("Looking forward to the next congress.");
+    expect(html).toContain("Looking forward to the next meeting.");
     expect(html).toContain("2026-08-17 14:32 UTC");
   });
 
@@ -183,7 +183,7 @@ describe("buildJoinNotificationText", () => {
     expect(text).toContain("ana@universidade.pt");
     expect(text).toContain("Academic");
     expect(text).toContain("Foot kinematics");
-    expect(text).toContain("Looking forward to the next congress.");
+    expect(text).toContain("Looking forward to the next meeting.");
     expect(text).toContain("Lisboa, Portugal");
     expect(text).toContain("2026-08-17 14:32 UTC");
   });

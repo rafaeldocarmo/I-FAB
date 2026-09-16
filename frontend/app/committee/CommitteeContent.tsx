@@ -116,7 +116,7 @@ export function CommitteeContent({ committee }: Props) {
             Interested in Joining the Board?
           </h2>
           <p className="mx-auto mb-7 max-w-lg text-sm leading-relaxed" style={{ color: "#374151" }}>
-            i-FAB is always seeking dedicated researchers and clinicians to contribute to our global mission. Reach out to learn about opportunities to join the board.
+            iFAB is always seeking dedicated researchers and clinicians to contribute to our global mission. Reach out to learn about opportunities to join the board.
           </p>
           <Link
             // The form on /join serves both subjects; this arrives on the

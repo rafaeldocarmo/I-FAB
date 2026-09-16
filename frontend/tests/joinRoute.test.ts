@@ -29,7 +29,7 @@ const VALID = {
   country: "Portugal",
   mainRole: "Clinician",
   researchLine: "Foot kinematics",
-  message: "Looking forward to the next congress.",
+  message: "Looking forward to the next meeting.",
   communicationsConsent: false,
 };
 
@@ -44,7 +44,7 @@ function post(body: unknown, contentType = "application/json") {
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("RESEND_API_KEY", "test-key");
-  vi.stubEnv("RESEND_FROM_EMAIL", "i-FAB <noreply@ifabweb.org>");
+  vi.stubEnv("RESEND_FROM_EMAIL", "iFAB <noreply@ifabweb.org>");
   vi.stubEnv("JOIN_NOTIFICATION_TO", "board@ifabweb.org");
   vi.stubEnv("JOIN_NOTIFICATION_CC", "");
   vi.stubEnv("JOIN_NOTIFICATION_BCC", "");
@@ -131,7 +131,7 @@ describe("POST /api/join — accepted submission", () => {
       email: "ana@universidade.pt",
       mainRole: "Clinician",
       researchLine: "Foot kinematics",
-      message: "Looking forward to the next congress.",
+      message: "Looking forward to the next meeting.",
       communicationsConsent: false,
     });
     expect(createMock.mock.calls[0][0].submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
@@ -181,8 +181,11 @@ describe("POST /api/join — communications consent", () => {
     await POST(post({ ...VALID, communicationsConsent: true }));
     const doc = createMock.mock.calls[0][0];
     expect(doc.communicationsConsent).toBe(true);
-    expect(doc.consentText).toContain("i-FAB may email me occasionally");
-    expect(doc.consentVersion).toBe("2026-08-18");
+    expect(doc.consentText).toContain("iFAB may email me occasionally");
+    expect(doc.consentText).toContain("about meetings");
+    // Pinned on purpose: bumping the version must be a deliberate act, not
+    // something that slips through when the wording is edited.
+    expect(doc.consentVersion).toBe("2026-09-16");
   });
 
   it("stores no consent proof when the box was left unticked", async () => {
@@ -240,7 +243,7 @@ describe("POST /api/join — purpose", () => {
 
     expect(res.status).toBe(200);
     expect(sendMock.mock.calls[0][0].subject).toBe(
-      "i-FAB - Contact the board: Ana Ribeiro",
+      "iFAB - Contact the board: Ana Ribeiro",
     );
     expect(createMock.mock.calls[0][0]).toMatchObject({ purpose: "contact" });
   });
@@ -249,7 +252,7 @@ describe("POST /api/join — purpose", () => {
     const res = await POST(post({ ...VALID, purpose: "join" }));
 
     expect(res.status).toBe(200);
-    expect(sendMock.mock.calls[0][0].subject).toBe("i-FAB - Join i-FAB: Ana Ribeiro");
+    expect(sendMock.mock.calls[0][0].subject).toBe("iFAB - Join iFAB: Ana Ribeiro");
     expect(createMock.mock.calls[0][0]).toMatchObject({ purpose: "join" });
   });
 

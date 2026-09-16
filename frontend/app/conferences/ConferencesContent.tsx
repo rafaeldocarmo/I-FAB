@@ -99,8 +99,8 @@ function UpcomingConferenceCard({ upcoming }: { upcoming: UpcomingConferenceData
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-[#ECDFD2] px-2.5 py-1 text-xs font-semibold text-[#081849]">
               {upcoming.edition != null
-                ? `${toOrdinal(upcoming.edition)} Congress`
-                : "Congress"}
+                ? `${toOrdinal(upcoming.edition)} Meeting`
+                : "Meeting"}
             </span>
           </div>
 
@@ -200,14 +200,14 @@ export function ConferencesContent({ upcoming, past }: Props) {
           ) : (
             <div className="rounded-2xl border border-[#E8E4E0] bg-[#f9f7f5] px-6 py-14 text-center sm:px-10">
               <p className="mx-auto max-w-lg text-[15px] leading-relaxed text-[#6B7280]">
-                There is no upcoming congress scheduled at the moment. Join the community to hear about
-                future i-FAB events.
+                There is no upcoming meeting scheduled at the moment. Join the community to hear about
+                future iFAB events.
               </p>
               <Link
                 href="/join"
                 className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#213885] px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               >
-                Join i-FAB
+                Join iFAB
               </Link>
             </div>
           )}
@@ -351,10 +351,10 @@ export function ConferencesContent({ upcoming, past }: Props) {
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-white mb-4" style={{  fontSize: "1.7rem", fontWeight: 700 }}>
-            Interested in Hosting a Future i-FAB Congress?
+            Interested in Hosting a Future iFAB Meeting?
           </h2>
           <p className="text-sm leading-relaxed mb-7 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.7)" }}>
-            i-FAB welcomes bids from institutions and cities around the world to host upcoming world congresses. Contact us to learn more about the hosting requirements and process.
+            iFAB welcomes bids from institutions and cities around the world to host upcoming world meetings. Contact us to learn more about the hosting requirements and process.
           </p>
           <a
             href="mailto:info@i-fab.org"

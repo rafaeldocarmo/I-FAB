@@ -34,7 +34,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("RESEND_WEBHOOK_SECRET", "whsec_test");
   vi.stubEnv("RESEND_API_KEY", "re_test");
-  vi.stubEnv("RESEND_FROM_EMAIL", "i-FAB <noreply@ifabweb.org>");
+  vi.stubEnv("RESEND_FROM_EMAIL", "iFAB <noreply@ifabweb.org>");
   vi.stubEnv("JOIN_NOTIFICATION_TO", "a@uw.edu, b@ior.it");
   vi.stubEnv("INBOUND_FORWARD_TO", "");
   verifyMock.mockReturnValue(RECEIVED);
@@ -50,7 +50,7 @@ describe("POST /api/inbound", () => {
     expect(forwardMock).toHaveBeenCalledWith({
       emailId: "inb_1",
       to: ["a@uw.edu", "b@ior.it"],
-      from: "i-FAB <noreply@ifabweb.org>",
+      from: "iFAB <noreply@ifabweb.org>",
     });
   });
 

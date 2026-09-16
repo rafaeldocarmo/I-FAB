@@ -1,7 +1,7 @@
 /**
  * How long a Join submission is kept, and the cutoff that follows from it.
  *
- * Four years spans two congress cycles, which is how long a submission stays
+ * Four years spans two meeting cycles, which is how long a submission stays
  * useful for the purpose it was given for. The Privacy Policy states this
  * period publicly, so it lives here rather than inline in the route that
  * enforces it: a promise made to the public and the job that keeps it must not

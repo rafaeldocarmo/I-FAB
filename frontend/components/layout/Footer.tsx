@@ -41,12 +41,12 @@ export function Footer() {
                 style={{ height: 150, width: "auto" }}
                 className="h-[150px] w-auto"
                 src={ifabLogo} 
-                alt="i-FAB logo"
+                alt="iFAB logo"
                 loading="eager"
               />
             </div>
             <p className="text-sm leading-relaxed max-w-xs mt-4" style={{ color: "#9ca3af" }}>
-              A global community advancing foot and ankle biomechanics—raising visibility across disciplines, bridging science and application, and connecting experts through our biannual congress and international partnerships.
+              A global community advancing foot and ankle biomechanics—raising visibility across disciplines, bridging science and application, and connecting experts through our biannual meeting and international partnerships.
             </p>
 
             <div className="flex items-center gap-3 mt-5">
@@ -111,7 +111,7 @@ export function Footer() {
             </h3>
             <ul className="space-y-2.5">
               {[
-                { label: "Join i-FAB", path: "/join" },
+                { label: "Join iFAB", path: "/join" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -133,7 +133,7 @@ export function Footer() {
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs" style={{ color: "#6B7280" }}>
-            © {new Date().getFullYear()} International Foot and Ankle Biomechanics Community (i-FAB). All rights reserved.
+            © {new Date().getFullYear()} International Foot and Ankle Biomechanics Community (iFAB). All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link

@@ -28,7 +28,7 @@ const highlightCards = [
     icon: Calendar,
     title: "Conferences",
     description:
-      "The biannual i-FAB Congress showcases cutting-edge research and builds bridges between academia, industry, and applied practice—alongside sessions at major international conferences worldwide.",
+      "The biannual iFAB Meeting showcases cutting-edge research and builds bridges between academia, industry, and applied practice—alongside sessions at major international conferences worldwide.",
     link: "/conferences",
     linkLabel: "View Events",
   },

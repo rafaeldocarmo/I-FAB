@@ -16,14 +16,14 @@ const GRADIENT_BAR = "linear-gradient(90deg, #081849 0%, #213885 100%)";
 
 /** Fallback se `CONGRESS_CAROUSEL_SLIDES` estiver vazio — ficheiros na raiz de `public/`. */
 const LEGACY_CONFERENCE_HERO_SLIDES: PublicCarouselSlide[] = [
-  { src: "/carrossel1.png", alt: "i-FAB congress" },
-  { src: "/carrossel2.jpg", alt: "i-FAB congress" },
-  { src: "/carrossel3.png", alt: "i-FAB congress" },
-  { src: "/carrossel4.png", alt: "i-FAB congress" },
-  { src: "/carrossel5.jpg", alt: "i-FAB congress" },
-  { src: "/carrossel6.jpg", alt: "i-FAB congress" },
-  { src: "/carrossel7.jpg", alt: "i-FAB congress" },
-  { src: "/carrossel8.jpg", alt: "i-FAB congress" },
+  { src: "/carrossel1.png", alt: "iFAB meeting" },
+  { src: "/carrossel2.jpg", alt: "iFAB meeting" },
+  { src: "/carrossel3.png", alt: "iFAB meeting" },
+  { src: "/carrossel4.png", alt: "iFAB meeting" },
+  { src: "/carrossel5.jpg", alt: "iFAB meeting" },
+  { src: "/carrossel6.jpg", alt: "iFAB meeting" },
+  { src: "/carrossel7.jpg", alt: "iFAB meeting" },
+  { src: "/carrossel8.jpg", alt: "iFAB meeting" },
 ];
 
 function congressHeroSlides(): PublicCarouselSlide[] {
@@ -45,7 +45,7 @@ export function ConferenceHero() {
     <section className="bg-white pb-20 pt-24 sm:pb-28 sm:pt-28 md:px-4 md:pb-12 md:pt-32 lg:px-8 lg:pb-8 lg:pt-36">
       <div className="mx-auto max-w-4xl text-center lg:max-w-5xl">
         <p className="mb-2 text-[20px] font-bold uppercase tracking-[0.22em] text-[#213885] md:mb-3 md:text-3xl">
-          Congresses
+          Meetings
         </p>
       </div>
 
@@ -54,7 +54,7 @@ export function ConferenceHero() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-14">
             <div className="space-y-6 text-base leading-relaxed text-[#374151] md:text-lg lg:text-[1.125rem]">
               <p className="mb-5 text-xl font-semibold uppercase tracking-widest text-[#213885]">
-                Our biannual i-FAB congress is an international meeting designed to
+                Our biannual iFAB Meeting is an international gathering designed to
               </p>
               {CONGRESS_AIMS.map((line) => (
                 <div key={line} className="flex items-start gap-2.5">
@@ -69,7 +69,7 @@ export function ConferenceHero() {
                 <PublicImageCarousel
                   variant="hero"
                   slides={slides}
-                  ariaLabel="i-FAB congress gallery"
+                  ariaLabel="iFAB meeting gallery"
                   imageFit="contain"
                 />
               ) : null}

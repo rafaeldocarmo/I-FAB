@@ -35,9 +35,9 @@ const FRAMING: Record<
   { eyebrow: string; heading: string; intro: (name: string) => string }
 > = {
   join: {
-    eyebrow: "Join i-FAB",
+    eyebrow: "Join iFAB",
     heading: "New membership interest",
-    intro: (name) => `${name} has asked to join the i-FAB community.`,
+    intro: (name) => `${name} has asked to join the iFAB community.`,
   },
   contact: {
     eyebrow: "Contact the board",
@@ -71,7 +71,7 @@ export function buildJoinNotificationHtml(
     emailRow(
       "Email updates",
       p.communicationsConsent
-        ? "Opted in — may be contacted about congresses and community news"
+        ? "Opted in — may be contacted about meetings and community news"
         : "Not opted in — do not add to any mailing list",
     ),
     emailRow("Submitted", formatSubmittedAt(submittedAt)),
@@ -98,7 +98,7 @@ export function buildJoinNotificationText(
   const framing = FRAMING[p.purpose];
 
   return [
-    `i-FAB — ${framing.eyebrow}`,
+    `iFAB — ${framing.eyebrow}`,
     framing.heading,
     "",
     framing.intro(p.fullName),

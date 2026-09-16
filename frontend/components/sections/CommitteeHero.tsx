@@ -5,7 +5,7 @@
 const GRADIENT_BAR = "linear-gradient(90deg, #081849 0%, #213885 100%)";
 
 const DEFAULT_QUOTE =
-  "Our board is composed of internationally recognized experts who guide the scientific direction, governance, and activities of i-FAB.";
+  "Our board is composed of internationally recognized experts who guide the scientific direction, governance, and activities of iFAB.";
 
 type CommitteeHeroProps = {
   /** Rótulo superior (ex.: Scientific Board) */

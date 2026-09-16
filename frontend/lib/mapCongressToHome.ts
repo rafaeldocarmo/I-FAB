@@ -56,7 +56,7 @@ export function mapCongressToHomeProps(
     typeof c.description === "string" ? c.description.trim() : "";
 
   return {
-    name: c.title.trim() || "i-FAB Congress",
+    name: c.title.trim() || "iFAB Meeting",
     location,
     date,
     venue: c.venue ?? undefined,

@@ -15,7 +15,7 @@ const DEFAULT_QUOTE =
   "To foster international collaboration and advance knowledge in foot and ankle biomechanics through research, education, and community engagement — improving lives through evidence-based understanding.";
 
 const DEFAULT_BODY =
-  "Founded in 2006, i-FAB has grown into a global network of over 1,200 members across 30+ countries, united by a shared commitment to understanding the biomechanics of the foot and ankle.";
+  "Founded in 2006, iFAB has grown into a global network of over 1,200 members across 30+ countries, united by a shared commitment to understanding the biomechanics of the foot and ankle.";
 
 type MissionHeroProps = {
   quote?: string;

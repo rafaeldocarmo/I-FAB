@@ -9,7 +9,7 @@ export function JoinHero() {
     <section className="bg-white px-4 pb-16 pt-24 sm:px-6 sm:pb-20 sm:pt-28 md:pb-12 md:pt-32 lg:px-8 lg:pb-0 lg:pt-36">
       <div className="mx-auto max-w-4xl text-center lg:max-w-5xl">
         <h1 className="text-lg font-semibold uppercase tracking-[0.22em] text-[#213885]">
-          JOIN i-FAB
+          JOIN iFAB
         </h1>
       </div>
 

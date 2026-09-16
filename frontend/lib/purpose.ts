@@ -24,7 +24,7 @@ export function parsePurpose(raw: unknown): Purpose {
 
 /** What the visitor picks from, and what the board reads in the notification. */
 export const PURPOSE_LABEL: Record<Purpose, string> = {
-  join: "Join i-FAB",
+  join: "Join iFAB",
   contact: "Contact the board",
 };
 

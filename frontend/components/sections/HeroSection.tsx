@@ -24,7 +24,7 @@ export function HeroSection() {
         />
         <Image
           src={ifabLogo}
-          alt="i-FAB logo"
+          alt="iFAB logo"
           priority
           style={{
             width: 150,
@@ -57,7 +57,7 @@ export function HeroSection() {
             marginBottom: 28,
           }}
         >
-          i - F A B
+          i F A B
         </div>
         <p
           style={{

@@ -78,7 +78,7 @@ export function LegalDocument({
               This document is an unreviewed scaffold. It has not been checked by a
               qualified data protection or legal adviser, and every highlighted
               placeholder below must be completed before publication. Do not rely on
-              it as a statement of i-FAB&rsquo;s legal position in its current form.
+              it as a statement of iFAB&rsquo;s legal position in its current form.
             </p>
           </div>
         ) : null}

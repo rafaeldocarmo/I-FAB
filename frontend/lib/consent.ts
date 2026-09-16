@@ -8,10 +8,10 @@
  * the time. Changing the wording means bumping the version, never rewriting
  * records that were collected under the old one.
  */
-export const COMMUNICATIONS_CONSENT_VERSION = "2026-08-18";
+export const COMMUNICATIONS_CONSENT_VERSION = "2026-09-16";
 
 export const COMMUNICATIONS_CONSENT_TEXT =
-  "Yes, i-FAB may email me occasionally about congresses and community news. " +
+  "Yes, iFAB may email me occasionally about meetings and community news. " +
   "I can withdraw this at any time by emailing info@i-fab.org.";
 
 /**
@@ -20,7 +20,7 @@ export const COMMUNICATIONS_CONSENT_TEXT =
  * Kept here so the form and any future copy of it cannot drift apart.
  */
 export const COLLECTION_NOTICE =
-  "Your details go to the i-FAB board, who use them to reply to you and to consider your " +
+  "Your details go to the iFAB board, who use them to reply to you and to consider your " +
   "interest in the community. We keep them for four years, never publish them on this site, " +
   "and never share them for advertising. To ask what we hold about you, to correct it, or to " +
   "have it deleted, email info@i-fab.org.";

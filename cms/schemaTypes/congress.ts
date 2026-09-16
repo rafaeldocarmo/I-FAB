@@ -1,11 +1,16 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
 /**
- * A congress / conference event with location, dates, media, and journal link.
+ * A meeting / conference event with location, dates, media, and journal link.
+ *
+ * Shown to editors as "Meeting", but the type is still named `congress` on
+ * purpose: that name is stored as `_type` on every existing document and
+ * queried by the website. Renaming it would disconnect the site from all of
+ * its content, so only the labels changed.
  */
 export default defineType({
   name: 'congress',
-  title: 'Congress',
+  title: 'Meeting',
   type: 'document',
   fields: [
     defineField({
@@ -55,8 +60,8 @@ export default defineType({
     }),
     defineField({
       name: 'editionNumber',
-      title: 'Congress edition number',
-      description: 'Ordinal edition (e.g. 12 for the 12th congress)',
+      title: 'Meeting edition number',
+      description: 'Ordinal edition (e.g. 12 for the 12th meeting)',
       type: 'number',
       validation: (Rule) => Rule.positive().integer(),
     }),
@@ -68,7 +73,7 @@ export default defineType({
     defineField({
       name: 'images',
       title: 'Image',
-      description: 'A single congress image (hero / card).',
+      description: 'A single meeting image (hero / card).',
       type: 'array',
       of: [
         {
@@ -257,14 +262,14 @@ export default defineType({
       name: 'homeEyebrow',
       title: 'Homepage countdown label',
       description:
-        'Short line above the countdown on the homepage (e.g. "Countdown to i-FAB 2026"). Leave empty to use the site default.',
+        'Short line above the countdown on the homepage (e.g. "Countdown to iFAB 2026"). Leave empty to use the site default.',
       type: 'string',
     }),
     defineField({
       name: 'hiddenFromWebsite',
       title: 'Hide',
       description:
-        'When on, this congress won’t appear on the public website (homepage or Conferences page).',
+        'When on, this meeting won’t appear on the public website (homepage or Conferences page).',
       type: 'boolean',
       initialValue: false,
       options: {

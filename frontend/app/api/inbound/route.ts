@@ -4,7 +4,7 @@ import { Resend } from "resend";
 import { parseEmailList } from "@/lib/emailList";
 
 /**
- * Webhook for mail arriving at the i-FAB inbound address.
+ * Webhook for mail arriving at the iFAB inbound address.
  *
  * The site can send but the domain has no mailbox, so anything written to the
  * address published in the privacy policy would otherwise vanish. Resend

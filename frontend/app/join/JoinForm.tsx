@@ -120,7 +120,7 @@ export function JoinForm() {
         <p className="text-[15px] leading-relaxed text-[#6B7280]">
           {purpose === "contact"
             ? "Your message has been received. The board can reply to you directly."
-            : "Your details have been received. The i-FAB team will be in touch when appropriate."}
+            : "Your details have been received. The iFAB team will be in touch when appropriate."}
         </p>
         <button
           type="button"
@@ -288,7 +288,7 @@ export function JoinForm() {
             placeholder={
               messageRequired
                 ? "Write your message to the board…"
-                : "Your interests, what you hope to get from i-FAB, or anything else…"
+                : "Your interests, what you hope to get from iFAB, or anything else…"
             }
             required={messageRequired}
           />

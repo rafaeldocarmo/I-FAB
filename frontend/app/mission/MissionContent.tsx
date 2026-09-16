@@ -8,15 +8,15 @@ import { ABOUT_CAROUSEL_SLIDES } from "@/lib/publicCarouselSlides";
 
 /** Parágrafos iniciais da secção Mission (a citação do hero vem de mission/page.tsx). */
 const MISSION_PARAGRAPHS = [
-  "i-FAB activities seek to enable more effective approaches to researching the foot and ankle, accelerate our ability to address the unique challenges that the foot and ankle pose for biomechanics researchers, health care professionals and industry, and foster seamless activities between researchers and research users.",
-  "The International Foot and Ankle Biomechanics Community (i-FAB) is an international collaborative activity which will have an important impact on the foot and ankle biomechanics community. It was launched on July 2nd 2007 at the foot and ankle session of the International Society of Biomechanics (ISB) meeting in Taipei, Taiwan.",
+  "iFAB activities seek to enable more effective approaches to researching the foot and ankle, accelerate our ability to address the unique challenges that the foot and ankle pose for biomechanics researchers, health care professionals and industry, and foster seamless activities between researchers and research users.",
+  "The International Foot and Ankle Biomechanics Community (iFAB) is an international collaborative activity which will have an important impact on the foot and ankle biomechanics community. It was launched on July 2nd 2007 at the foot and ankle session of the International Society of Biomechanics (ISB) meeting in Taipei, Taiwan.",
 ];
 
 const THE_FOOT_BODY =
   "The foot and ankle represent one of the most complex mechanical structures in the human body, consisting of multiple joints, bones, muscles, tendons, and ligaments that work together to support locomotion. Understanding this system requires advanced experimental biomechanics, computational modeling, and engineering approaches.";
 
 const SCIENTIFIC_VALUE_INTRO =
-  "A central mission of i-FAB is to promote the scientific value of biomechanics research. By bridging the gap between laboratory findings and applied solutions, i-FAB ensures that:";
+  "A central mission of iFAB is to promote the scientific value of biomechanics research. By bridging the gap between laboratory findings and applied solutions, iFAB ensures that:";
 
 const SCIENTIFIC_VALUE_BULLETS = [
   "Footwear and orthotics industries integrate research-based designs.",
@@ -25,7 +25,7 @@ const SCIENTIFIC_VALUE_BULLETS = [
 ];
 
 const SCIENTIFIC_VALUE_OUTRO =
-  "This close connection between science and application positions i-FAB as a leading force in the field.";
+  "This close connection between science and application positions iFAB as a leading force in the field.";
 
 const SECTION_TITLE_WHAT_WE_DO = "What we do";
 
@@ -45,14 +45,14 @@ const OBJECTIVES_PILLARS: ObjectivePillar[] = [
     color: "#213885",
     lead: "Raising visibility",
     body:
-      "By showcasing biomechanics at international congresses, conferences, and collaborative events, we ensure that foot and ankle research gains recognition across disciplines, and we increase visibility of biomechanics research in academic, clinical, and industrial communities.",
+      "By showcasing biomechanics at international meetings, conferences, and collaborative events, we ensure that foot and ankle research gains recognition across disciplines, and we increase visibility of biomechanics research in academic, clinical, and industrial communities.",
   },
   {
     id: 2,
     color: "#081849",
     lead: "Bridging academia and industry",
     body:
-      "i-FAB provides a platform where universities, sports science labs, orthopaedic engineers, and footwear companies can exchange knowledge. We promote the scientific value of foot and ankle biomechanics to research users, including footwear designers, orthotics manufacturers, sports performance experts, and surgical innovators.",
+      "iFAB provides a platform where universities, sports science labs, orthopaedic engineers, and footwear companies can exchange knowledge. We promote the scientific value of foot and ankle biomechanics to research users, including footwear designers, orthotics manufacturers, sports performance experts, and surgical innovators.",
   },
   {
     id: 3,
@@ -66,7 +66,7 @@ const OBJECTIVES_PILLARS: ObjectivePillar[] = [
     color: "#1a365d",
     lead: "Providing global networking opportunities",
     body:
-      "Through the biannual i-FAB Congress and partnerships with major biomechanics societies, we amplify the scientific importance of foot and ankle research worldwide.",
+      "Through the biannual iFAB Meeting and partnerships with major biomechanics societies, we amplify the scientific importance of foot and ankle research worldwide.",
   },
 ];
 
@@ -112,8 +112,8 @@ function ObjectivesNumberedPillars() {
 }
 
 const HOW_WE_DO = [
-  "One of the core initiatives of i-FAB is its biannual congress, an international meeting designed to showcase cutting-edge biomechanics research; build bridges between academia, industry, and applied practice; foster connections between disciplines that traditionally might not intersect; and highlight biomechanics in new regions and territories.",
-  "Beyond its congress, i-FAB also organizes and contributes to sessions at major international conferences such as the Footwear Biomechanics Group, International Society of Biomechanics, World Council of Biomechanics, and EFAS.",
+  "One of the core initiatives of iFAB is its biannual meeting, an international gathering designed to showcase cutting-edge biomechanics research; build bridges between academia, industry, and applied practice; foster connections between disciplines that traditionally might not intersect; and highlight biomechanics in new regions and territories.",
+  "Beyond its meeting, iFAB also organizes and contributes to sessions at major international conferences such as the Footwear Biomechanics Group, International Society of Biomechanics, World Council of Biomechanics, and EFAS.",
   "This is an open community – if you have an idea for a new initiative that can further our aims please contact us via email",
 ];
 
@@ -157,13 +157,13 @@ export function MissionContent() {
                 <PublicImageCarousel
                   variant="hero"
                   slides={ABOUT_CAROUSEL_SLIDES}
-                  ariaLabel="i-FAB mission gallery"
+                  ariaLabel="iFAB mission gallery"
                 />
               ) : (
                 <div className="relative overflow-hidden rounded-2xl">
                   <Image
                     src="/mission1.png"
-                    alt="i-FAB mission"
+                    alt="iFAB mission"
                     width={1200}
                     height={900}
                     className="h-auto w-full max-h-[min(520px,70vh)] object-cover"

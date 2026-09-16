@@ -7,7 +7,7 @@ export function OfficialSiteBadge() {
   return (
     <aside
       className="fixed bottom-5 right-5 z-50 drop-shadow-lg sm:bottom-6 sm:right-6"
-      aria-label="Official i-FAB website"
+      aria-label="Official iFAB website"
     >
       <div
         className="w-[140px] p-px border-2 border-[#8d1d1c] bg-white rounded-full"

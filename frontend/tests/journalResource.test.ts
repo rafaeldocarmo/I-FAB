@@ -5,7 +5,7 @@ import {
 } from "@/lib/journalResource";
 import type { Congress } from "@/lib/types";
 
-const base = { _id: "c", title: "Congress" } as Congress;
+const base = { _id: "c", title: "Meeting" } as Congress;
 const congress = (extra: Partial<Congress>): Congress => ({ ...base, ...extra });
 
 describe("resolveCongressJournalItems — journalItems (current path)", () => {

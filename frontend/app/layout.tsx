@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "i-FAB — International Foot and Ankle Biomechanics Community",
+  title: "iFAB — International Foot and Ankle Biomechanics Community",
   description:
     "A global scientific community dedicated to advancing research, education, and clinical practice in foot and ankle biomechanics.",
 };

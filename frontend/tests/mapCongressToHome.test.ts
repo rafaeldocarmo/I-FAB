@@ -94,12 +94,12 @@ describe("mapCongressToHomeProps", () => {
   it("builds location and date from the CMS fields", () => {
     const props = mapCongressToHomeProps(
       congress("c", "2026-09-14T00:00:00Z", "2026-09-17T00:00:00Z", {
-        title: "12th i-FAB Congress",
+        title: "12th iFAB Meeting",
         city: "Lisbon",
         country: "Portugal",
       }),
     );
-    expect(props.name).toBe("12th i-FAB Congress");
+    expect(props.name).toBe("12th iFAB Meeting");
     expect(props.location).toBe("Lisbon, Portugal");
     expect(props.date).toBe("September 14–17, 2026");
   });

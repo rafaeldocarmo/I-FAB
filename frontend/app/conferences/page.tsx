@@ -122,9 +122,9 @@ function toPast(c: Congress): PastConferenceData {
 }
 
 export const metadata = {
-  title: "Conferences — i-FAB",
+  title: "Conferences — iFAB",
   description:
-    "Since 2006, i-FAB has convened biennial world congresses that serve as the premier forum for foot and ankle biomechanics research globally.",
+    "Since 2006, iFAB has convened biennial world meetings that serve as the premier forum for foot and ankle biomechanics research globally.",
 };
 
 export default async function ConferencesPage() {

@@ -2,9 +2,9 @@ import { JoinHero } from "@/components/sections/JoinHero";
 import { JoinForm } from "./JoinForm";
 
 export const metadata = {
-  title: "Join i-FAB — International Foot and Ankle Biomechanics Community",
+  title: "Join iFAB — International Foot and Ankle Biomechanics Community",
   description:
-    "Express your interest in joining the i-FAB community: researchers, clinicians, and industry partners in foot and ankle biomechanics.",
+    "Express your interest in joining the iFAB community: researchers, clinicians, and industry partners in foot and ankle biomechanics.",
 };
 
 export default function JoinPage() {

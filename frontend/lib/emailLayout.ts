@@ -76,7 +76,7 @@ export function emailLink(address: string): string {
 }
 
 type ShellOptions = {
-  /** Small line above the heading, e.g. "Join i-FAB". */
+  /** Small line above the heading, e.g. "Join iFAB". */
   eyebrow: string;
   heading: string;
   /** Sentence under the heading. */
@@ -114,7 +114,7 @@ export function renderEmailShell({
 
         <tr>
           <td bgcolor="${EMAIL_BRAND.navy}" style="background-color:${EMAIL_BRAND.navy};padding:26px 32px;">
-            <div style="font-family:${FONT_STACK};font-size:19px;font-weight:700;letter-spacing:.22em;color:#ffffff;">i-FAB</div>
+            <div style="font-family:${FONT_STACK};font-size:19px;font-weight:700;letter-spacing:.22em;color:#ffffff;">iFAB</div>
             <div style="margin-top:5px;font-family:${FONT_STACK};font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${EMAIL_BRAND.sand};">${escapeHtml(eyebrow)}</div>
           </td>
         </tr>

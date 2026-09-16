@@ -25,7 +25,7 @@ function shuffleSlides<T>(items: T[]): T[] {
 
 export type PublicImageCarouselProps = {
   slides: PublicCarouselSlide[];
-  /** Acessível — ex.: "Congress photo gallery" */
+  /** Acessível — ex.: "Meeting photo gallery" */
   ariaLabel?: string;
   className?: string;
   /**

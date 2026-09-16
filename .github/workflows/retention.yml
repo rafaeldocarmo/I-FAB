@@ -1,0 +1,66 @@
+name: Retention
+
+# Enforces the four-year retention period the Privacy Policy promises, by
+# calling /api/retention on the live site. The route does the deleting; this
+# workflow only provides the clock.
+#
+# Actions rather than Vercel Cron: the Hobby plan allows two cron jobs at a
+# daily frequency, and a failed Actions run emails the repository owner. A
+# deletion job that stops working without telling anybody would leave the
+# policy stating something untrue.
+#
+# Needs two repository secrets:
+#   RETENTION_URL    — https://<the live site>/api/retention
+#   RETENTION_SECRET — the same value as the RETENTION_SECRET env var on Vercel
+
+on:
+  schedule:
+    # Daily at 03:17 UTC. Off the hour on purpose: scheduled runs queue at
+    # popular minutes and can be delayed by a long time.
+    - cron: "17 3 * * *"
+  # Lets the board run a sweep by hand, and makes the first run testable
+  # without waiting a day for it.
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "Report what would be deleted, without deleting it"
+        type: boolean
+        default: false
+
+jobs:
+  purge:
+    name: Delete expired Join submissions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the retention endpoint
+        env:
+          URL: ${{ secrets.RETENTION_URL }}
+          SECRET: ${{ secrets.RETENTION_SECRET }}
+          DRY_RUN: ${{ inputs.dryRun }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${URL:-}" ] || [ -z "${SECRET:-}" ]; then
+            echo "::error::RETENTION_URL or RETENTION_SECRET is missing from the repository secrets"
+            exit 1
+          fi
+
+          target="$URL"
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            target="$URL?dryRun=1"
+            echo "Dry run: nothing will be deleted."
+          fi
+
+          status=$(curl --silent --show-error --max-time 60 \
+            --output response.json --write-out '%{http_code}' \
+            --request POST "$target" \
+            --header "Authorization: Bearer $SECRET")
+
+          echo "HTTP $status"
+          cat response.json
+          echo
+
+          if [ "$status" != "200" ]; then
+            echo "::error::The retention endpoint returned HTTP $status — expired submissions were NOT deleted"
+            exit 1
+          fi

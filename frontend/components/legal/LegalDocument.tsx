@@ -3,11 +3,12 @@ import type { ReactNode } from "react";
 /**
  * Shared shell for the Privacy Policy / Terms of Use pages.
  *
- * These documents are scaffolds: the factual sections describe what the site
- * actually does (see the Join and Contact the Board forms), but every
- * organisational and legal determination is left as an explicit
- * `[[TO CONFIRM: …]]` placeholder. `draft` renders the review banner and keeps
- * the page out of search indexes until it is signed off.
+ * Both are published and carry a date. The `draft` mode is kept for the next
+ * revision rather than removed: it renders a review banner and highlights any
+ * `[[TO CONFIRM: …]]` marker left in the copy, so unfinished wording is
+ * impossible to miss. Pass it — and restore `robots: { index: false }` on the
+ * page — while a document is being reworked, so a half-edited policy cannot
+ * reach search results.
  */
 
 export type LegalSection = {

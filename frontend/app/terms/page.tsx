@@ -4,8 +4,6 @@ export const metadata = {
   title: "Terms of Use — i-FAB",
   description:
     "The terms governing use of the International Foot and Ankle Biomechanics Community website.",
-  // Draft: keep out of search results until the content is signed off.
-  robots: { index: false, follow: false },
 };
 
 /**
@@ -103,9 +101,8 @@ const SECTIONS: LegalSection[] = [
 export default function TermsPage() {
   return (
     <LegalDocument
-      draft
       title="Terms of Use"
-      lastUpdated="[[TO CONFIRM: the date the board signs this off]]"
+      lastUpdated="16 September 2026"
       intro="These terms govern your use of the i-FAB website. Please read them before using the site or submitting information through it."
       sections={SECTIONS}
     />

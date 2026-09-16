@@ -49,7 +49,7 @@ if (typeof globalThis !== "undefined") {
   }, RATE_LIMIT_WINDOW_MS);
 }
 
-const RATE_LIMITED_POST_APIS = ["/api/join", "/api/contact-board"];
+const RATE_LIMITED_POST_APIS = ["/api/join"];
 
 export function proxy(request: NextRequest) {
   if (

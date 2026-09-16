@@ -1,7 +1,8 @@
 import {defineField, defineType} from 'sanity'
 
 /**
- * A submission from the public "Join i-FAB" form.
+ * A submission from the public form on /join, which serves both membership
+ * interest and messages to the board — `purpose` says which.
  *
  * These documents are created by the website (`/api/join`) using a write token,
  * never by hand in the Studio. Every field is read-only so an editor cannot
@@ -17,9 +18,23 @@ import {defineField, defineType} from 'sanity'
  */
 export default defineType({
   name: 'joinSubmission',
-  title: 'Join submission',
+  title: 'Join / contact submission',
   type: 'document',
   fields: [
+    defineField({
+      name: 'purpose',
+      title: 'Enquiry',
+      description:
+        'What the sender chose in the Subject dropdown. Records made before the form offered a choice have no value here, and were all membership interest.',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Join i-FAB', value: 'join'},
+          {title: 'Contact the board', value: 'contact'},
+        ],
+      },
+      readOnly: true,
+    }),
     defineField({name: 'fullName', title: 'Full name', type: 'string', readOnly: true}),
     defineField({name: 'email', title: 'Email', type: 'string', readOnly: true}),
     defineField({name: 'employer', title: 'Employer', type: 'string', readOnly: true}),
@@ -74,6 +89,7 @@ export default defineType({
     select: {
       title: 'fullName',
       email: 'email',
+      purpose: 'purpose',
       mainRole: 'mainRole',
       researchLine: 'researchLine',
       communicationsConsent: 'communicationsConsent',
@@ -81,7 +97,7 @@ export default defineType({
       country: 'country',
       submittedAt: 'submittedAt',
     },
-    prepare({title, email, mainRole, researchLine, employer, country, submittedAt, communicationsConsent}) {
+    prepare({title, email, purpose, mainRole, researchLine, employer, country, submittedAt, communicationsConsent}) {
       const role = [mainRole, researchLine].filter(Boolean).join(' · ')
       const where = [employer, country].filter(Boolean).join(', ')
       const optIn = communicationsConsent ? '✉ opted in' : undefined
@@ -92,9 +108,13 @@ export default defineType({
             day: 'numeric',
           })
         : undefined
+      // A message waiting on a reply should be obvious in the list; membership
+      // interest is the norm and needs no badge. Records from before the field
+      // existed have no purpose, and were all membership interest.
+      const flag = purpose === 'contact' ? '✱ message for the board' : undefined
       return {
         title: title ?? email ?? 'Unnamed submission',
-        subtitle: [role, where, when, optIn].filter(Boolean).join(' · '),
+        subtitle: [flag, role, where, when, optIn].filter(Boolean).join(' · '),
       }
     },
   },

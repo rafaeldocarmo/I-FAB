@@ -226,3 +226,66 @@ describe("POST /api/join — degradation", () => {
     await expect(res.json()).resolves.toMatchObject({ error: "email_failed" });
   });
 });
+
+/**
+ * One form now serves membership interest and messages to the board. The
+ * fields are identical either way, so `purpose` is the only thing telling the
+ * board whether something is waiting on a reply.
+ */
+describe("POST /api/join — purpose", () => {
+  it("accepts a message for the board and says so in the subject", async () => {
+    const res = await POST(
+      post({ ...VALID, purpose: "contact", message: "Could we discuss a symposium?" }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(sendMock.mock.calls[0][0].subject).toBe(
+      "i-FAB - Contact the board: Ana Ribeiro",
+    );
+    expect(createMock.mock.calls[0][0]).toMatchObject({ purpose: "contact" });
+  });
+
+  it("labels a membership interest as such", async () => {
+    const res = await POST(post({ ...VALID, purpose: "join" }));
+
+    expect(res.status).toBe(200);
+    expect(sendMock.mock.calls[0][0].subject).toBe("i-FAB - Join i-FAB: Ana Ribeiro");
+    expect(createMock.mock.calls[0][0]).toMatchObject({ purpose: "join" });
+  });
+
+  it("refuses a message for the board with nothing in it", async () => {
+    const res = await POST(post({ ...VALID, purpose: "contact", message: "   " }));
+
+    expect(res.status).toBe(400);
+    await expect(res.json()).resolves.toMatchObject({ error: "Missing message" });
+    expect(sendMock).not.toHaveBeenCalled();
+    expect(createMock).not.toHaveBeenCalled();
+  });
+
+  it("still accepts membership interest with no message", async () => {
+    const res = await POST(post({ ...VALID, purpose: "join", message: "" }));
+    expect(res.status).toBe(200);
+  });
+
+  /**
+   * A submission is worth more than a field the sender never chose, so an
+   * unusable purpose falls back to the default instead of failing the request.
+   */
+  it.each([["nonsense"], [null], [42], [undefined]])(
+    "treats the purpose %s as membership interest",
+    async (purpose) => {
+      const res = await POST(post({ ...VALID, purpose }));
+
+      expect(res.status).toBe(200);
+      expect(createMock.mock.calls[0][0]).toMatchObject({ purpose: "join" });
+    },
+  );
+
+  /** Records made before the dropdown existed were all membership interest. */
+  it("defaults when the field is absent entirely", async () => {
+    const res = await POST(post(VALID));
+
+    expect(res.status).toBe(200);
+    expect(createMock.mock.calls[0][0]).toMatchObject({ purpose: "join" });
+  });
+});

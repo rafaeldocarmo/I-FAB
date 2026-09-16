@@ -9,6 +9,7 @@ import {
 const WHEN = new Date("2026-08-17T14:32:00Z");
 
 const payload = (extra: Partial<JoinPayload> = {}): JoinPayload => ({
+  purpose: "join",
   fullName: "Ana Ribeiro",
   email: "ana@universidade.pt",
   employer: "Universidade de Lisboa",
@@ -34,6 +35,32 @@ describe("escapeHtml", () => {
 
   it("leaves ordinary text alone", () => {
     expect(escapeHtml("Ana Ribeiro — Lisboa")).toBe("Ana Ribeiro — Lisboa");
+  });
+});
+
+describe("purpose framing", () => {
+  it("frames membership interest as a decision to make", () => {
+    const html = buildJoinNotificationHtml(payload({ purpose: "join" }), WHEN);
+    expect(html).toContain("New membership interest");
+    expect(html).toContain("has asked to join the i-FAB community");
+    expect(html).toContain("Join i-FAB");
+  });
+
+  /** The board triages from the subject and the first line, so the two must not look alike. */
+  it("frames a board message as something waiting on a reply", () => {
+    const html = buildJoinNotificationHtml(payload({ purpose: "contact" }), WHEN);
+    expect(html).toContain("New message for the board");
+    expect(html).toContain("waiting on a reply");
+    expect(html).not.toContain("New membership interest");
+  });
+
+  it("carries the purpose in the plain-text version too", () => {
+    expect(buildJoinNotificationText(payload({ purpose: "contact" }), WHEN)).toContain(
+      "Contact the board",
+    );
+    expect(buildJoinNotificationText(payload({ purpose: "join" }), WHEN)).toContain(
+      "Join i-FAB",
+    );
   });
 });
 

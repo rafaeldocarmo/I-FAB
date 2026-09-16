@@ -12,6 +12,11 @@ import {
   COMMUNICATIONS_CONSENT_TEXT,
   COMMUNICATIONS_CONSENT_VERSION,
 } from "@/lib/consent";
+import {
+  PURPOSE_LABEL,
+  parsePurpose,
+  requiresMessage,
+} from "@/lib/purpose";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_FIELD_LEN = 500;
@@ -95,10 +100,24 @@ export async function POST(req: Request) {
     const fullName = sanitize(b.fullName);
     const email = sanitize(b.email, 254);
     const mainRole = sanitize(b.mainRole);
+    const message = sanitize(b.message, MAX_MESSAGE_LEN);
+    // An unrecognised purpose becomes the default rather than an error: the
+    // submission itself is still perfectly good, and rejecting it would lose
+    // somebody's message over a value they never chose.
+    const purpose = parsePurpose(b.purpose);
 
     if (!fullName || !email || !mainRole) {
       return NextResponse.json(
         { ok: false, error: "Missing fields" },
+        { status: 400 },
+      );
+    }
+
+    // Writing to the board with nothing to say is not a submission worth
+    // storing, and the board would have nothing to reply to.
+    if (requiresMessage(purpose) && !message) {
+      return NextResponse.json(
+        { ok: false, error: "Missing message" },
         { status: 400 },
       );
     }
@@ -111,6 +130,7 @@ export async function POST(req: Request) {
     }
 
     const payload: JoinPayload = {
+      purpose,
       fullName,
       email,
       employer: sanitize(b.employer),
@@ -118,7 +138,7 @@ export async function POST(req: Request) {
       country: sanitize(b.country),
       mainRole,
       researchLine: sanitize(b.researchLine),
-      message: sanitize(b.message, MAX_MESSAGE_LEN),
+      message,
       // Only an explicit `true` counts. Anything else - absent, "false",
       // "on", null - is not consent.
       communicationsConsent: b.communicationsConsent === true,
@@ -169,7 +189,7 @@ export async function POST(req: Request) {
       ...(cc.length > 0 ? { cc } : {}),
       ...(bcc.length > 0 ? { bcc } : {}),
       replyTo: payload.email,
-      subject: `i-FAB - New Join i-FAB submission: ${payload.fullName}`,
+      subject: `i-FAB - ${PURPOSE_LABEL[payload.purpose]}: ${payload.fullName}`,
       html: buildJoinNotificationHtml(payload, submittedAt),
       text: buildJoinNotificationText(payload, submittedAt),
     });

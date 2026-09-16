@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import {
   COLLECTION_NOTICE,
   COMMUNICATIONS_CONSENT_TEXT,
 } from "@/lib/consent";
+import {
+  DEFAULT_PURPOSE,
+  PURPOSES,
+  PURPOSE_LABEL,
+  parsePurpose,
+  requiresMessage,
+  type Purpose,
+} from "@/lib/purpose";
 
 const inputClass =
   "w-full rounded-lg border-2 border-[#213885] bg-white px-4 py-3 text-[15px] text-[#081849] shadow-sm transition-[box-shadow,border-color] placeholder:text-[#9CA3AF] focus:border-[#081849] focus:outline-none focus:ring-2 focus:ring-[#213885]/25";
@@ -16,6 +24,25 @@ const labelClass =
 export function JoinForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  /**
+   * Controlled, because the subject decides whether the message box is
+   * required and what the button and the confirmation say.
+   */
+  const [purpose, setPurpose] = useState<Purpose>(DEFAULT_PURPOSE);
+  const messageRequired = requiresMessage(purpose);
+
+  /**
+   * The Scientific Board page sends people here with a "Contact the Board"
+   * button, so honour the subject it asks for rather than landing them on the
+   * wrong one.
+   *
+   * Read after mount, not during render: the prerendered page has no query
+   * string, so picking one up while rendering would mismatch on hydration.
+   */
+  useEffect(() => {
+    const asked = new URLSearchParams(window.location.search).get("purpose");
+    if (asked) setPurpose(parsePurpose(asked));
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,6 +50,7 @@ export function JoinForm() {
     const form = e.currentTarget;
     const fd = new FormData(form);
     const payload = {
+      purpose,
       fullName: String(fd.get("fullName") ?? "").trim(),
       email: String(fd.get("email") ?? "").trim(),
       employer: String(fd.get("employer") ?? "").trim(),
@@ -37,6 +65,11 @@ export function JoinForm() {
 
     if (!payload.fullName || !payload.email || !payload.mainRole) {
       setErrorMessage("Please fill in your name, email, and main role.");
+      return;
+    }
+
+    if (messageRequired && !payload.message) {
+      setErrorMessage("Please write the message you would like the board to read.");
       return;
     }
 
@@ -85,12 +118,17 @@ export function JoinForm() {
         <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-[#213885]" strokeWidth={1.5} />
         <h2 className="mb-2 text-xl font-bold text-[#081849]">Thank you</h2>
         <p className="text-[15px] leading-relaxed text-[#6B7280]">
-          Your details have been received. The i-FAB team will be in touch when appropriate.
+          {purpose === "contact"
+            ? "Your message has been received. The board can reply to you directly."
+            : "Your details have been received. The i-FAB team will be in touch when appropriate."}
         </p>
         <button
           type="button"
           className="mt-8 text-sm font-semibold text-[#213885] underline-offset-4 hover:underline"
-          onClick={() => setStatus("idle")}
+          onClick={() => {
+            setPurpose(DEFAULT_PURPOSE);
+            setStatus("idle");
+          }}
         >
           Submit another response
         </button>
@@ -105,6 +143,34 @@ export function JoinForm() {
       noValidate
     >
       <div className="rounded-2xl border border-[#213885]/20 p-6 shadow-[0_24px_80px_rgba(8,24,73,0.07)] sm:p-8 md:p-10">
+        {/*
+          One form serves both purposes, and it asks for the same details
+          either way. The only thing that changes is what the sender wants
+          back, which is what this decides.
+        */}
+        <div className="mb-6 md:mb-7 md:max-w-sm">
+          <label htmlFor="join-purpose" className={labelClass}>
+            Subject
+          </label>
+          <select
+            id="join-purpose"
+            name="purpose"
+            className={`${inputClass} cursor-pointer appearance-none bg-[right_1rem_center] bg-no-repeat pr-10`}
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23213885' d='M1.41 0 6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E\")",
+            }}
+            value={purpose}
+            onChange={(e) => setPurpose(e.target.value as Purpose)}
+          >
+            {PURPOSES.map((option) => (
+              <option key={option} value={option}>
+                {PURPOSE_LABEL[option]}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-7">
           <div>
             <label htmlFor="join-fullName" className={labelClass}>
@@ -209,7 +275,9 @@ export function JoinForm() {
 
         <div className="mt-6 md:mt-7">
           <label htmlFor="join-message" className={labelClass}>
-            Anything else you would like to tell us?
+            {messageRequired
+              ? "Your message"
+              : "Anything else you would like to tell us?"}
           </label>
           <textarea
             id="join-message"
@@ -217,7 +285,12 @@ export function JoinForm() {
             rows={6}
             maxLength={5000}
             className={`${inputClass} min-h-[140px] resize-y`}
-            placeholder="Your interests, what you hope to get from i-FAB, or anything else…"
+            placeholder={
+              messageRequired
+                ? "Write your message to the board…"
+                : "Your interests, what you hope to get from i-FAB, or anything else…"
+            }
+            required={messageRequired}
           />
         </div>
 
@@ -263,6 +336,8 @@ export function JoinForm() {
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Sending…
               </>
+            ) : messageRequired ? (
+              "Send message"
             ) : (
               "Send your data"
             )}

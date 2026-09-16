@@ -119,7 +119,9 @@ export function CommitteeContent({ committee }: Props) {
             i-FAB is always seeking dedicated researchers and clinicians to contribute to our global mission. Reach out to learn about opportunities to join the board.
           </p>
           <Link
-            href="/join"
+            // The form on /join serves both subjects; this arrives on the
+            // right one rather than making the visitor find the dropdown.
+            href="/join?purpose=contact"
             className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold text-white transition-all duration-200"
             style={{ background: "linear-gradient(135deg, #213885, #081849)", boxShadow: "0 4px 16px rgba(33,56,133,0.3)" }}
             onMouseEnter={(e) => {

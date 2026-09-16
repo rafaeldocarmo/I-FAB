@@ -7,11 +7,13 @@ import {
   escapeHtml,
   renderEmailShell,
 } from "@/lib/emailLayout";
+import { PURPOSE_LABEL, type Purpose } from "@/lib/purpose";
 
 /** Re-exported so existing importers keep working. */
 export { escapeHtml };
 
 export type JoinPayload = {
+  purpose: Purpose;
   fullName: string;
   email: string;
   employer: string;
@@ -21,6 +23,27 @@ export type JoinPayload = {
   researchLine: string;
   message: string;
   communicationsConsent: boolean;
+};
+
+/**
+ * How each purpose introduces itself. The board triages from the subject line
+ * and the first line of the preview, so a message waiting on a reply must not
+ * look like a membership interest waiting on a decision.
+ */
+const FRAMING: Record<
+  Purpose,
+  { eyebrow: string; heading: string; intro: (name: string) => string }
+> = {
+  join: {
+    eyebrow: "Join i-FAB",
+    heading: "New membership interest",
+    intro: (name) => `${name} has asked to join the i-FAB community.`,
+  },
+  contact: {
+    eyebrow: "Contact the board",
+    heading: "New message for the board",
+    intro: (name) => `${name} has written to the board and is waiting on a reply.`,
+  },
 };
 
 /** "London, United Kingdom", or whichever half was filled in. */
@@ -37,6 +60,7 @@ export function buildJoinNotificationHtml(
   submittedAt: Date = new Date(),
 ): string {
   const bodyHtml = [
+    emailRow("Enquiry", PURPOSE_LABEL[p.purpose]),
     emailRow("Full name", p.fullName),
     emailRowRaw("Email", emailLink(p.email)),
     emailRowRaw("Main role", emailBadge(p.mainRole)),
@@ -53,10 +77,12 @@ export function buildJoinNotificationHtml(
     emailRow("Submitted", formatSubmittedAt(submittedAt)),
   ].join("\n");
 
+  const framing = FRAMING[p.purpose];
+
   return renderEmailShell({
-    eyebrow: "Join i-FAB",
-    heading: "New membership interest",
-    intro: `${p.fullName} has asked to join the i-FAB community.`,
+    eyebrow: framing.eyebrow,
+    heading: framing.heading,
+    intro: framing.intro(p.fullName),
     preheader: `${p.fullName} — ${p.mainRole}${formatLocation(p) ? ` — ${formatLocation(p)}` : ""}`,
     bodyHtml,
     footerNote:
@@ -69,12 +95,15 @@ export function buildJoinNotificationText(
   p: JoinPayload,
   submittedAt: Date = new Date(),
 ): string {
+  const framing = FRAMING[p.purpose];
+
   return [
-    "i-FAB — Join i-FAB",
-    "New membership interest",
+    `i-FAB — ${framing.eyebrow}`,
+    framing.heading,
     "",
-    `${p.fullName} has asked to join the i-FAB community.`,
+    framing.intro(p.fullName),
     "",
+    `Enquiry:       ${PURPOSE_LABEL[p.purpose]}`,
     `Full name:     ${p.fullName}`,
     `Email:         ${p.email}`,
     `Main role:     ${p.mainRole}`,
@@ -93,29 +122,3 @@ export function buildJoinNotificationText(
   ].join("\n");
 }
 
-export type ContactBoardPayload = {
-  name: string;
-  email: string;
-  message: string;
-};
-
-export function buildContactBoardNotificationHtml(p: ContactBoardPayload): string {
-  const row = (label: string, value: string) =>
-    `<tr><td style="padding:8px 12px;border:1px solid #e5e7eb;font-weight:600;color:#081849;width:160px">${escapeHtml(label)}</td><td style="padding:8px 12px;border:1px solid #e5e7eb;color:#374151">${escapeHtml(value || "—")}</td></tr>`;
-
-  const messageBlock = `<pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;color:#374151">${escapeHtml(p.message)}</pre>`;
-
-  return `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/></head>
-<body style="font-family:system-ui,sans-serif;line-height:1.5;color:#111827">
-  <p style="margin:0 0 16px;font-size:15px">New <strong>Contact the Board</strong> message:</p>
-  <table style="border-collapse:collapse;max-width:560px;font-size:14px">
-    ${row("Name", p.name)}
-    ${row("Email", p.email)}
-    <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;font-weight:600;color:#081849;vertical-align:top;width:160px">Message</td><td style="padding:8px 12px;border:1px solid #e5e7eb">${messageBlock}</td></tr>
-  </table>
-</body>
-</html>`;
-}

@@ -65,28 +65,6 @@ function UpcomingConferenceCard({ upcoming }: { upcoming: UpcomingConferenceData
               aria-hidden
             />
           )}
-          {upcoming.edition != null ? (
-            <div className="absolute bottom-6 left-6">
-              <div
-                className={`text-5xl font-bold ${
-                  upcoming.imageBackdrop === "light"
-                    ? "text-[#213885]"
-                    : "text-white"
-                }`}
-              >
-                {toOrdinal(upcoming.edition)}
-              </div>
-              <div
-                className={`text-xs font-semibold uppercase tracking-widest ${
-                  upcoming.imageBackdrop === "light"
-                    ? "text-[#213885]"
-                    : "text-white"
-                }`}
-              >
-                Edition
-              </div>
-            </div>
-          ) : null}
         </div>
 
         <div

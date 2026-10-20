@@ -15,7 +15,7 @@ type Props = {
 export function CommitteeContent({ committee }: Props) {
   return (
     <>
-      {/* Variation A — Classic Grid (Scientific Board) */}
+      {/* Variation A — Classic Grid (Executive Board) */}
       {/* <section className="bg-[#f9f7f5] py-11 sm:py-12 md:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 text-center sm:mb-10">

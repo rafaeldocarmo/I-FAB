@@ -32,7 +32,7 @@ export type CommitteeMemberDisplay = {
 };
 
 export const metadata = {
-  title: "Scientific Board — iFAB",
+  title: "Executive Board — iFAB",
   description: "Our board is composed of internationally recognized experts who guide the scientific direction of iFAB.",
 };
 

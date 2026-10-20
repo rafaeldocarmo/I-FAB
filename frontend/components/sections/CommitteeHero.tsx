@@ -8,7 +8,7 @@ const DEFAULT_QUOTE =
   "Our board is composed of internationally recognized experts who guide the scientific direction, governance, and activities of iFAB.";
 
 type CommitteeHeroProps = {
-  /** Rótulo superior (ex.: Scientific Board) */
+  /** Rótulo superior (ex.: Executive Board) */
   eyebrow?: string;
   quote?: string;
   /** Parágrafo de apoio opcional abaixo da citação */
@@ -16,7 +16,7 @@ type CommitteeHeroProps = {
 };
 
 export function CommitteeHero({
-  eyebrow = "Scientific Board",
+  eyebrow = "Executive Board",
   quote = DEFAULT_QUOTE,
   body,
 }: CommitteeHeroProps) {

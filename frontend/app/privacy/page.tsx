@@ -33,7 +33,7 @@ const SECTIONS: LegalSection[] = [
     heading: "Who we are",
     body: [
       "iFAB — the International Foot and Ankle Biomechanics Community — is an international network of academic researchers. It is not a company or a registered charity, and it has no legal personality separate from the people who make it up.",
-      "This website is operated by the members of the iFAB Scientific Board, who are named on our Scientific Board page. They are jointly responsible for the personal data described in this policy, and in data protection terms they act together as its controller.",
+      "This website is operated by the members of the iFAB Executive Board, who are named on our Executive Board page. They are jointly responsible for the personal data described in this policy, and in data protection terms they act together as its controller.",
       "iFAB is far below the size at which a Data Protection Officer must be appointed, so there is no separate privacy office to write to. Everything covered by this policy — including a request about your own data — goes to info@i-fab.org, which reaches the board.",
     ],
   },
@@ -95,7 +95,7 @@ const SECTIONS: LegalSection[] = [
       "We keep form submissions for four years from the date they are made, whichever subject they were sent under. That period spans two meeting cycles, which is how long a submission stays useful for the purpose it was given for.",
       "After four years the record is deleted from the content management system automatically, by a scheduled job that runs every day. Nobody has to remember to do it, and nothing depends on anybody noticing that a record has aged.",
       "The notification email sent to the board at the time is a second copy of the same details, and it sits in the recipient's institutional mailbox. Board members are asked to delete these messages once the four years are up, and we will not pretend to more than that: iFAB cannot impose a deletion schedule inside a mail system somebody's employer runs. If you ask us to erase your data, we pass that request to every board member who received it.",
-      "Until the end of August 2026 a separate Contact the Board form, with its own name, email and message fields, was offered on the Scientific Board page. It has been replaced by the single form described above. Messages sent through it while it existed may still be held in the inbox that received them, and the same four-year rule applies to them.",
+      "Until the end of August 2026 a separate Contact the Board form, with its own name, email and message fields, was offered on the board page. It has been replaced by the single form described above. Messages sent through it while it existed may still be held in the inbox that received them, and the same four-year rule applies to them.",
       "If you ask us to delete your data sooner than that, we will. See Your rights below.",
     ],
   },
@@ -146,7 +146,7 @@ export default function PrivacyPage() {
   return (
     <LegalDocument
       title="Privacy Policy"
-      lastUpdated="16 September 2026"
+      lastUpdated="19 October 2026"
       intro="This policy explains what personal data the iFAB website collects, why we collect it, who it is shared with, and the rights you have over it."
       sections={SECTIONS}
     />

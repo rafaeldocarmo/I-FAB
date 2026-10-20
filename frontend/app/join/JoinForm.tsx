@@ -32,7 +32,7 @@ export function JoinForm() {
   const messageRequired = requiresMessage(purpose);
 
   /**
-   * The Scientific Board page sends people here with a "Contact the Board"
+   * The Executive Board page sends people here with a "Contact the Board"
    * button, so honour the subject it asks for rather than landing them on the
    * wrong one.
    *

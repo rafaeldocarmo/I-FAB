@@ -18,7 +18,7 @@ const highlightCards = [
   },
   {
     icon: Users,
-    title: "Scientific Board",
+    title: "Executive Board",
     description:
       "Our board comprises world-leading researchers and clinicians who guide the scientific direction of foot and ankle biomechanics and help connect disciplines across the community.",
     link: "/committee",

@@ -18,13 +18,13 @@ const SECTIONS: LegalSection[] = [
     heading: "Acceptance of these terms",
     body: [
       "By accessing or using this website you agree to these terms. If you do not agree with them, please do not use the site.",
-      "The site is run by the members of the Scientific Board of iFAB, the International Foot and Ankle Biomechanics Community. iFAB is an international network of academic researchers; it is not incorporated in any country and has no legal personality separate from its members. The board can be reached at info@i-fab.org.",
+      "The site is run by the members of the Executive Board of iFAB, the International Foot and Ankle Biomechanics Community. iFAB is an international network of academic researchers; it is not incorporated in any country and has no legal personality separate from its members. The board can be reached at info@i-fab.org.",
     ],
   },
   {
     heading: "About this website",
     body: [
-      "This site provides information about iFAB, its scientific board, its mission, and its meetings, and carries a form through which you can express interest in joining the community or send a message to the board.",
+      "This site provides information about iFAB, its executive board, its mission, and its meetings, and carries a form through which you can express interest in joining the community or send a message to the board.",
       "Content is provided for general information and scientific communication. It is not medical, clinical, or professional advice, and it must not be used as a substitute for consulting a qualified professional.",
       "The site is provided free of charge. Using it does not make you a customer, and nothing on it is offered for sale.",
     ],
@@ -75,7 +75,7 @@ const SECTIONS: LegalSection[] = [
   {
     heading: "Limitation of liability",
     body: [
-      "The site is offered free of charge and for information. To the fullest extent permitted by law, neither iFAB, nor the members of its Scientific Board, nor anyone operating the site on their behalf is liable for any loss or damage arising from your use of the site or from reliance on anything published on it — including loss arising from the site being unavailable, incomplete, out of date, or inaccurate, or from the content of any site we link to.",
+      "The site is offered free of charge and for information. To the fullest extent permitted by law, neither iFAB, nor the members of its Executive Board, nor anyone operating the site on their behalf is liable for any loss or damage arising from your use of the site or from reliance on anything published on it — including loss arising from the site being unavailable, incomplete, out of date, or inaccurate, or from the content of any site we link to.",
       "Nothing in these terms excludes or limits liability where it would be unlawful to do so, including liability for death or personal injury caused by negligence, or for fraud.",
     ],
   },
@@ -102,7 +102,7 @@ export default function TermsPage() {
   return (
     <LegalDocument
       title="Terms of Use"
-      lastUpdated="16 September 2026"
+      lastUpdated="19 October 2026"
       intro="These terms govern your use of the iFAB website. Please read them before using the site or submitting information through it."
       sections={SECTIONS}
     />
